@@ -2,29 +2,37 @@ import { supabase } from '@/providers/supabase';
 import { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ISessionStore {
-  session?: Session;
+  session: Session | null;
+  username?: string;
   loadSession: () => void;
-  setSession: (session?: Session) => void;
+  setSession: (session: Session | null) => void;
 }
 
 export const useUserSessionStore = create<ISessionStore>()(
   persist(
     (set) => ({
+      session: null,
       loadSession: async () => {
         const {
           data: { session },
         } = await supabase.auth.getSession();
 
-        if (session) set(() => ({ session }));
+        const username = session?.user.email?.substring(
+          0,
+          session?.user.email.indexOf('@'),
+        );
+        set({ session, username });
       },
-      setSession: async (session) => {
-        set(() => ({ session }));
+      setSession: (session) => {
+        set({ session });
       },
     }),
     {
       name: 'user-session',
+      storage: createJSONStorage(() => AsyncStorage),
     },
   ),
 );

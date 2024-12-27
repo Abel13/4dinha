@@ -15,26 +15,26 @@ export type Database = {
           id: string
           lives: number
           match_id: string
-          next_user: string | null
           ready: boolean | null
+          table_sit: number | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
           id?: string
-          lives: number
+          lives?: number
           match_id: string
-          next_user?: string | null
           ready?: boolean | null
-          user_id: string
+          table_sit?: number | null
+          user_id?: string
         }
         Update: {
           created_at?: string | null
           id?: string
           lives?: number
           match_id?: string
-          next_user?: string | null
           ready?: boolean | null
+          table_sit?: number | null
           user_id?: string
         }
         Relationships: [
@@ -71,185 +71,19 @@ export type Database = {
         }
         Relationships: []
       }
-      round_user_cards: {
-        Row: {
-          card: number
-          created_at: string | null
-          id: string
-          round_id: string | null
-          user_id: string | null
-        }
-        Insert: {
-          card: number
-          created_at?: string | null
-          id?: string
-          round_id?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          card?: number
-          created_at?: string | null
-          id?: string
-          round_id?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "round_user_cards_round_id_fkey"
-            columns: ["round_id"]
-            isOneToOne: false
-            referencedRelation: "rounds"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      round_users: {
-        Row: {
-          bet: number | null
-          created_at: string | null
-          current: boolean | null
-          round_id: string
-          round_score: number | null
-          user_id: string
-        }
-        Insert: {
-          bet?: number | null
-          created_at?: string | null
-          current?: boolean | null
-          round_id: string
-          round_score?: number | null
-          user_id: string
-        }
-        Update: {
-          bet?: number | null
-          created_at?: string | null
-          current?: boolean | null
-          round_id?: string
-          round_score?: number | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "round_users_round_id_fkey"
-            columns: ["round_id"]
-            isOneToOne: false
-            referencedRelation: "rounds"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      rounds: {
-        Row: {
-          created_at: string | null
-          dealer: string
-          id: string
-          match_id: string
-          number: number
-          status: Database["public"]["Enums"]["round_status"] | null
-          trump: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          dealer: string
-          id?: string
-          match_id: string
-          number: number
-          status?: Database["public"]["Enums"]["round_status"] | null
-          trump?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          dealer?: string
-          id?: string
-          match_id?: string
-          number?: number
-          status?: Database["public"]["Enums"]["round_status"] | null
-          trump?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "rounds_dealer_fkey"
-            columns: ["dealer"]
-            isOneToOne: false
-            referencedRelation: "match_users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "rounds_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "matches"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      turns: {
-        Row: {
-          created_at: string | null
-          id: string
-          number: number
-          round_id: string
-          winner: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          number: number
-          round_id: string
-          winner?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          number?: number
-          round_id?: string
-          winner?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "turns_round_id_fkey"
-            columns: ["round_id"]
-            isOneToOne: false
-            referencedRelation: "rounds"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_turn: {
-        Row: {
-          card: number
-          created_at: string | null
-          turn_id: string
-          user_id: string
-        }
-        Insert: {
-          card: number
-          created_at?: string | null
-          turn_id: string
-          user_id: string
-        }
-        Update: {
-          card?: number
-          created_at?: string | null
-          turn_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_turn_turn_id_fkey"
-            columns: ["turn_id"]
-            isOneToOne: false
-            referencedRelation: "turns"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_email: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          email: string
+        }[]
+      }
     }
     Enums: {
       match_status: "created" | "started" | "finished"

@@ -6,7 +6,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,7 +31,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DarkTheme}>
-        <Slot />
+        <Slot initialRouteName='(tabs)' />
         <StatusBar style='auto' />
       </ThemeProvider>
     </QueryClientProvider>

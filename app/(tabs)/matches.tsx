@@ -7,12 +7,12 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
-import { ThemedFlatList } from '@/components/ThemedFlatList';
 import { useMatch } from '@/hooks/useMatch';
+import { MatchItem } from '@/components/MatchItem';
 
 export default function LobbyScreen() {
   const router = useRouter();
-  const { matches } = useMatch();
+  const { matches, enterMatch } = useMatch();
 
   const handleNewMatch = useCallback(() => {
     router.push({
@@ -32,12 +32,20 @@ export default function LobbyScreen() {
         />
       }
     >
-      <ThemedButton title='Nova Partida' onPress={handleNewMatch} />
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type='title'>Partidas</ThemedText>
+      <ThemedView>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type='title'>Partidas</ThemedText>
+          <ThemedButton title='Criar Partida' onPress={handleNewMatch} />
+        </ThemedView>
         {matches &&
           matches.map((item) => {
-            return <ThemedText>{item.name}</ThemedText>;
+            return (
+              <MatchItem
+                key={item.id}
+                match={item}
+                onPress={() => enterMatch(item.id)}
+              />
+            );
           })}
       </ThemedView>
     </ParallaxScrollView>
@@ -53,5 +61,6 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     gap: 10,
+    paddingHorizontal: 20,
   },
 });

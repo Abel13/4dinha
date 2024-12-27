@@ -6,24 +6,35 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/hooks/useAuth';
+import { useUserSessionStore } from '@/hooks/useUserSessionStore';
+import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
-  const { signOut } = useAuth();
+  const { signOut, loading: loggingOut } = useAuth();
+  const { username } = useUserSessionStore((state) => state);
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEBB', dark: '#1D6A47' }}
+      headerBackgroundColor={{ dark: '#1D6A47' }}
       headerImage={
         <Image
-          source={require('@/assets/images/logo.png')}
+          source={{
+            uri: `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${username}&scale=90`,
+          }}
           style={styles.reactLogo}
         />
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type='title'>Olá, AbelB13!</ThemedText>
+        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
         <HelloWave />
       </ThemedView>
-      <ThemedButton title='SAIR' type='outlined' onPress={signOut} />
+      <ThemedButton
+        title='SAIR'
+        type='outlined'
+        onPress={signOut}
+        loading={loggingOut}
+      />
       <ThemedView style={styles.stepContainer}>
         <ThemedText type='subtitle'>Step 1: Try it</ThemedText>
         <ThemedText>
@@ -73,10 +84,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+    height: 100,
+    width: 100,
+    bottom: 10,
+    left: 10,
     position: 'absolute',
+    borderRadius: '50%',
+    borderWidth: 1,
+    borderColor: Colors.dark.tabIconSelected,
   },
 });

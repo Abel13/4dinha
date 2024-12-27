@@ -9,10 +9,14 @@ import { Colors } from '@/constants/Colors';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 
 export default function TabLayout() {
-  const { session } = useUserSessionStore((state) => state);
+  const { session, loadSession } = useUserSessionStore((state) => state);
+
+  useEffect(() => {
+    loadSession();
+  }, []);
 
   if (!session) {
-    return <Redirect href='/(auth)' />;
+    return <Redirect href='/auth' />;
   }
 
   return (

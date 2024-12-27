@@ -5,9 +5,9 @@ import { useUserSessionStore } from './useUserSessionStore';
 import { useRouter } from 'expo-router';
 
 export const useAuth = () => {
+  const { setSession } = useUserSessionStore((state) => state);
   const [authError, setAuthError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
-  const { setSession } = useUserSessionStore((state) => state);
   const router = useRouter();
 
   const onAuth = async (credentials: SignInWithPasswordCredentials) => {
@@ -18,6 +18,7 @@ export const useAuth = () => {
         error,
         data: { session },
       } = await supabase.auth.signInWithPassword(credentials);
+
       if (session) {
         setSession(session);
         router.replace('/(tabs)');
@@ -30,10 +31,11 @@ export const useAuth = () => {
 
   const signOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (!error) setSession(undefined);
-    } catch (error) {
-      // ignore error
+      setLoading(true);
+      await supabase.auth.signOut();
+      setSession(null);
+    } finally {
+      setLoading(false);
     }
   };
 
