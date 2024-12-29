@@ -3,12 +3,16 @@ import { ThemedText } from './ThemedText';
 import { MatchUser } from '@/types/MatchUser';
 import { Image, StyleSheet } from 'react-native';
 import { usePlayer } from '@/hooks/usePlayer';
+import { Colors } from '@/constants/Colors';
 
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  row: {
     gap: 10,
+    flexDirection: 'row',
   },
   profileImage: {
     width: 24,
@@ -31,16 +35,20 @@ export const PlayerItem = ({ matchUser }: Props) => {
       </ThemedView>
     );
 
-  console.log('P', playerName);
   return (
-    <ThemedView style={styles.container}>
-      <Image
-        source={{
-          uri: `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${playerName}&scale=90`,
-        }}
-        style={styles.profileImage}
-      />
-      <ThemedText>{playerName}</ThemedText>
+    <ThemedView style={[styles.container, styles.row]}>
+      <ThemedView style={styles.row}>
+        <Image
+          source={{
+            uri: `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${playerName}&scale=90`,
+          }}
+          style={styles.profileImage}
+        />
+        <ThemedText>{playerName}</ThemedText>
+      </ThemedView>
+      <ThemedText darkColor={Colors.dark.success}>
+        {matchUser.ready ? 'PRONTO' : ''}
+      </ThemedText>
     </ThemedView>
   );
 };

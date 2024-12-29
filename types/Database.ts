@@ -9,6 +9,30 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      deck: {
+        Row: {
+          id: string
+          power: number
+          suit: Database["public"]["Enums"]["card_suit"]
+          suit_power: number
+          symbol: Database["public"]["Enums"]["card_symbol"]
+        }
+        Insert: {
+          id?: string
+          power: number
+          suit: Database["public"]["Enums"]["card_suit"]
+          suit_power: number
+          symbol: Database["public"]["Enums"]["card_symbol"]
+        }
+        Update: {
+          id?: string
+          power?: number
+          suit?: Database["public"]["Enums"]["card_suit"]
+          suit_power?: number
+          symbol?: Database["public"]["Enums"]["card_symbol"]
+        }
+        Relationships: []
+      }
       match_users: {
         Row: {
           created_at: string | null
@@ -84,8 +108,36 @@ export type Database = {
           email: string
         }[]
       }
+      update_match_status_to_started: {
+        Args: {
+          _match_id: string
+        }
+        Returns: undefined
+      }
+      update_ready_status: {
+        Args: {
+          _match_id: string
+          _is_ready: boolean
+        }
+        Returns: undefined
+      }
     }
     Enums: {
+      card_suit: "♣️" | "♥️" | "♠️" | "♦️"
+      card_symbol:
+        | "A"
+        | "2"
+        | "3"
+        | "4"
+        | "5"
+        | "6"
+        | "7"
+        | "8"
+        | "9"
+        | "10"
+        | "Q"
+        | "J"
+        | "K"
       match_status: "created" | "started" | "finished"
       round_status: "bet" | "play" | "finished"
     }

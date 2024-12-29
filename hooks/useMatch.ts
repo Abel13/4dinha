@@ -1,17 +1,15 @@
 import { supabase } from '@/providers/supabase';
-import { createMatchService, fetchMatches } from '@/services/match';
+import { createMatchService, fetchMatch, fetchMatches } from '@/services/match';
 import { enterMatchService } from '@/services/matchUsers';
-import { MatchInsert } from '@/types/Match';
+import { Match, MatchInsert } from '@/types/Match';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
-import { useUserSessionStore } from './useUserSessionStore';
 
-export const useMatch = () => {
+export const useMatch = (matchId?: string) => {
   const router = useRouter();
   const [creatingMatch, setCreatingMatch] = useState<boolean>(false);
-  const { session } = useUserSessionStore();
 
   const {
     data: matches,
@@ -19,6 +17,12 @@ export const useMatch = () => {
     refetch,
   } = useQuery({
     ...fetchMatches(),
+    enabled: !matchId,
+  });
+
+  const { data: match } = useQuery({
+    ...fetchMatch(matchId || ''),
+    enabled: matchId !== undefined && matchId.length > 0,
   });
 
   const enterMatchMutation = useMutation({
@@ -38,7 +42,7 @@ export const useMatch = () => {
     mutationFn: createMatchService,
     onSuccess: async (matchId) => {
       if (matchId) {
-        enterMatchMutation.mutate({ matchId, userId: session!.user.id });
+        enterMatchMutation.mutate({ matchId });
       }
 
       setCreatingMatch(false);
@@ -49,8 +53,18 @@ export const useMatch = () => {
     },
   });
 
+  const startMatchMutation = useMutation({
+    mutationFn: startMatchService,
+    onSuccess: () => {},
+    onError: () => {},
+  });
+
+  const startMatch = useCallback(async () => {
+    startMatchMutation.mutate(matchId);
+  }, []);
+
   const enterMatch = useCallback(async (matchId: string) => {
-    enterMatchMutation.mutate({ matchId, userId: session!.user.id });
+    enterMatchMutation.mutate({ matchId });
   }, []);
 
   const createMatch = useCallback(async (formData: MatchInsert) => {
@@ -90,5 +104,13 @@ export const useMatch = () => {
     };
   }, [matches]);
 
-  return { createMatch, enterMatch, loadingMatches, creatingMatch, matches };
+  return {
+    createMatch,
+    enterMatch,
+    startMatch,
+    match,
+    loadingMatches,
+    creatingMatch,
+    matches,
+  };
 };

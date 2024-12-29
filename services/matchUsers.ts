@@ -1,7 +1,6 @@
 import { supabase } from '@/providers/supabase';
-import { Database } from '@/types';
-import { MatchInsert } from '@/types/Match';
-import { MatchUser, MatchUserInsert } from '@/types/MatchUser';
+import { MatchUser } from '@/types/MatchUser';
+import { UpdateStatusPayload } from '@/types/UpdateStatus';
 
 export const matchesKey = (matchId: string) => {
   return ['match-users', matchId];
@@ -25,18 +24,14 @@ export const fetchMatchUsers = (matchId: string) => {
 
 export const enterMatchService = async ({
   matchId,
-  userId,
 }: {
   matchId: string;
-  userId: string;
 }): Promise<string | null> => {
   const { data: matchUser, error } = await supabase
     .from('match_users')
-    .upsert({
+    .insert({
       match_id: matchId,
     })
-    .eq('match_id', matchId)
-    .eq('user_id', userId)
     .select('*')
     .maybeSingle();
 
@@ -44,4 +39,18 @@ export const enterMatchService = async ({
   if (matchUser) return matchUser.match_id;
 
   return null;
+};
+
+export const updateStatusService = async (payload: UpdateStatusPayload) => {
+  try {
+    const { data, error } = await supabase.rpc('update_ready_status', payload);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (e) {
+    console.error('Erro ao chamar a função:', e);
+  }
 };

@@ -1,7 +1,7 @@
 import { supabase } from '@/providers/supabase';
-import { fetchMatchUsers } from '@/services/matchUsers';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { fetchMatchUsers, updateStatusService } from '@/services/matchUsers';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
 
 export const useMatchUsers = (matchId: string) => {
   const {
@@ -12,6 +12,22 @@ export const useMatchUsers = (matchId: string) => {
     ...fetchMatchUsers(matchId),
     enabled: matchId.length > 0,
   });
+
+  const updateStatusMutation = useMutation({
+    mutationFn: updateStatusService,
+    onSuccess: () => {},
+    onError: () => {},
+  });
+
+  const updateStatus = useCallback(
+    async (matchId: string, isReady: boolean) => {
+      await updateStatusMutation.mutate({
+        _is_ready: isReady,
+        _match_id: matchId,
+      });
+    },
+    [],
+  );
 
   useEffect(() => {
     const channel = supabase
@@ -27,6 +43,17 @@ export const useMatchUsers = (matchId: string) => {
           refetch();
         },
       )
+      .on(
+        'postgres_changes',
+        {
+          schema: 'public',
+          table: 'match_users',
+          event: 'UPDATE',
+        },
+        () => {
+          refetch();
+        },
+      )
       .subscribe();
 
     return () => {
@@ -37,5 +64,6 @@ export const useMatchUsers = (matchId: string) => {
   return {
     players,
     loadingLobby,
+    updateStatus,
   };
 };

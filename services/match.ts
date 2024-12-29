@@ -5,6 +5,10 @@ export const matchesKey = () => {
   return ['matches'];
 };
 
+export const matchKey = (matchId: string) => {
+  return ['match', matchId];
+};
+
 export const fetchMatches = () => {
   return {
     queryKey: matchesKey(),
@@ -21,6 +25,24 @@ export const fetchMatches = () => {
   };
 };
 
+export const fetchMatch = (matchId: string) => {
+  return {
+    queryKey: matchKey(matchId),
+    queryFn: async (): Promise<Match | null> => {
+      if (!matchId) return null;
+      const { data } = await supabase
+        .from('matches')
+        .select('*')
+        .eq('id', matchId)
+        .maybeSingle();
+
+      if (data) return data;
+      return null;
+    },
+    initialData: null,
+  };
+};
+
 export const createMatchService = async (
   formData: MatchInsert,
 ): Promise<string | null> => {
@@ -33,4 +55,10 @@ export const createMatchService = async (
   if (match) return match.id;
 
   return null;
+};
+
+export const startMatchService = async (matchId: string): Promise<void> => {
+  await supabase.rpc('update_match_status_to_started', {
+    _match_id: matchId,
+  });
 };
