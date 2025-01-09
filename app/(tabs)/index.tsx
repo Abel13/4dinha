@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     left: 10,
     position: 'absolute',
-    borderRadius: '50%',
+    borderRadius: 50,
     borderWidth: 1,
     borderColor: Colors.dark.border,
   },
