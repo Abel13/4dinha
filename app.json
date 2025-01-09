@@ -13,6 +13,7 @@
       "bundleIdentifier": "com.abelb13.4dinha"
     },
     "android": {
+      "package": "com.abelb13.x4dinha",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000"
