@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
     fontFamily: 'BarlowCondensed',
-    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderRadius: 8,
     borderColor: Colors.dark.tint,
   },
 });

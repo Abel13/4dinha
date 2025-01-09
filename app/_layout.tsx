@@ -31,7 +31,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DarkTheme}>
-        <Slot initialRouteName='(tabs)' />
+        <Slot />
         <StatusBar style='auto' />
       </ThemeProvider>
     </QueryClientProvider>

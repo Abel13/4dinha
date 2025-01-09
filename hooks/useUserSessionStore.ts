@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 interface ISessionStore {
   session: Session | null;
   username?: string;
+  profilePicture?: string;
   loadSession: () => void;
   setSession: (session: Session | null) => void;
 }
@@ -24,7 +25,9 @@ export const useUserSessionStore = create<ISessionStore>()(
           0,
           session?.user.email.indexOf('@'),
         );
-        set({ session, username });
+
+        const profilePicture = `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${session?.user.email}&scale=90`;
+        set({ session, username, profilePicture });
       },
       setSession: (session) => {
         set({ session });

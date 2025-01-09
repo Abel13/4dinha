@@ -1,14 +1,22 @@
-const tintColorDark = '#fff';
+const tintColorDark = '#409efa';
 
 export const Colors = {
   dark: {
+    // default colors
+    tint: tintColorDark,
+
+    // style colors
     text: '#ECEDEE',
     background: '#151718',
-    tint: tintColorDark,
+    border: '#A2A3AA',
+
+    // component colors
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
     link: '#0a7ea4',
+
+    // status colors
     danger: '#ef5350',
     success: '#34a424',
   },

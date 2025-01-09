@@ -1,5 +1,10 @@
 import { supabase } from '@/providers/supabase';
-import { createMatchService, fetchMatch, fetchMatches } from '@/services/match';
+import {
+  createMatchService,
+  fetchMatch,
+  fetchMatches,
+  startMatchService,
+} from '@/services/match';
 import { enterMatchService } from '@/services/matchUsers';
 import { Match, MatchInsert } from '@/types/Match';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -24,6 +29,10 @@ export const useMatch = (matchId?: string) => {
     ...fetchMatch(matchId || ''),
     enabled: matchId !== undefined && matchId.length > 0,
   });
+
+  const matchPicture = match
+    ? `https://api.dicebear.com/9.x/icons/png?seed=${match?.id}&scale=90`
+    : null;
 
   const enterMatchMutation = useMutation({
     mutationFn: enterMatchService,
@@ -60,7 +69,7 @@ export const useMatch = (matchId?: string) => {
   });
 
   const startMatch = useCallback(async () => {
-    startMatchMutation.mutate(matchId);
+    startMatchMutation.mutate(matchId as string);
   }, []);
 
   const enterMatch = useCallback(async (matchId: string) => {
@@ -109,6 +118,7 @@ export const useMatch = (matchId?: string) => {
     enterMatch,
     startMatch,
     match,
+    matchPicture,
     loadingMatches,
     creatingMatch,
     matches,

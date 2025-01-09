@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -15,21 +15,33 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 100,
     paddingBottom: 50,
-    padding: 20,
     gap: 10,
+  },
+  matchPicture: {
+    width: 30,
+    height: 30,
+    borderRadius: 4,
   },
   row: {
     flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'center',
+    alignItems: 'center',
     gap: 20,
+  },
+  padding: {
+    padding: 10,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: 10,
+  },
+  center: {
+    justifyContent: 'center',
   },
 });
 
 export default function LobbyScreen() {
   const { matchId } = useLocalSearchParams();
   const { session } = useUserSessionStore((state) => state);
-  const { match, startMatch } = useMatch(matchId as string);
+  const { match, matchPicture, startMatch } = useMatch(matchId as string);
   const { players, loadingLobby, updateStatus } = useMatchUsers(
     matchId as string,
   );
@@ -38,17 +50,28 @@ export default function LobbyScreen() {
 
   if (!me)
     return (
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={[styles.titleContainer, styles.padding]}>
         <ThemedText type='subtitle'>{match?.name}</ThemedText>
       </ThemedView>
     );
 
   return (
     <ThemedView style={styles.titleContainer}>
-      <ThemedText type='subtitle'>{match?.name}</ThemedText>
+      <ThemedView style={[styles.row, styles.padding]}>
+        <Image
+          source={{
+            uri: matchPicture?.toString(),
+          }}
+          style={styles.matchPicture}
+        />
+        <ThemedText type='subtitle'>{match?.name}</ThemedText>
+      </ThemedView>
       <ThemedView />
       <PlayerItem matchUser={me} />
       <ThemedView />
+      <ThemedText style={styles.paddingHorizontal} type='subtitle'>
+        Jogadores
+      </ThemedText>
       <ThemedFlatList
         data={players.filter((p) => p.user_id !== session?.user.id)}
         renderItem={({ item }) => {
@@ -56,9 +79,10 @@ export default function LobbyScreen() {
         }}
         refreshing={loadingLobby}
       />
-      <ThemedView style={styles.row}>
+      <ThemedView style={[styles.row, styles.center]}>
         <ThemedButton
           title={me.ready ? 'CANCELAR' : 'PRONTO'}
+          type={me.ready ? 'danger' : 'default'}
           onPress={() => {
             updateStatus(match!.id, !me.ready);
           }}
@@ -66,7 +90,7 @@ export default function LobbyScreen() {
         {match?.user_id === session?.user.id && (
           <ThemedButton
             title='INICIAR PARTIDA'
-            disabled={!!players.find((p) => !p.ready)}
+            disabled={!!players.find((p) => !p.ready) || players.length < 3}
             onPress={() => {
               startMatch();
             }}

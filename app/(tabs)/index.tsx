@@ -11,7 +11,7 @@ import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
-  const { username } = useUserSessionStore((state) => state);
+  const { username, profilePicture } = useUserSessionStore((state) => state);
 
   return (
     <ParallaxScrollView
@@ -19,7 +19,7 @@ export default function HomeScreen() {
       headerImage={
         <Image
           source={{
-            uri: `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${username}&scale=90`,
+            uri: profilePicture,
           }}
           style={styles.reactLogo}
         />
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: '50%',
     borderWidth: 1,
-    borderColor: Colors.dark.tabIconSelected,
+    borderColor: Colors.dark.border,
   },
 });

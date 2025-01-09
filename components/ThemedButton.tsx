@@ -16,6 +16,12 @@ export type ThemedButtonProps = ButtonProps & {
   loading?: boolean;
 };
 
+const TypeColors = {
+  default: Colors.dark.tint,
+  danger: Colors.dark.danger,
+  outlined: Colors.dark.tint,
+};
+
 export function ThemedButton({
   type = 'default',
   loading = false,
@@ -55,5 +61,5 @@ export function ThemedButton({
       </Animated.View>
     );
 
-  return <Button color={Colors.dark.tint} {...rest} />;
+  return <Button color={TypeColors[type]} {...rest} />;
 }
