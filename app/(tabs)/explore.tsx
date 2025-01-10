@@ -41,11 +41,7 @@ export default function ExploreScreen() {
         </ExternalLink>
       </Collapsible>
       <Collapsible title='Partida de Abel'>
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type='defaultSemiBold'>w</ThemedText>{' '}
-          in the terminal running this project.
-        </ThemedText>
+        <ThemedText>You can open this project on Android and iOS.</ThemedText>
       </Collapsible>
       <Collapsible title='Partida de Guará'>
         <ThemedText>

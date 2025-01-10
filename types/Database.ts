@@ -36,28 +36,31 @@ export type Database = {
       match_users: {
         Row: {
           created_at: string | null
+          dealer: boolean
           id: string
           lives: number
           match_id: string
-          ready: boolean | null
+          ready: boolean
           table_sit: number | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
+          dealer?: boolean
           id?: string
           lives?: number
           match_id: string
-          ready?: boolean | null
+          ready?: boolean
           table_sit?: number | null
           user_id?: string
         }
         Update: {
           created_at?: string | null
+          dealer?: boolean
           id?: string
           lives?: number
           match_id?: string
-          ready?: boolean | null
+          ready?: boolean
           table_sit?: number | null
           user_id?: string
         }
@@ -92,6 +95,60 @@ export type Database = {
           name?: string
           status?: Database["public"]["Enums"]["match_status"] | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      player_cards: {
+        Row: {
+          card_id: string | null
+          created_at: string
+          match_user: string
+          round_number: number
+        }
+        Insert: {
+          card_id?: string | null
+          created_at?: string
+          match_user: string
+          round_number: number
+        }
+        Update: {
+          card_id?: string | null
+          created_at?: string
+          match_user?: string
+          round_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "round_one_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "deck"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "round_one_match_user_fkey"
+            columns: ["match_user"]
+            isOneToOne: false
+            referencedRelation: "match_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      round_one: {
+        Row: {
+          created_at: string
+          id: number
+          round_number: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          round_number: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          round_number?: number
         }
         Relationships: []
       }
@@ -139,7 +196,7 @@ export type Database = {
         | "J"
         | "K"
       match_status: "created" | "started" | "finished"
-      round_status: "bet" | "play" | "finished"
+      round_status: "dealing" | "betting" | "playing" | "finished"
     }
     CompositeTypes: {
       [_ in never]: never

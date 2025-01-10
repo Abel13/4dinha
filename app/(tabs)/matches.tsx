@@ -7,12 +7,12 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
-import { useMatch } from '@/hooks/useMatch';
 import { MatchItem } from '@/components/MatchItem';
+import { useMatchList } from '@/hooks/useMatchList';
 
 export default function LobbyScreen() {
   const router = useRouter();
-  const { matches, enterMatch } = useMatch();
+  const { matches, enterMatch } = useMatchList();
 
   const handleNewMatch = useCallback(() => {
     router.push({

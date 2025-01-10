@@ -12,19 +12,27 @@ export const useGame = (user?: User) => {
       try {
         const { data, error } = await supabase
           .from('match_users')
-          .select(`match:matches(id)`)
+          .select(
+            `
+        user_id,
+        match_id,
+        matches!inner(id, status)
+      `,
+          )
           .eq('user_id', user.id)
           .eq('matches.status', 'started')
+          .limit(1)
           .maybeSingle();
 
         if (error) {
-          console.error('Erro ao buscar dados:', error.message);
           throw error;
         }
 
-        if (data) setGameId(data.match.id);
+        if (data && data.matches) {
+          setGameId(data.matches.id);
+        }
       } catch (e) {
-        // Do nothing
+        console.error('Erro ao executar a consulta:', e);
       }
     };
 

@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { format } from 'date-fns';
 import { ThemedButton } from '@/components/ThemedButton';
-import { useMatch } from '@/hooks/useMatch';
+import { useMatchList } from '@/hooks/useMatchList';
 
 const schema = yup.object({
   name: yup.string().required('Nome da partida é obrigatório'),
@@ -17,7 +17,7 @@ const schema = yup.object({
 
 export default function NewMatchScreen() {
   const { username } = useUserSessionStore((state) => state);
-  const { createMatch, creatingMatch } = useMatch();
+  const { createMatch, creatingMatch } = useMatchList();
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
