@@ -28,9 +28,8 @@ export const useMatch = (matchId: string) => {
   }, []);
 
   useEffect(() => {
-    console.log('CREATE CHANNEL', matchId);
     const channel = supabase
-      .channel('matches_channel')
+      .channel('match_channel')
       .on(
         'postgres_changes',
         {
@@ -40,9 +39,13 @@ export const useMatch = (matchId: string) => {
           filter: `id=eq.${matchId}`,
         },
         (payload) => {
-          console.log(payload, matchId);
           if (payload.new.status === 'started') {
-            router.replace('/(game)/4dinha/table');
+            router.replace({
+              pathname: '/(game)/4dinha/table',
+              params: {
+                gameId: payload.new.id,
+              },
+            });
           }
         },
       )

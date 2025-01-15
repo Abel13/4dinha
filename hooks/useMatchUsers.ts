@@ -38,6 +38,7 @@ export const useMatchUsers = (matchId: string) => {
           schema: 'public',
           table: 'match_users',
           event: 'INSERT',
+          filter: `match_id=eq.${matchId}`,
         },
         () => {
           refetch();
@@ -49,6 +50,7 @@ export const useMatchUsers = (matchId: string) => {
           schema: 'public',
           table: 'match_users',
           event: 'UPDATE',
+          filter: `match_id=eq.${matchId}`,
         },
         () => {
           refetch();

@@ -8,10 +8,19 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
+import { useMatchList } from '@/hooks/useMatchList';
+import { useEffect } from 'react';
 
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { username, profilePicture, session } = useUserSessionStore(
+    (state) => state,
+  );
+  const { fetchInProgressMatch } = useMatchList();
+
+  useEffect(() => {
+    if (session) fetchInProgressMatch(session?.user?.id as string);
+  }, [session]);
 
   return (
     <ParallaxScrollView

@@ -51,6 +51,6 @@ export const updateStatusService = async (payload: UpdateStatusPayload) => {
 
     return data;
   } catch (e) {
-    console.error('Erro ao chamar a função:', e);
+    // ignore error
   }
 };

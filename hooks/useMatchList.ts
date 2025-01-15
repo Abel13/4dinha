@@ -56,6 +56,39 @@ export const useMatchList = () => {
     createMatchMutation.mutate(formData);
   }, []);
 
+  const fetchInProgressMatch = useCallback(async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('match_users')
+        .select(
+          `
+            user_id,
+            match_id,
+            matches!inner(*)
+          `,
+        )
+        .eq('user_id', userId)
+        .eq('matches.status', 'started')
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data && data.matches) {
+        router.replace({
+          pathname: '/(game)/4dinha/table',
+          params: {
+            gameId: data.matches.id,
+          },
+        });
+      }
+    } catch (e) {
+      // ignore error
+    }
+  }, []);
+
   useEffect(() => {
     const channel = supabase
       .channel('matches_channel')
@@ -91,6 +124,7 @@ export const useMatchList = () => {
   return {
     createMatch,
     enterMatch,
+    fetchInProgressMatch,
     loadingMatches,
     creatingMatch,
     matches,

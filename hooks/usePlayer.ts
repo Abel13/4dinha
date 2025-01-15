@@ -3,12 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export const usePlayer = (playerId: string) => {
-  const [playerName, setPlayerName] = useState<string | null>(null);
-  const [playerPicture, setPlayerPicture] = useState<string | null>(null);
+  const [playerName, setPlayerName] = useState<string | null>('');
+  const [playerPicture, setPlayerPicture] = useState<string | null>('');
 
   const { data: player } = useQuery({
     ...getPlayer(playerId),
-    enabled: playerId.length > 0,
+    enabled: playerId !== '',
   });
 
   useEffect(() => {

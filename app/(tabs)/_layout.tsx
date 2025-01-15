@@ -7,11 +7,9 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
-import { useGame } from '@/hooks/useGame';
 
 export default function TabLayout() {
   const { session, loadSession } = useUserSessionStore((state) => state);
-  const { gameId } = useGame(session?.user);
 
   useEffect(() => {
     loadSession();
@@ -19,10 +17,6 @@ export default function TabLayout() {
 
   if (!session) {
     return <Redirect href='/auth' />;
-  }
-
-  if (gameId) {
-    return <Redirect href='/(game)/4dinha/table' />;
   }
 
   return (

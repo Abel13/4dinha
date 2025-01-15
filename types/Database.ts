@@ -33,6 +33,41 @@ export type Database = {
         }
         Relationships: []
       }
+      match_actions: {
+        Row: {
+          action: Database["public"]["Enums"]["actions"]
+          created_at: string
+          id: number
+          match_id: string
+          round_number: number
+          user_id: string
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["actions"]
+          created_at?: string
+          id?: number
+          match_id: string
+          round_number: number
+          user_id?: string
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["actions"]
+          created_at?: string
+          id?: number
+          match_id?: string
+          round_number?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "match_actions_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       match_users: {
         Row: {
           created_at: string | null
@@ -79,6 +114,7 @@ export type Database = {
           created_at: string | null
           id: string
           name: string
+          round_number: number
           status: Database["public"]["Enums"]["match_status"] | null
           user_id: string
         }
@@ -86,6 +122,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           name: string
+          round_number?: number
           status?: Database["public"]["Enums"]["match_status"] | null
           user_id?: string
         }
@@ -93,6 +130,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           name?: string
+          round_number?: number
           status?: Database["public"]["Enums"]["match_status"] | null
           user_id?: string
         }
@@ -100,63 +138,107 @@ export type Database = {
       }
       player_cards: {
         Row: {
-          card_id: string | null
+          card_id: string
           created_at: string
-          match_user: string
+          id: string
+          match_id: string
           round_number: number
+          status: Database["public"]["Enums"]["hand_status"]
+          turn: number | null
+          user_id: string
         }
         Insert: {
-          card_id?: string | null
+          card_id: string
           created_at?: string
-          match_user: string
+          id?: string
+          match_id: string
           round_number: number
+          status?: Database["public"]["Enums"]["hand_status"]
+          turn?: number | null
+          user_id: string
         }
         Update: {
-          card_id?: string | null
+          card_id?: string
           created_at?: string
-          match_user?: string
+          id?: string
+          match_id?: string
           round_number?: number
+          status?: Database["public"]["Enums"]["hand_status"]
+          turn?: number | null
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "round_one_card_id_fkey"
+            foreignKeyName: "player_cards_card_id_fkey"
             columns: ["card_id"]
             isOneToOne: false
             referencedRelation: "deck"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "round_one_match_user_fkey"
-            columns: ["match_user"]
+            foreignKeyName: "player_cards_match_id_fkey"
+            columns: ["match_id"]
             isOneToOne: false
-            referencedRelation: "match_users"
+            referencedRelation: "matches"
             referencedColumns: ["id"]
           },
         ]
       }
-      round_one: {
+      rounds: {
         Row: {
-          created_at: string
-          id: number
+          match_id: string
           round_number: number
+          status: Database["public"]["Enums"]["round_status"]
+          trump: string
         }
         Insert: {
-          created_at?: string
-          id?: number
+          match_id: string
           round_number: number
+          status?: Database["public"]["Enums"]["round_status"]
+          trump: string
         }
         Update: {
-          created_at?: string
-          id?: number
+          match_id?: string
           round_number?: number
+          status?: Database["public"]["Enums"]["round_status"]
+          trump?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "round_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rounds_trump_fkey"
+            columns: ["trump"]
+            isOneToOne: false
+            referencedRelation: "deck"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_player_cards: {
+        Args: {
+          _match_id: string
+          _user_id: string
+          _round_number: number
+        }
+        Returns: {
+          id: string
+          user_id: string
+          symbol: Database["public"]["Enums"]["card_symbol"]
+          suit: Database["public"]["Enums"]["card_suit"]
+          status: Database["public"]["Enums"]["hand_status"]
+        }[]
+      }
       get_user_email: {
         Args: {
           user_id: string
@@ -180,6 +262,7 @@ export type Database = {
       }
     }
     Enums: {
+      actions: "deal"
       card_suit: "♣️" | "♥️" | "♠️" | "♦️"
       card_symbol:
         | "A"
@@ -195,7 +278,8 @@ export type Database = {
         | "Q"
         | "J"
         | "K"
-      match_status: "created" | "started" | "finished"
+      hand_status: "on hand" | "played"
+      match_status: "created" | "started" | "end"
       round_status: "dealing" | "betting" | "playing" | "finished"
     }
     CompositeTypes: {
