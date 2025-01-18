@@ -22,6 +22,7 @@ export const useMatchList = () => {
   const enterMatchMutation = useMutation({
     mutationFn: enterMatchService,
     onSuccess: (matchId) => {
+      console.log(matchId);
       if (matchId)
         router.navigate({
           pathname: '/lobby/[matchId]',

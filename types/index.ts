@@ -4,4 +4,5 @@ export * from './Game';
 export * from './Match';
 export * from './MatchUser';
 export * from './Player';
-export * from './PlayerCards';
+export * from './PlayerCard';
+export * from './Bet';

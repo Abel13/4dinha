@@ -1,14 +1,25 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { ThemedView } from './ThemedView';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { HandStatus, Suit, Symbol } from '@/types/Card';
 
 interface CardProps {
-  visible: boolean;
-  suit: '♣️' | '♥️' | '♠️' | '♦️';
-  symbol: string;
+  id?: string;
+  status: HandStatus;
+  suit?: Suit;
+  symbol?: Symbol;
+  playing?: boolean;
+  onPress?: (id: string) => Promise<void>;
 }
 
-export const Card: React.FC<CardProps> = ({ visible, suit, symbol }) => {
+export const Card: React.FC<CardProps> = ({
+  id,
+  suit,
+  symbol,
+  playing,
+  status,
+  onPress,
+}) => {
+  const visible = symbol && suit;
   const getSuitColor = (): string => {
     if (suit === '♥️' || suit === '♦️') {
       return '#FF4C4C';
@@ -16,8 +27,38 @@ export const Card: React.FC<CardProps> = ({ visible, suit, symbol }) => {
     return '#000';
   };
 
+  if (playing || status !== 'on hand')
+    return (
+      <View style={[styles.card, !visible && styles.cardBack]}>
+        {visible ? (
+          <View style={styles.cardContent}>
+            <Text
+              style={[styles.symbol, styles.left, { color: getSuitColor() }]}
+            >
+              {symbol}
+            </Text>
+            <Text
+              style={[styles.suit, styles.center, { color: getSuitColor() }]}
+            >
+              {suit}
+            </Text>
+          </View>
+        ) : (
+          <Image
+            source={require('../assets/images/logo.png')}
+            style={styles.logo}
+          />
+        )}
+      </View>
+    );
+
   return (
-    <ThemedView style={[styles.card, !visible && styles.cardBack]}>
+    <TouchableOpacity
+      style={[styles.card, !visible && styles.cardBack]}
+      onPress={() => {
+        if (onPress) onPress(id || '');
+      }}
+    >
       {visible ? (
         <View style={styles.cardContent}>
           <Text style={[styles.symbol, styles.left, { color: getSuitColor() }]}>
@@ -33,7 +74,7 @@ export const Card: React.FC<CardProps> = ({ visible, suit, symbol }) => {
           style={styles.logo}
         />
       )}
-    </ThemedView>
+    </TouchableOpacity>
   );
 };
 
@@ -53,7 +94,7 @@ const styles = StyleSheet.create({
     padding: 1,
   },
   cardBack: {
-    backgroundColor: '#004080',
+    backgroundColor: '#994050',
     alignItems: 'center',
     justifyContent: 'center',
   },

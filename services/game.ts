@@ -1,5 +1,6 @@
-import { Game } from '@/types';
+import { BetInsert, Game } from '@/types';
 import { api } from './api';
+import { supabase } from '@/providers/supabase';
 
 export const gameKey = (gameId: string) => {
   return ['game', gameId];
@@ -32,15 +33,15 @@ export const updateGame = (gameId: string, token: string) => {
   };
 };
 
-export const dealCards = (token: string) => {
+export const dealCardsMutation = (token: string) => {
   return {
     mutationFn: async (gameId: string): Promise<void> => {
       if (!gameId) throw new Error('Game ID is required');
 
       try {
-        const response = await api.post(
+        await api.post(
           '/api/deal',
-          { matchID: gameId }, // Corpo da requisição
+          { matchID: gameId },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -49,6 +50,53 @@ export const dealCards = (token: string) => {
         );
       } catch (error) {
         throw new Error(error.response?.data?.error || 'Failed to deal cards');
+      }
+    },
+  };
+};
+
+export const playMutation = (token: string) => {
+  return {
+    mutationFn: async (id: string): Promise<void> => {
+      try {
+        await api.post(
+          '/api/play',
+          {
+            playerCardId: id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+      } catch (error) {
+        // ignore error
+      }
+    },
+  };
+};
+
+/**
+ * @todo MUDAR O INSERT PARA A API PARA CONTROLAR A QUANTIDADE DE APOSTAS
+ * @returns void
+ */
+export const betMutation = () => {
+  return {
+    mutationFn: async ({
+      bet,
+      match_id,
+      round_number,
+    }: BetInsert): Promise<void> => {
+      const { error } = await supabase.from('bets').insert({
+        match_id,
+        round_number,
+        bet,
+      });
+
+      console.log(error);
+      if (error) {
+        throw error;
       }
     },
   };

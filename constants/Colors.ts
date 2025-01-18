@@ -19,5 +19,6 @@ export const Colors = {
     // status colors
     danger: '#ef5350',
     success: '#34a424',
+    info: '#1a4e89',
   },
 };

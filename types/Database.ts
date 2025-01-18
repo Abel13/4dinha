@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bets: {
+        Row: {
+          bet: number
+          created_at: string | null
+          match_id: string
+          round_number: number
+          user_id: string
+        }
+        Insert: {
+          bet: number
+          created_at?: string | null
+          match_id: string
+          round_number: number
+          user_id?: string
+        }
+        Update: {
+          bet?: number
+          created_at?: string | null
+          match_id?: string
+          round_number?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bets_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deck: {
         Row: {
           id: string
@@ -37,7 +69,7 @@ export type Database = {
         Row: {
           action: Database["public"]["Enums"]["actions"]
           created_at: string
-          id: number
+          id: string
           match_id: string
           round_number: number
           user_id: string
@@ -45,7 +77,7 @@ export type Database = {
         Insert: {
           action: Database["public"]["Enums"]["actions"]
           created_at?: string
-          id?: number
+          id?: string
           match_id: string
           round_number: number
           user_id?: string
@@ -53,7 +85,7 @@ export type Database = {
         Update: {
           action?: Database["public"]["Enums"]["actions"]
           created_at?: string
-          id?: number
+          id?: string
           match_id?: string
           round_number?: number
           user_id?: string
@@ -76,7 +108,7 @@ export type Database = {
           lives: number
           match_id: string
           ready: boolean
-          table_sit: number | null
+          table_seat: number | null
           user_id: string
         }
         Insert: {
@@ -86,7 +118,7 @@ export type Database = {
           lives?: number
           match_id: string
           ready?: boolean
-          table_sit?: number | null
+          table_seat?: number | null
           user_id?: string
         }
         Update: {
@@ -96,7 +128,7 @@ export type Database = {
           lives?: number
           match_id?: string
           ready?: boolean
-          table_sit?: number | null
+          table_seat?: number | null
           user_id?: string
         }
         Relationships: [
@@ -262,7 +294,7 @@ export type Database = {
       }
     }
     Enums: {
-      actions: "deal"
+      actions: "deal" | "bet" | "change_status" | "play"
       card_suit: "♣️" | "♥️" | "♠️" | "♦️"
       card_symbol:
         | "A"

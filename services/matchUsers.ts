@@ -35,6 +35,8 @@ export const enterMatchService = async ({
     .select('*')
     .maybeSingle();
 
+  console.log(error);
+
   if (error && error.code === '23505') return matchId;
   if (matchUser) return matchUser.match_id;
 
