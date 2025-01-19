@@ -1,9 +1,13 @@
-import { BetInsert, Game } from '@/types';
+import { BetInsert, Deck, Game } from '@/types';
 import { api } from './api';
 import { supabase } from '@/providers/supabase';
 
 export const gameKey = (gameId: string) => {
   return ['game', gameId];
+};
+
+export const trumpKey = (gameId: string, roundNumber: number) => {
+  return ['trump', gameId, roundNumber];
 };
 
 export const updateGame = (gameId: string, token: string) => {
@@ -94,10 +98,36 @@ export const betMutation = () => {
         bet,
       });
 
-      console.log(error);
       if (error) {
         throw error;
       }
     },
+  };
+};
+
+export const getTrumps = (
+  gameId: string,
+  roundNumber: number,
+  token: string,
+) => {
+  return {
+    queryKey: trumpKey(gameId, roundNumber),
+    queryFn: async (): Promise<Deck[]> => {
+      try {
+        const response = await api.get('api/trumps', {
+          params: {
+            matchID: gameId,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    initialData: [],
   };
 };

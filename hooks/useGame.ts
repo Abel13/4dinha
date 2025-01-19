@@ -6,6 +6,7 @@ import {
   updateGame,
   betMutation,
   playMutation,
+  getTrumps,
 } from '@/services/game';
 import { Bet, GamePlayer } from '@/types';
 import { useUserSessionStore } from './useUserSessionStore';
@@ -44,6 +45,15 @@ export const useGame = (matchId: string) => {
   });
 
   const roundNumber = game?.round?.round_number || 0;
+
+  const { data: trumps } = useQuery({
+    ...getTrumps(
+      matchId as string,
+      roundNumber,
+      session?.access_token as string,
+    ),
+    enabled: roundNumber > 0,
+  });
 
   const refreshGame = useCallback(() => {
     refetch();
@@ -220,6 +230,7 @@ export const useGame = (matchId: string) => {
       symbol: game?.round?.trump_symbol,
       suit: game?.round?.trump_suit,
     },
+    trumps,
     bet,
     betCount,
     max,

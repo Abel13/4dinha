@@ -8,7 +8,7 @@ interface CardProps {
   suit?: Suit;
   symbol?: Symbol;
   playing?: boolean;
-  onPress?: (id: string) => Promise<void>;
+  onPress?: (id?: string) => void;
 }
 
 export const Card: React.FC<CardProps> = ({

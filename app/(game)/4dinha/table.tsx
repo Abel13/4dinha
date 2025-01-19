@@ -5,9 +5,10 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
+import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
-import { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Modal, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,10 +49,26 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: Colors.dark.background,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
 });
 
 export default function Table() {
   const { gameId } = useLocalSearchParams();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const {
     dealing,
@@ -73,6 +90,7 @@ export default function Table() {
     checkLimit,
     betting,
     playing,
+    trumps,
     add,
     subtract,
     handleDeal,
@@ -81,7 +99,13 @@ export default function Table() {
     refreshGame,
   } = useGame(gameId as string);
 
-  const handleTrumps = useCallback(async () => {}, []);
+  const closeModal = useCallback(() => {
+    setModalVisible(false);
+  }, []);
+
+  const onTrumpPress = useCallback(() => {
+    setModalVisible(true);
+  }, []);
 
   const getEmoji = (
     status?:
@@ -172,12 +196,14 @@ export default function Table() {
       </ThemedView>
       <ThemedView style={styles.trump}>
         <ThemedText>MANILHA</ThemedText>
-        <Card
-          suit={trump?.suit}
-          symbol={trump?.symbol}
-          status={'played'}
-          onPress={handleTrumps}
-        />
+        {roundStatus && (
+          <Card
+            suit={trump?.suit}
+            symbol={trump?.symbol}
+            status={'on hand'}
+            onPress={onTrumpPress}
+          />
+        )}
       </ThemedView>
       <ThemedView style={styles.track}>
         <ThemedView style={styles.row}>
@@ -272,6 +298,52 @@ export default function Table() {
           />
         </ThemedView>
       </ThemedView>
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType='slide'
+        onRequestClose={closeModal}
+      >
+        <ThemedView style={styles.modalContainer}>
+          <ThemedView style={styles.modalContent}>
+            <ThemedView
+              style={[
+                {
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                },
+              ]}
+            >
+              <ThemedText type='title'>Trunfos</ThemedText>
+              <Feather
+                name='x-circle'
+                onPress={closeModal}
+                color={Colors.dark.link}
+                size={24}
+              />
+            </ThemedView>
+            <ThemedView
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-evenly',
+              }}
+            >
+              {trumps.map((card) => {
+                return (
+                  <Card
+                    key={`${card.symbol}${card.suit}`}
+                    status='played'
+                    suit={card.suit}
+                    symbol={card.symbol}
+                  />
+                );
+              })}
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </Modal>
     </ThemedView>
   );
 }
