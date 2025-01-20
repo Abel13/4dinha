@@ -56,6 +56,19 @@ export interface GamePlayer {
    * Define quantos turnos o jogador precisa ganhar na rodada.
    */
   bet: number;
+
+  /**
+   * Quantidade de vitórias na rodada.
+   * Retorna a quantidade de vitórias na rodada.
+   */
+  wins: number;
+}
+
+export interface GameResult {
+  user_id: string;
+  lives: number;
+  bets: number;
+  wins: number;
 }
 
 export interface Game {
@@ -64,4 +77,5 @@ export interface Game {
   round: GameRound;
   player_cards: PlayerCardOnGame;
   bets: Bet[];
+  results: GameResult[];
 }

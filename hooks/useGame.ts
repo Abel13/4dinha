@@ -7,6 +7,7 @@ import {
   betMutation,
   playMutation,
   getTrumps,
+  finishRoundMutation,
 } from '@/services/game';
 import { Bet, GamePlayer } from '@/types';
 import { useUserSessionStore } from './useUserSessionStore';
@@ -16,6 +17,9 @@ export const useGame = (matchId: string) => {
   const { session } = useUserSessionStore();
   const { mutate: mutateDealCards } = useMutation(
     dealCardsMutation(session?.access_token as string),
+  );
+  const { mutate: mutateFinishRound } = useMutation(
+    finishRoundMutation(session?.access_token as string),
   );
   const { mutate: mutatePlay } = useMutation(
     playMutation(session?.access_token as string),
@@ -42,9 +46,10 @@ export const useGame = (matchId: string) => {
   } = useQuery({
     ...updateGame(matchId as string, session?.access_token as string),
     enabled: matchId !== '',
+    refetchInterval: 60000,
   });
 
-  const roundNumber = game?.round?.round_number || 0;
+  const roundNumber = game?.round?.round_number || -1;
 
   const { data: trumps } = useQuery({
     ...getTrumps(
@@ -58,6 +63,18 @@ export const useGame = (matchId: string) => {
   const refreshGame = useCallback(() => {
     refetch();
   }, [game]);
+
+  const handleFinishRound = useCallback(() => {
+    // setFinishing(true);
+    mutateFinishRound(matchId, {
+      onSuccess: () => {
+        setDealing(false);
+      },
+      onError: () => {
+        setDealing(false);
+      },
+    });
+  }, []);
 
   const handleDeal = useCallback(() => {
     setDealing(true);
@@ -89,7 +106,7 @@ export const useGame = (matchId: string) => {
   );
 
   const getCardQuantity = useCallback((roundNumber: number) => {
-    if (roundNumber === 0) return 0;
+    if (roundNumber <= 0) return undefined;
 
     const lastDigit = roundNumber % 10;
 
@@ -139,7 +156,7 @@ export const useGame = (matchId: string) => {
       const { players } = game;
       const me = players.find((player) => player.user_id === session?.user?.id);
 
-      setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
+      if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
 
       const player2 = players.find(
         (player) => player.table_seat === ((me?.table_seat || 0) + 1) % 6,
@@ -161,32 +178,38 @@ export const useGame = (matchId: string) => {
         ...me,
         cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
         bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
       } as GamePlayer);
 
       setPlayer2({
         ...player2,
         cards: game.player_cards.filter((p) => p.user_id === player2?.user_id),
         bet: game.bets.find((p) => p.user_id === player2?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === player2?.user_id)?.wins,
       } as GamePlayer);
       setPlayer3({
         ...player3,
         cards: game.player_cards.filter((p) => p.user_id === player3?.user_id),
         bet: game.bets.find((p) => p.user_id === player3?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === player3?.user_id)?.wins,
       } as GamePlayer);
       setPlayer4({
         ...player4,
         cards: game.player_cards.filter((p) => p.user_id === player4?.user_id),
         bet: game.bets.find((p) => p.user_id === player4?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === player4?.user_id)?.wins,
       } as GamePlayer);
       setPlayer5({
         ...player5,
         cards: game.player_cards.filter((p) => p.user_id === player5?.user_id),
         bet: game.bets.find((p) => p.user_id === player5?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === player5?.user_id)?.wins,
       } as GamePlayer);
       setPlayer6({
         ...player6,
         cards: game.player_cards.filter((p) => p.user_id === player6?.user_id),
         bet: game.bets.find((p) => p.user_id === player6?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === player6?.user_id)?.wins,
       } as GamePlayer);
     }
   }, [game]);
@@ -230,6 +253,7 @@ export const useGame = (matchId: string) => {
       symbol: game?.round?.trump_symbol,
       suit: game?.round?.trump_suit,
     },
+    results: game?.results,
     trumps,
     bet,
     betCount,
@@ -242,6 +266,7 @@ export const useGame = (matchId: string) => {
     handleDeal,
     handlePlay,
     handleBet,
+    handleFinishRound,
     refreshGame,
   };
 };

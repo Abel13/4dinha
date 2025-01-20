@@ -269,6 +269,7 @@ export type Database = {
           symbol: Database["public"]["Enums"]["card_symbol"]
           suit: Database["public"]["Enums"]["card_suit"]
           status: Database["public"]["Enums"]["hand_status"]
+          turn: number
         }[]
       }
       get_user_email: {
@@ -279,9 +280,24 @@ export type Database = {
           email: string
         }[]
       }
+      update_dealer: {
+        Args: {
+          _match_id: string
+          _table_seat: number
+        }
+        Returns: undefined
+      }
       update_match_status_to_started: {
         Args: {
           _match_id: string
+        }
+        Returns: undefined
+      }
+      update_player_lives: {
+        Args: {
+          _match_id: string
+          _user_id: string
+          _new_lives: number
         }
         Returns: undefined
       }
@@ -292,9 +308,16 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_round_number: {
+        Args: {
+          _match_id: string
+          _new_round_number: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
-      actions: "deal" | "bet" | "change_status" | "play"
+      actions: "deal" | "bet" | "change_status" | "play" | "round_start"
       card_suit: "♣️" | "♥️" | "♠️" | "♦️"
       card_symbol:
         | "A"

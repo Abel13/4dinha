@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
   },
+  empty: {
+    borderColor: Colors.dark.tabIconDefault,
+  },
   current: {
     borderColor: Colors.dark.success,
     shadowColor: Colors.dark.success,
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 1,
   },
   number: {
     alignSelf: 'flex-start',
@@ -58,13 +61,13 @@ export const TableSeat = ({
   player?: GamePlayer;
   number: number;
   playing?: boolean;
-  handlePlay?: (id: string) => Promise<void>;
+  handlePlay?: (id?: string) => void;
 }) => {
   const { playerName, playerPicture } = usePlayer(player?.user_id as string);
 
   if (!player?.user_id)
     return (
-      <ThemedView style={styles.seat}>
+      <ThemedView style={[styles.seat, styles.empty]}>
         <ThemedView style={styles.row}>
           <ThemedText style={styles.number}>{number}</ThemedText>
         </ThemedView>
@@ -87,7 +90,7 @@ export const TableSeat = ({
           )}
           <ThemedText type='default'>{playerName}</ThemedText>
         </ThemedView>
-        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.bet)) ? '-' : player.bet}/-`}</ThemedText>
+        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.bet)) ? '-' : player.bet}/${Number.isNaN(Number(player.wins)) ? '-' : player.wins}`}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.row}>
         {player.cards &&

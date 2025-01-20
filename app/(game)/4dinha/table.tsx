@@ -1,4 +1,5 @@
 import { Card } from '@/components/Card';
+import { ResultItem } from '@/components/ResultItem';
 import { TableSeat } from '@/components/TableSeat';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
@@ -8,7 +9,7 @@ import { useGame } from '@/hooks/useGame';
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Modal, StyleSheet } from 'react-native';
+import { Button, Modal, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -91,11 +92,13 @@ export default function Table() {
     betting,
     playing,
     trumps,
+    results,
     add,
     subtract,
     handleDeal,
     handlePlay,
     handleBet,
+    handleFinishRound,
     refreshGame,
   } = useGame(gameId as string);
 
@@ -147,7 +150,9 @@ export default function Table() {
               gap: 2,
             }}
           >
-            <ThemedText type='subtitle'>{`RODADA ${roundNumber}`}</ThemedText>
+            <ThemedText type='subtitle'>
+              {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
+            </ThemedText>
             <ThemedView />
             <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
             <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
@@ -181,7 +186,7 @@ export default function Table() {
                 marginBottom: 5,
               }}
             >
-              {checkLimit && me?.current && (
+              {checkLimit && me?.current && cardQuantity && (
                 <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
               )}
             </ThemedView>
@@ -247,7 +252,7 @@ export default function Table() {
             <TableSeat
               number={1}
               player={me}
-              handlePlay={handlePlay}
+              handlePlay={(id) => handlePlay(id)}
               playing={playing}
             />
           </ThemedView>
@@ -340,6 +345,45 @@ export default function Table() {
                   />
                 );
               })}
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </Modal>
+
+      <Modal
+        visible={roundStatus === 'finished'}
+        transparent={true}
+        animationType='slide'
+      >
+        <ThemedView style={styles.modalContainer}>
+          <ThemedView style={styles.modalContent}>
+            <ThemedView
+              style={[
+                {
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                },
+              ]}
+            >
+              <ThemedText type='title'>{`Fim da rodada ${roundNumber}`}</ThemedText>
+            </ThemedView>
+            <ThemedView style={{ width: '100%', gap: 5 }}>
+              {results &&
+                results.map((result) => {
+                  return <ResultItem result={result} key={result.user_id} />;
+                })}
+            </ThemedView>
+            <ThemedView style={{}}>
+              {me?.dealer ? (
+                <Button
+                  title='Concluir Rodada'
+                  color={Colors.dark.success}
+                  onPress={handleFinishRound}
+                />
+              ) : (
+                <ThemedText>Aguarde o início da próxima rodada...</ThemedText>
+              )}
             </ThemedView>
           </ThemedView>
         </ThemedView>

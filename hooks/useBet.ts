@@ -2,12 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function useBet(
   currentCount: number,
-  currentRound: number,
+  currentRound?: number,
   checkLimit: boolean = false,
 ) {
   const [bet, setBet] = useState(0);
 
-  function calculateMaxBet(round_number: number): number {
+  function calculateMaxBet(round_number?: number): number {
+    // if (!round_number) return NaN;
+
     const maxCards = 6;
     const roundAbs = (round_number - 1) % (maxCards * 2);
     return roundAbs < maxCards
@@ -43,6 +45,8 @@ export default function useBet(
       }
     }
   }, [checkLimit, currentCount, currentRound]);
+
+  useEffect(() => {}, [bet]);
 
   return { bet, max, add, subtract };
 }

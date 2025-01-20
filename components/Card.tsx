@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { HandStatus, Suit, Symbol } from '@/types/Card';
+import { Colors } from '@/constants/Colors';
 
 interface CardProps {
   id?: string;
@@ -54,7 +55,11 @@ export const Card: React.FC<CardProps> = ({
 
   return (
     <TouchableOpacity
-      style={[styles.card, !visible && styles.cardBack]}
+      style={[
+        styles.card,
+        !visible && styles.cardBack,
+        visible && styles.notPlayed,
+      ]}
       onPress={() => {
         if (onPress) onPress(id || '');
       }}
@@ -120,5 +125,10 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     resizeMode: 'contain',
+  },
+  notPlayed: {
+    borderColor: Colors.dark.success,
+    borderWidth: 2,
+    shadowColor: Colors.dark.success,
   },
 });

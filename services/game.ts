@@ -53,7 +53,33 @@ export const dealCardsMutation = (token: string) => {
           },
         );
       } catch (error) {
+        console.log(error);
         throw new Error(error.response?.data?.error || 'Failed to deal cards');
+      }
+    },
+  };
+};
+
+export const finishRoundMutation = (token: string) => {
+  return {
+    mutationFn: async (gameId: string): Promise<void> => {
+      if (!gameId) throw new Error('Game ID is required');
+
+      console.log(gameId);
+      try {
+        await api.put(
+          '/api/finish-round',
+          { matchID: gameId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+      } catch (error) {
+        throw new Error(
+          error.response?.data?.error || 'Failed to finish round',
+        );
       }
     },
   };
