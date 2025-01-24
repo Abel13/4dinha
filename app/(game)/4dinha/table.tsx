@@ -85,6 +85,7 @@ export default function Table() {
     roundStatus,
     bet,
     betCount,
+    turn,
     max,
     cardQuantity,
     roundNumber,
@@ -157,8 +158,8 @@ export default function Table() {
             <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
             <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
           </ThemedView>
-          <ThemedView>
-            <TableSeat number={4} player={player4} />
+          <ThemedView style={{ maxWidth: '50%' }}>
+            <TableSeat number={4} player={player4} currentTurn={turn} />
           </ThemedView>
           <ThemedView
             style={{
@@ -177,7 +178,7 @@ export default function Table() {
               style={{
                 borderWidth: 1,
                 borderColor:
-                  checkLimit && me?.current
+                  checkLimit && me?.current && roundStatus === 'betting'
                     ? Colors.dark.danger
                     : Colors.dark.border,
                 borderRadius: 10,
@@ -186,17 +187,20 @@ export default function Table() {
                 marginBottom: 5,
               }}
             >
-              {checkLimit && me?.current && cardQuantity && (
-                <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
-              )}
+              {checkLimit &&
+                me?.current &&
+                cardQuantity &&
+                roundStatus === 'betting' && (
+                  <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
+                )}
             </ThemedView>
           </ThemedView>
         </ThemedView>
       </ThemedView>
       <ThemedView style={styles.track}>
         <ThemedView style={styles.row}>
-          <TableSeat number={3} player={player3} />
-          <TableSeat number={5} player={player5} />
+          <TableSeat number={3} player={player3} currentTurn={turn} />
+          <TableSeat number={5} player={player5} currentTurn={turn} />
         </ThemedView>
       </ThemedView>
       <ThemedView style={styles.trump}>
@@ -212,8 +216,8 @@ export default function Table() {
       </ThemedView>
       <ThemedView style={styles.track}>
         <ThemedView style={styles.row}>
-          <TableSeat number={2} player={player2} />
-          <TableSeat number={6} player={player6} />
+          <TableSeat number={2} player={player2} currentTurn={turn} />
+          <TableSeat number={6} player={player6} currentTurn={turn} />
         </ThemedView>
       </ThemedView>
 
@@ -252,8 +256,9 @@ export default function Table() {
             <TableSeat
               number={1}
               player={me}
-              handlePlay={(id) => handlePlay(id)}
+              handlePlay={(id) => handlePlay(id as string)}
               playing={playing}
+              currentTurn={turn}
             />
           </ThemedView>
         )}

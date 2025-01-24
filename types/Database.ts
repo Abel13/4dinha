@@ -333,7 +333,7 @@ export type Database = {
         | "Q"
         | "J"
         | "K"
-      hand_status: "on hand" | "played"
+      hand_status: "on hand" | "on table" | "played"
       match_status: "created" | "started" | "end"
       round_status: "dealing" | "betting" | "playing" | "finished"
     }

@@ -14,7 +14,7 @@ import { useUserSessionStore } from './useUserSessionStore';
 import useBet from './useBet';
 
 export const useGame = (matchId: string) => {
-  const { session } = useUserSessionStore();
+  const { session, loadSession } = useUserSessionStore();
   const { mutate: mutateDealCards } = useMutation(
     dealCardsMutation(session?.access_token as string),
   );
@@ -28,6 +28,7 @@ export const useGame = (matchId: string) => {
   const [dealing, setDealing] = useState<boolean>(false);
   const [playing, setPlaying] = useState<boolean>(false);
   const [betting, setBetting] = useState<boolean>(false);
+  const [turn, setTurn] = useState<number>(1);
 
   const [me, setMe] = useState<GamePlayer>();
   const [player2, setPlayer2] = useState<GamePlayer>();
@@ -42,12 +43,19 @@ export const useGame = (matchId: string) => {
     data: game,
     isLoading,
     isFetching,
+    error,
     refetch,
   } = useQuery({
     ...updateGame(matchId as string, session?.access_token as string),
     enabled: matchId !== '',
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
+
+  useEffect(() => {
+    if (error) {
+      loadSession();
+    }
+  }, [error]);
 
   const roundNumber = game?.round?.round_number || -1;
 
@@ -211,6 +219,11 @@ export const useGame = (matchId: string) => {
         bet: game.bets.find((p) => p.user_id === player6?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === player6?.user_id)?.wins,
       } as GamePlayer);
+
+      if (game.player_cards) {
+        const turn = Math.max(...game.player_cards.map((r) => r.turn));
+        setTurn(turn);
+      }
     }
   }, [game]);
 
@@ -257,6 +270,7 @@ export const useGame = (matchId: string) => {
     trumps,
     bet,
     betCount,
+    turn,
     max,
     cardQuantity,
     roundNumber,

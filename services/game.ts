@@ -16,22 +16,18 @@ export const updateGame = (gameId: string, token: string) => {
     queryFn: async (): Promise<Game> => {
       if (!gameId) return {} as Game;
 
-      try {
-        const response = await api.get('/api/update', {
-          params: {
-            matchID: gameId,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await api.get('/api/update', {
+        params: {
+          matchID: gameId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const { data } = response;
+      const { data } = response;
 
-        return data;
-      } catch (error) {
-        return {} as Game;
-      }
+      return data;
     },
     initialData: {} as Game,
   };
