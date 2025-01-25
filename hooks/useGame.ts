@@ -29,6 +29,9 @@ export const useGame = (matchId: string) => {
   const [playing, setPlaying] = useState<boolean>(false);
   const [betting, setBetting] = useState<boolean>(false);
   const [turn, setTurn] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<'indiozinho' | 'end' | null>(
+    null,
+  );
 
   const [me, setMe] = useState<GamePlayer>();
   const [player2, setPlayer2] = useState<GamePlayer>();
@@ -36,6 +39,8 @@ export const useGame = (matchId: string) => {
   const [player4, setPlayer4] = useState<GamePlayer>();
   const [player5, setPlayer5] = useState<GamePlayer>();
   const [player6, setPlayer6] = useState<GamePlayer>();
+
+  const [winner, setWinner] = useState<GamePlayer>();
 
   const [checkLimit, setCheckLimit] = useState(false);
 
@@ -48,7 +53,6 @@ export const useGame = (matchId: string) => {
   } = useQuery({
     ...updateGame(matchId as string, session?.access_token as string),
     enabled: matchId !== '',
-    // refetchInterval: 60000,
   });
 
   useEffect(() => {
@@ -111,6 +115,34 @@ export const useGame = (matchId: string) => {
       } else console.log('CALMA CARAIO');
     },
     [game, me],
+  );
+
+  const getEmoji = useCallback(
+    (
+      status?:
+        | 'dealing'
+        | 'betting'
+        | 'playing'
+        | 'finished'
+        | 'loading'
+        | 'indiozinho',
+    ) => {
+      switch (status) {
+        case 'betting':
+          return '💵';
+        case 'playing':
+          return '🎮';
+        case 'loading':
+          return '⏳';
+        case 'finished':
+          return '🏁';
+        case 'indiozinho':
+          return '🏹';
+        default:
+          return '🎰';
+      }
+    },
+    [],
   );
 
   const getCardQuantity = useCallback((roundNumber: number) => {
@@ -225,6 +257,18 @@ export const useGame = (matchId: string) => {
         setTurn(turn);
       }
     }
+
+    if (game?.players?.length === 2) {
+      // setCurrentPage('indiozinho');
+      return;
+    }
+
+    if (game?.players?.length === 1) {
+      const winner = game.players.find((p) => p.lives > 0);
+      setWinner(winner);
+      setCurrentPage('end');
+      return;
+    }
   }, [game]);
 
   useEffect(() => {
@@ -275,6 +319,8 @@ export const useGame = (matchId: string) => {
     cardQuantity,
     roundNumber,
     checkLimit,
+    currentPage,
+    winner,
     add,
     subtract,
     handleDeal,
@@ -282,5 +328,6 @@ export const useGame = (matchId: string) => {
     handleBet,
     handleFinishRound,
     refreshGame,
+    getEmoji,
   };
 };

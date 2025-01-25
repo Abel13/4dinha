@@ -7,8 +7,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import { Feather } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Modal, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -94,6 +94,7 @@ export default function Table() {
     playing,
     trumps,
     results,
+    currentPage,
     add,
     subtract,
     handleDeal,
@@ -101,6 +102,7 @@ export default function Table() {
     handleBet,
     handleFinishRound,
     refreshGame,
+    getEmoji,
   } = useGame(gameId as string);
 
   const closeModal = useCallback(() => {
@@ -111,30 +113,16 @@ export default function Table() {
     setModalVisible(true);
   }, []);
 
-  const getEmoji = (
-    status?:
-      | 'dealing'
-      | 'betting'
-      | 'playing'
-      | 'finished'
-      | 'loading'
-      | 'indiozinho',
-  ) => {
-    switch (status) {
-      case 'betting':
-        return '💵';
-      case 'playing':
-        return '🎮';
-      case 'loading':
-        return '⏳';
-      case 'finished':
-        return '🏁';
-      case 'indiozinho':
-        return '🏹';
-      default:
-        return '🎰';
+  useEffect(() => {
+    if (currentPage) {
+      router.replace({
+        pathname: `/(game)/4dinha/${currentPage}`,
+        params: {
+          gameId,
+        },
+      });
     }
-  };
+  }, [currentPage]);
 
   return (
     <ThemedView style={styles.container}>

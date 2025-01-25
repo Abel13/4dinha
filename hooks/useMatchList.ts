@@ -78,7 +78,7 @@ export const useMatchList = () => {
 
       if (data && data.matches) {
         router.replace({
-          pathname: '/(game)/4dinha/table',
+          pathname: '/(game)/4dinha',
           params: {
             gameId: data.matches.id,
           },

@@ -287,6 +287,12 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_match_status_to_end: {
+        Args: {
+          _match_id: string
+        }
+        Returns: undefined
+      }
       update_match_status_to_started: {
         Args: {
           _match_id: string

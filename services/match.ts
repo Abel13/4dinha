@@ -62,3 +62,11 @@ export const startMatchService = async (matchId: string): Promise<void> => {
     _match_id: matchId,
   });
 };
+
+export const endMatchService = async (matchId: string): Promise<void> => {
+  const { error, data } = await supabase.rpc('update_match_status_to_end', {
+    _match_id: matchId,
+  });
+
+  console.log('ERROR', error, data);
+};
