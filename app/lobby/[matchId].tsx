@@ -1,14 +1,16 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedFlatList } from '@/components/ThemedFlatList';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useMatchUsers } from '@/hooks/useMatchUsers';
 import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
+import { Feather } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -25,7 +27,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20,
+    gap: 10,
   },
   padding: {
     padding: 10,
@@ -58,6 +60,13 @@ export default function LobbyScreen() {
   return (
     <ThemedView style={styles.titleContainer}>
       <ThemedView style={[styles.row, styles.padding]}>
+        <TouchableOpacity onPress={router.back}>
+          <Feather
+            name='chevron-left'
+            color={Colors.dark.tabIconDefault}
+            size={24}
+          />
+        </TouchableOpacity>
         <Image
           source={{
             uri: matchPicture?.toString(),

@@ -102,15 +102,19 @@ export const TableSeat = ({
               .filter((c) => c.status === 'on hand')
               .map((card) => {
                 return (
-                  <Card
+                  <ThemedView
                     key={card.id}
-                    id={card.id}
-                    suit={card.suit}
-                    symbol={card.symbol}
-                    status={card.status}
-                    playing={playing}
-                    onPress={handlePlay}
-                  />
+                    style={!card.symbol && { marginRight: -25 }}
+                  >
+                    <Card
+                      id={card.id}
+                      suit={card.suit}
+                      symbol={card.symbol}
+                      status={card.status}
+                      playing={playing}
+                      onPress={handlePlay}
+                    />
+                  </ThemedView>
                 );
               })}
         </ThemedView>

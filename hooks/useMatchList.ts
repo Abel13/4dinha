@@ -1,15 +1,21 @@
 import { supabase } from '@/providers/supabase';
-import { createMatchService, fetchMatches } from '@/services/match';
+import {
+  createMatchService,
+  fetchInProgressMatch,
+  fetchMatches,
+} from '@/services/match';
 import { enterMatchService } from '@/services/matchUsers';
 import { MatchInsert } from '@/types/Match';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
+import { useUserSessionStore } from './useUserSessionStore';
 
 export const useMatchList = () => {
   const router = useRouter();
   const [creatingMatch, setCreatingMatch] = useState<boolean>(false);
+  const { session } = useUserSessionStore();
 
   const {
     data: matches,
@@ -19,11 +25,28 @@ export const useMatchList = () => {
     ...fetchMatches(),
   });
 
+  const { data: inProgressMatches, refetch: refetchMyMatches } = useQuery({
+    ...fetchInProgressMatch(session?.user?.id || ''),
+  });
+
   const enterMatchMutation = useMutation({
     mutationFn: enterMatchService,
     onSuccess: (matchId) => {
       if (matchId)
-        router.navigate({
+        router.push({
+          pathname: '/lobby/[matchId]',
+          params: {
+            matchId,
+          },
+        });
+    },
+  });
+
+  const createMatchUserMutation = useMutation({
+    mutationFn: enterMatchService,
+    onSuccess: (matchId) => {
+      if (matchId)
+        router.dismissTo({
           pathname: '/lobby/[matchId]',
           params: {
             matchId,
@@ -36,7 +59,7 @@ export const useMatchList = () => {
     mutationFn: createMatchService,
     onSuccess: async (matchId) => {
       if (matchId) {
-        enterMatchMutation.mutate({ matchId });
+        createMatchUserMutation.mutate({ matchId });
       }
 
       setCreatingMatch(false);
@@ -54,39 +77,6 @@ export const useMatchList = () => {
   const createMatch = useCallback(async (formData: MatchInsert) => {
     setCreatingMatch(true);
     createMatchMutation.mutate(formData);
-  }, []);
-
-  const fetchInProgressMatch = useCallback(async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('match_users')
-        .select(
-          `
-            user_id,
-            match_id,
-            matches!inner(*)
-          `,
-        )
-        .eq('user_id', userId)
-        .eq('matches.status', 'started')
-        .limit(1)
-        .maybeSingle();
-
-      if (error) {
-        throw error;
-      }
-
-      if (data && data.matches) {
-        router.replace({
-          pathname: '/(game)/4dinha',
-          params: {
-            gameId: data.matches.id,
-          },
-        });
-      }
-    } catch (e) {
-      // ignore error
-    }
   }, []);
 
   useEffect(() => {
@@ -112,6 +102,7 @@ export const useMatchList = () => {
         },
         () => {
           refetch();
+          refetchMyMatches();
         },
       )
       .subscribe();
@@ -124,9 +115,10 @@ export const useMatchList = () => {
   return {
     createMatch,
     enterMatch,
-    fetchInProgressMatch,
     loadingMatches,
     creatingMatch,
     matches,
+    inProgressMatches,
+    refetchMyMatches,
   };
 };

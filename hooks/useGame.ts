@@ -11,7 +11,6 @@ import {
 } from '@/services/game';
 import { Bet, GamePlayer } from '@/types';
 import { useUserSessionStore } from './useUserSessionStore';
-import useBet from './useBet';
 
 export const useGame = (matchId: string) => {
   const { session, loadSession } = useUserSessionStore();
@@ -170,26 +169,23 @@ export const useGame = (matchId: string) => {
 
   const betCount = sumBets(game?.bets);
 
-  const { bet, max, add, subtract } = useBet(
-    betCount,
-    cardQuantity,
-    checkLimit,
+  const handleBet = useCallback(
+    (bet: number) => {
+      setBetting(true);
+      mutateBet(
+        { match_id: matchId, round_number: roundNumber, bet },
+        {
+          onError: () => {
+            setBetting(false);
+          },
+          onSuccess: () => {
+            setBetting(false);
+          },
+        },
+      );
+    },
+    [game, roundNumber, matchId],
   );
-
-  const handleBet = useCallback(() => {
-    setBetting(true);
-    mutateBet(
-      { match_id: matchId, round_number: roundNumber, bet },
-      {
-        onError: () => {
-          setBetting(false);
-        },
-        onSuccess: () => {
-          setBetting(false);
-        },
-      },
-    );
-  }, [game, bet, roundNumber, matchId]);
 
   useEffect(() => {
     if (game.players?.length > 0) {
@@ -312,17 +308,13 @@ export const useGame = (matchId: string) => {
     },
     results: game?.results,
     trumps,
-    bet,
     betCount,
     turn,
-    max,
     cardQuantity,
     roundNumber,
     checkLimit,
     currentPage,
     winner,
-    add,
-    subtract,
     handleDeal,
     handlePlay,
     handleBet,

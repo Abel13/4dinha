@@ -37,11 +37,11 @@ export default function TabLayout() {
       <Tabs.Screen
         name='index'
         options={{
-          title: 'Perfil',
+          title: 'Encontrar Partida',
           tabBarIcon: ({ color, focused }) => (
             <IconSymbol
               size={28}
-              name={focused ? 'person.fill' : 'person'}
+              name={focused ? 'gamecontroller.fill' : 'gamecontroller'}
               color={color}
             />
           ),
@@ -61,13 +61,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='matches'
+        name='profile'
         options={{
-          title: 'Encontrar Partida',
+          title: 'Perfil',
           tabBarIcon: ({ color, focused }) => (
             <IconSymbol
               size={28}
-              name={focused ? 'gamecontroller.fill' : 'gamecontroller'}
+              name={focused ? 'person.fill' : 'person'}
               color={color}
             />
           ),

@@ -1,3 +1,4 @@
+import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
 import { TableSeat } from '@/components/TableSeat';
@@ -52,14 +53,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
+    paddingBottom: '40%',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(10, 60, 120, 0.4)',
   },
   modalContent: {
     width: '80%',
     padding: 20,
-    backgroundColor: Colors.dark.background,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -83,23 +85,19 @@ export default function Table() {
     isFetching,
     isLoading,
     roundStatus,
-    bet,
     betCount,
     turn,
-    max,
     cardQuantity,
     roundNumber,
     checkLimit,
-    betting,
     playing,
     trumps,
     results,
     currentPage,
-    add,
-    subtract,
     handleDeal,
     handlePlay,
     handleBet,
+    betting,
     handleFinishRound,
     refreshGame,
     getEmoji,
@@ -126,6 +124,118 @@ export default function Table() {
 
   return (
     <ThemedView style={styles.container}>
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType='slide'
+        onRequestClose={closeModal}
+      >
+        <ThemedView style={styles.modalContainer}>
+          <ThemedView style={styles.modalContent}>
+            <ThemedView
+              style={[
+                {
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                },
+              ]}
+            >
+              <ThemedText type='title'>Trunfos</ThemedText>
+              <Feather
+                name='x-circle'
+                onPress={closeModal}
+                color={Colors.dark.link}
+                size={24}
+              />
+            </ThemedView>
+            <ThemedView
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-evenly',
+              }}
+            >
+              {trumps.map((card) => {
+                return (
+                  <Card
+                    key={`${card.symbol}${card.suit}`}
+                    status='played'
+                    suit={card.suit}
+                    symbol={card.symbol}
+                  />
+                );
+              })}
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </Modal>
+
+      <Modal
+        visible={roundStatus === 'finished'}
+        transparent={true}
+        animationType='slide'
+      >
+        <ThemedView style={styles.modalContainer}>
+          <ThemedView style={styles.modalContent}>
+            <ThemedView
+              style={[
+                {
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                },
+              ]}
+            >
+              <ThemedText type='title'>{`Fim da rodada ${roundNumber}`}</ThemedText>
+            </ThemedView>
+            <ThemedView style={{ width: '100%', gap: 5 }}>
+              {results &&
+                results.map((result) => {
+                  return <ResultItem result={result} key={result.user_id} />;
+                })}
+            </ThemedView>
+            <ThemedView style={{}}>
+              {me?.dealer ? (
+                <Button
+                  title='Concluir Rodada'
+                  color={Colors.dark.success}
+                  onPress={handleFinishRound}
+                />
+              ) : (
+                <ThemedText>Aguarde o início da próxima rodada...</ThemedText>
+              )}
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </Modal>
+
+      <Modal
+        visible={
+          !!(
+            roundStatus === 'betting' &&
+            me?.current &&
+            !isFetching &&
+            !isLoading
+          )
+        }
+        transparent={true}
+        animationType='slide'
+      >
+        <ThemedView style={styles.modalContainer}>
+          <ThemedView style={styles.modalContent}>
+            <Bet
+              betCount={betCount}
+              betting={betting}
+              cardQuantity={cardQuantity!}
+              checkLimit={checkLimit}
+              handleBet={handleBet}
+              refreshGame={refreshGame}
+              loading={isFetching || isLoading}
+            />
+          </ThemedView>
+        </ThemedView>
+      </Modal>
       <ThemedView style={styles.track}>
         <ThemedView style={styles.row}>
           <ThemedView
@@ -226,7 +336,7 @@ export default function Table() {
             style={{
               justifyContent: 'center',
               alignItems: 'center',
-              flex: 0.6,
+              flex: 1,
             }}
           >
             <ThemedButton
@@ -238,7 +348,7 @@ export default function Table() {
         ) : (
           <ThemedView
             style={{
-              flex: 0.6,
+              flex: 1,
             }}
           >
             <TableSeat
@@ -250,45 +360,8 @@ export default function Table() {
             />
           </ThemedView>
         )}
-        {roundStatus === 'betting' &&
-          me?.current &&
-          !isFetching &&
-          !isLoading && (
-            <ThemedView
-              style={{
-                flex: 0.3,
-                width: '50%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 10,
-              }}
-            >
-              <ThemedView
-                style={{
-                  width: '100%',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}
-              >
-                <ThemedButton
-                  title='-'
-                  onPress={subtract}
-                  disabled={bet === 0}
-                />
-                <ThemedText>{bet}</ThemedText>
-                <ThemedButton title='+' onPress={add} disabled={bet === max} />
-              </ThemedView>
-              <ThemedButton
-                title='APOSTAR'
-                onPress={handleBet}
-                loading={betting}
-              />
-            </ThemedView>
-          )}
-        <ThemedView
-          style={{ justifyContent: 'center', alignItems: 'center', flex: 0.1 }}
-        >
+
+        <ThemedView style={{ justifyContent: 'center', alignItems: 'center' }}>
           <ThemedButton
             title='↻'
             loading={isFetching || isLoading}
@@ -296,91 +369,6 @@ export default function Table() {
           />
         </ThemedView>
       </ThemedView>
-      <Modal
-        visible={isModalVisible}
-        transparent={true}
-        animationType='slide'
-        onRequestClose={closeModal}
-      >
-        <ThemedView style={styles.modalContainer}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedView
-              style={[
-                {
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                },
-              ]}
-            >
-              <ThemedText type='title'>Trunfos</ThemedText>
-              <Feather
-                name='x-circle'
-                onPress={closeModal}
-                color={Colors.dark.link}
-                size={24}
-              />
-            </ThemedView>
-            <ThemedView
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-evenly',
-              }}
-            >
-              {trumps.map((card) => {
-                return (
-                  <Card
-                    key={`${card.symbol}${card.suit}`}
-                    status='played'
-                    suit={card.suit}
-                    symbol={card.symbol}
-                  />
-                );
-              })}
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </Modal>
-
-      <Modal
-        visible={roundStatus === 'finished'}
-        transparent={true}
-        animationType='slide'
-      >
-        <ThemedView style={styles.modalContainer}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedView
-              style={[
-                {
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                },
-              ]}
-            >
-              <ThemedText type='title'>{`Fim da rodada ${roundNumber}`}</ThemedText>
-            </ThemedView>
-            <ThemedView style={{ width: '100%', gap: 5 }}>
-              {results &&
-                results.map((result) => {
-                  return <ResultItem result={result} key={result.user_id} />;
-                })}
-            </ThemedView>
-            <ThemedView style={{}}>
-              {me?.dealer ? (
-                <Button
-                  title='Concluir Rodada'
-                  color={Colors.dark.success}
-                  onPress={handleFinishRound}
-                />
-              ) : (
-                <ThemedText>Aguarde o início da próxima rodada...</ThemedText>
-              )}
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </Modal>
     </ThemedView>
   );
 }
