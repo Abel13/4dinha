@@ -1,0 +1,8 @@
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
+
+title: '4dinha'
+description: '🃏 Um jogo de truco, estratégia e zoeira onde a sorte e a malandragem decidem o destino dos jogadores! 🔥 Aposte, blefe e dispute até o último truco – mas cuidado, porque aqui quem vacila, dança! 😈 Será que você tem o que é preciso para ser o rei da mesa? 👑'
+show_downloads: false
+google_analytics: '' # Adicione seu Google Analytics ID se necessário
