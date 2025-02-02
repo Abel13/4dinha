@@ -29,7 +29,9 @@ export const Card: React.FC<CardProps> = ({
       <View style={[styles.card, styles[size], !visible && styles.cardBack]}>
         {visible ? (
           <View style={styles.cardContent}>
-            <Text style={[styles[`symbol_${size}`]]}>{symbol}</Text>
+            <Text style={[styles[`symbol_${size}`], styles[suit]]}>
+              {symbol}
+            </Text>
             <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
           </View>
         ) : (
