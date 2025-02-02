@@ -26,7 +26,6 @@ export const updateGame = (gameId: string, token: string) => {
       });
 
       const { data } = response;
-
       return data;
     },
     initialData: {} as Game,

@@ -73,7 +73,7 @@ export const TableSeat = ({
           <ThemedText style={styles.number}>{number}</ThemedText>
         </ThemedView>
         <ThemedView style={styles.row} />
-        <ThemedView style={styles.row}></ThemedView>
+        <ThemedView style={styles.row} />
       </ThemedView>
     );
 

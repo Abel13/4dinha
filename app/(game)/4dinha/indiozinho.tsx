@@ -111,7 +111,7 @@ export default function Indiozinho() {
 
   const onTrumpPress = useCallback(() => {
     if (trump.symbol) setModalVisible(true);
-  }, []);
+  }, [trump]);
 
   return (
     <ThemedView style={styles.container}>

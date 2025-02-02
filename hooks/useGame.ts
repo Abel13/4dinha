@@ -33,6 +33,8 @@ export const useGame = (matchId: string) => {
   );
 
   const [me, setMe] = useState<GamePlayer>();
+  const [indiozinho1, setIndiozinho1] = useState<GamePlayer>();
+  const [indiozinho2, setIndiozinho2] = useState<GamePlayer>();
   const [player2, setPlayer2] = useState<GamePlayer>();
   const [player3, setPlayer3] = useState<GamePlayer>();
   const [player4, setPlayer4] = useState<GamePlayer>();
@@ -76,7 +78,6 @@ export const useGame = (matchId: string) => {
   }, [game]);
 
   const handleFinishRound = useCallback(() => {
-    // setFinishing(true);
     mutateFinishRound(matchId, {
       onSuccess: () => {
         setDealing(false);
@@ -188,9 +189,16 @@ export const useGame = (matchId: string) => {
   );
 
   useEffect(() => {
-    if (game.players?.length > 0) {
+    if (game.players?.length >= 2) {
       const { players } = game;
       const me = players.find((player) => player.user_id === session?.user?.id);
+
+      setMe({
+        ...me,
+        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
+        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+      } as GamePlayer);
 
       if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
 
@@ -209,13 +217,6 @@ export const useGame = (matchId: string) => {
       const player6 = players.find(
         (player) => player.table_seat === ((me?.table_seat || 0) + 5) % 6,
       );
-
-      setMe({
-        ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
-      } as GamePlayer);
 
       setPlayer2({
         ...player2,
@@ -252,13 +253,56 @@ export const useGame = (matchId: string) => {
         const turn = Math.max(...game.player_cards.map((r) => r.turn));
         setTurn(turn);
       }
-    }
-
-    if (game?.players?.length === 2) {
-      // setCurrentPage('indiozinho');
       return;
     }
 
+    // INDIOZINHO
+    if (game?.players?.length === 2) {
+      setCurrentPage('indiozinho');
+      const { players } = game;
+      const me = players.find((player) => player.user_id === session?.user?.id);
+      setMe({
+        ...me,
+        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
+        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+      } as GamePlayer);
+
+      let indiozinho1 = me;
+      if (!indiozinho1) {
+        indiozinho1 = game.players.sort((i) => i.table_seat)[0];
+      }
+
+      let indiozinho2 = game.players.find(
+        (p) => p.user_id !== indiozinho1.user_id,
+      );
+
+      setIndiozinho1({
+        ...indiozinho1,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === indiozinho1?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === indiozinho1?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === indiozinho1?.user_id)
+          ?.wins,
+      } as GamePlayer);
+
+      setIndiozinho2({
+        ...indiozinho2,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === indiozinho2?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === indiozinho2?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === indiozinho2?.user_id)
+          ?.wins,
+      } as GamePlayer);
+
+      if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
+
+      return;
+    }
+
+    // VENCEDOR
     if (game?.players?.length === 1) {
       const winner = game.players.find((p) => p.lives > 0);
       setWinner(winner);
@@ -296,6 +340,8 @@ export const useGame = (matchId: string) => {
     player4,
     player5,
     player6,
+    indiozinho1,
+    indiozinho2,
     dealing,
     betting,
     playing,

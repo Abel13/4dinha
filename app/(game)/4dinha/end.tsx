@@ -14,7 +14,7 @@ export default function End() {
   const { gameId } = useLocalSearchParams();
   const { session } = useUserSessionStore();
 
-  const { winner, roundNumber } = useGame(gameId as string);
+  const { winner } = useGame(gameId as string);
 
   const { match, endMatch } = useMatch(gameId as string);
 
@@ -46,7 +46,7 @@ export default function End() {
           🏆 {playerName} 🏆
         </ThemedText>
         <ThemedText type='defaultSemiBold' style={styles.stats}>
-          Venceu {roundNumber || 0} Rodadas!
+          Venceu {(match?.round_number || 0) - 1} Rodadas!
         </ThemedText>
       </ThemedView>
 
