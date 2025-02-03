@@ -91,7 +91,7 @@ export const TableSeat = ({
           )}
           <ThemedText type='default'>{playerName}</ThemedText>
         </ThemedView>
-        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.bet)) ? '-' : player.bet}/${Number.isNaN(Number(player.wins)) ? '-' : player.wins}`}</ThemedText>
+        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}</ThemedText>
       </ThemedView>
       <ThemedView
         style={[styles.row, { flex: 1, justifyContent: 'space-between' }]}

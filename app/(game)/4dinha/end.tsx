@@ -20,6 +20,24 @@ export default function End() {
 
   const { playerName, playerPicture } = usePlayer(winner?.user_id || '');
 
+  if (!winner)
+    return (
+      <ThemedView style={styles.container}>
+        <ThemedView>
+          <ThemedText type='title' style={styles.title}>
+            🫠 Ops! 🫠
+          </ThemedText>
+          <ThemedText style={styles.message}>Ninguém ganhou essa!</ThemedText>
+        </ThemedView>
+
+        {session?.user?.id === match?.user_id ? (
+          <ThemedButton title='Finalizar partida' onPress={endMatch} />
+        ) : (
+          <ThemedText>Aguarde a finalização da partida...</ThemedText>
+        )}
+      </ThemedView>
+    );
+
   if (!playerName || !playerPicture)
     return <ActivityIndicator size={100} color={Colors.dark.info} />;
 

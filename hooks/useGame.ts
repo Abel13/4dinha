@@ -303,8 +303,8 @@ export const useGame = (matchId: string) => {
     }
 
     // VENCEDOR
-    if (game?.players?.length === 1) {
-      const winner = game.players.find((p) => p.lives > 0);
+    if (game?.players?.length <= 1) {
+      const winner = game.players?.find((p) => p.lives > 0);
       setWinner(winner);
       setCurrentPage('end');
       return;
