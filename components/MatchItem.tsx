@@ -15,14 +15,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 4,
+    marginVertical: 5,
   },
   matchPicture: {
     width: 30,
     height: 30,
     borderRadius: 4,
+    marginRight: 10,
   },
   title: {
     gap: 5,
+    width: '85%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 5,
   },
 });
 
