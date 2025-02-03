@@ -44,10 +44,42 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: Colors.dark.tint,
   },
+  userContainer: {
+    flex: 0.5,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    top: -17,
+    zIndex: 3,
+    backgroundColor: Colors.dark.background,
+    paddingHorizontal: 8,
+    alignSelf: 'center',
+  },
   profileImage: {
-    width: 35,
-    height: 35,
-    borderRadius: 18,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+  },
+  roundInfoContainer: {
+    borderWidth: 1,
+    borderColor: Colors.dark.tabIconSelected,
+    flexDirection: 'row',
+    gap: 10,
+    borderRadius: 4,
+    padding: 5,
+    minWidth: 40,
+  },
+  dealerEmojiContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dealerText: {
+    position: 'absolute',
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
   },
 });
 
@@ -79,7 +111,7 @@ export const TableSeat = ({
 
   return (
     <ThemedView style={[styles.seat, player.current && styles.current]}>
-      <ThemedView style={styles.row}>
+      <ThemedView style={styles.userContainer}>
         <ThemedView style={styles.row}>
           {playerPicture && (
             <Image
@@ -89,12 +121,19 @@ export const TableSeat = ({
               style={styles.profileImage}
             />
           )}
-          <ThemedText type='default'>{playerName}</ThemedText>
+          <ThemedText type='default' numberOfLines={1} style={{ maxWidth: 85 }}>
+            {playerName}
+          </ThemedText>
         </ThemedView>
-        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}</ThemedText>
+        <ThemedText type='h4'>
+          {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}
+        </ThemedText>
       </ThemedView>
       <ThemedView
-        style={[styles.row, { flex: 1, justifyContent: 'space-between' }]}
+        style={[
+          styles.row,
+          { flex: 1, justifyContent: 'space-between', marginTop: 10 },
+        ]}
       >
         <ThemedView style={[styles.row, { flex: 1 }]}>
           {player.cards &&
@@ -155,18 +194,14 @@ export const TableSeat = ({
             .fill('🤍')
             .join('')}`}
         </ThemedText>
-        <ThemedView
-          style={{
-            borderWidth: 1,
-            borderColor: Colors.dark.tabIconSelected,
-            flexDirection: 'row',
-            gap: 10,
-            borderRadius: 4,
-            padding: 5,
-            minWidth: 40,
-          }}
-        >
-          <ThemedText type='error'>{player.dealer && '🟡'}</ThemedText>
+
+        <ThemedView style={styles.roundInfoContainer}>
+          <ThemedView style={styles.dealerEmojiContainer}>
+            <ThemedText type='error'>{player.dealer && '🟡'}</ThemedText>
+            <ThemedText type='error' style={styles.dealerText}>
+              {player.dealer && 'D'}
+            </ThemedText>
+          </ThemedView>
           <ThemedText type='error'>{player.current && '🎲'}</ThemedText>
         </ThemedView>
       </ThemedView>
