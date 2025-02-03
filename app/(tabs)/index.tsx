@@ -1,104 +1,106 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { IconSymbol } from '@/components/ui/IconSymbol';
 import { ThemedButton } from '@/components/ThemedButton';
-import { useAuth } from '@/hooks/useAuth';
-import { useUserSessionStore } from '@/hooks/useUserSessionStore';
-import { Colors } from '@/constants/Colors';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect } from 'react';
+import { MatchItem } from '@/components/MatchItem';
 import { useMatchList } from '@/hooks/useMatchList';
-import { useEffect } from 'react';
 
-export default function HomeScreen() {
-  const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture, session } = useUserSessionStore(
-    (state) => state,
-  );
-  const { fetchInProgressMatch } = useMatchList();
+export default function LobbyScreen() {
+  const router = useRouter();
+  const { matches, enterMatch, inProgressMatches } = useMatchList();
 
-  useEffect(() => {
-    if (session) fetchInProgressMatch(session?.user?.id as string);
-  }, [session]);
+  const handleNewMatch = useCallback(() => {
+    router.push({
+      pathname: '/lobby/new',
+    });
+  }, []);
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ dark: '#1D6A47' }}
+      headerBackgroundColor={{ dark: '#353636' }}
       headerImage={
-        <Image
-          source={{
-            uri: profilePicture,
-          }}
-          style={styles.reactLogo}
+        <IconSymbol
+          size={310}
+          color='#808080'
+          name='gamecontroller.fill'
+          style={styles.headerImage}
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedButton
-        title='SAIR'
-        type='outlined'
-        onPress={signOut}
-        loading={loggingOut}
-      />
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{' '}
-          <ThemedText type='defaultSemiBold'>app/(tabs)/index.tsx</ThemedText>{' '}
-          to see changes. Press{' '}
-          <ThemedText type='defaultSemiBold'>
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
+      <ThemedView>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type='title'>Partidas</ThemedText>
+          <ThemedButton title='Criar Partida' onPress={handleNewMatch} />
+        </ThemedView>
+        <ThemedText type='subtitle'>Partidas em andamento</ThemedText>
+        {inProgressMatches &&
+          inProgressMatches.map((item) => {
+            return (
+              <ThemedView key={item.matches.id}>
+                <MatchItem
+                  match={item.matches}
+                  enterMatch={() => enterMatch(item.matches.id)}
+                  continueMatch={() => {
+                    router.push({
+                      pathname: '/(game)/4dinha',
+                      params: {
+                        gameId: item.matches.id,
+                      },
+                    });
+                  }}
+                />
+                <ThemedView style={{ height: 4 }} />
+              </ThemedView>
+            );
+          })}
+        <ThemedView style={styles.separator} />
+        <ThemedText type='subtitle'>Novas partidas</ThemedText>
+        {matches &&
+          matches
+            .filter((i) => {
+              return !inProgressMatches.find((p) => p.match_id === i.id);
+            })
+            .map((item) => {
+              return (
+                <ThemedView key={item.id}>
+                  <MatchItem
+                    match={item}
+                    enterMatch={() => enterMatch(item.id)}
+                    continueMatch={() => {
+                      router.replace({
+                        pathname: '/(game)/4dinha',
+                        params: {
+                          gameId: item.id,
+                        },
+                      });
+                    }}
+                  />
+                  <ThemedView style={{ height: 4 }} />
+                </ThemedView>
+              );
             })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type='defaultSemiBold'>npm run reset-project</ThemedText>{' '}
-          to get a fresh <ThemedText type='defaultSemiBold'>app</ThemedText>{' '}
-          directory. This will move the current{' '}
-          <ThemedText type='defaultSemiBold'>app</ThemedText> to{' '}
-          <ThemedText type='defaultSemiBold'>app-example</ThemedText>.
-        </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 100,
-    width: 100,
-    bottom: 10,
-    left: 10,
+  headerImage: {
+    color: '#808080',
+    bottom: -90,
+    left: -35,
     position: 'absolute',
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
+  },
+  titleContainer: {
+    gap: 10,
+    paddingHorizontal: 20,
+  },
+  separator: {
+    height: 15,
   },
 });

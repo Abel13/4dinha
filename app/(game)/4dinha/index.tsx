@@ -1,3 +1,4 @@
+import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
 import { TableSeat } from '@/components/TableSeat';
@@ -7,8 +8,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import { Feather } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Modal, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -52,14 +53,15 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
+    paddingBottom: '40%',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(10, 60, 120, 0.4)',
   },
   modalContent: {
     width: '80%',
     padding: 20,
-    backgroundColor: Colors.dark.background,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -83,23 +85,22 @@ export default function Table() {
     isFetching,
     isLoading,
     roundStatus,
-    bet,
     betCount,
-    max,
+    turn,
     cardQuantity,
     roundNumber,
     checkLimit,
-    betting,
     playing,
     trumps,
     results,
-    add,
-    subtract,
+    currentPage,
     handleDeal,
     handlePlay,
     handleBet,
+    betting,
     handleFinishRound,
     refreshGame,
+    getEmoji,
   } = useGame(gameId as string);
 
   const closeModal = useCallback(() => {
@@ -110,199 +111,19 @@ export default function Table() {
     setModalVisible(true);
   }, []);
 
-  const getEmoji = (
-    status?:
-      | 'dealing'
-      | 'betting'
-      | 'playing'
-      | 'finished'
-      | 'loading'
-      | 'indiozinho',
-  ) => {
-    switch (status) {
-      case 'betting':
-        return '💵';
-      case 'playing':
-        return '🎮';
-      case 'loading':
-        return '⏳';
-      case 'finished':
-        return '🏁';
-      case 'indiozinho':
-        return '🏹';
-      default:
-        return '🎰';
+  useEffect(() => {
+    if (currentPage) {
+      router.replace({
+        pathname: `/(game)/4dinha/${currentPage}`,
+        params: {
+          gameId,
+        },
+      });
     }
-  };
+  }, [currentPage]);
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
-          <ThemedView
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              borderColor: Colors.dark.border,
-              borderRadius: 10,
-              padding: 10,
-              marginVertical: 5,
-              gap: 2,
-            }}
-          >
-            <ThemedText type='subtitle'>
-              {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
-            </ThemedText>
-            <ThemedView />
-            <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
-            <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
-          </ThemedView>
-          <ThemedView>
-            <TableSeat number={4} player={player4} />
-          </ThemedView>
-          <ThemedView
-            style={{
-              flex: 1,
-              gap: 5,
-            }}
-          >
-            <ThemedView style={styles.popup}>
-              <ThemedText type='title'>
-                {isFetching || isLoading
-                  ? getEmoji('loading')
-                  : getEmoji(roundStatus)}
-              </ThemedText>
-            </ThemedView>
-            <ThemedView
-              style={{
-                borderWidth: 1,
-                borderColor:
-                  checkLimit && me?.current
-                    ? Colors.dark.danger
-                    : Colors.dark.border,
-                borderRadius: 10,
-                minHeight: '60%',
-                padding: 10,
-                marginBottom: 5,
-              }}
-            >
-              {checkLimit && me?.current && cardQuantity && (
-                <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
-              )}
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </ThemedView>
-      <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
-          <TableSeat number={3} player={player3} />
-          <TableSeat number={5} player={player5} />
-        </ThemedView>
-      </ThemedView>
-      <ThemedView style={styles.trump}>
-        <ThemedText>MANILHA</ThemedText>
-        {roundStatus && (
-          <Card
-            suit={trump?.suit}
-            symbol={trump?.symbol}
-            status={'on hand'}
-            onPress={onTrumpPress}
-          />
-        )}
-      </ThemedView>
-      <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
-          <TableSeat number={2} player={player2} />
-          <TableSeat number={6} player={player6} />
-        </ThemedView>
-      </ThemedView>
-
-      <ThemedView
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          gap: 10,
-          marginTop: 20,
-          paddingTop: 5,
-          borderColor: Colors.dark.border,
-          borderTopWidth: 1,
-        }}
-      >
-        {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
-          <ThemedView
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 0.6,
-            }}
-          >
-            <ThemedButton
-              title='dar cartas'
-              loading={dealing}
-              onPress={handleDeal}
-            />
-          </ThemedView>
-        ) : (
-          <ThemedView
-            style={{
-              flex: 0.6,
-            }}
-          >
-            <TableSeat
-              number={1}
-              player={me}
-              handlePlay={(id) => handlePlay(id)}
-              playing={playing}
-            />
-          </ThemedView>
-        )}
-        {roundStatus === 'betting' &&
-          me?.current &&
-          !isFetching &&
-          !isLoading && (
-            <ThemedView
-              style={{
-                flex: 0.3,
-                width: '50%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 10,
-              }}
-            >
-              <ThemedView
-                style={{
-                  width: '100%',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}
-              >
-                <ThemedButton
-                  title='-'
-                  onPress={subtract}
-                  disabled={bet === 0}
-                />
-                <ThemedText>{bet}</ThemedText>
-                <ThemedButton title='+' onPress={add} disabled={bet === max} />
-              </ThemedView>
-              <ThemedButton
-                title='APOSTAR'
-                onPress={handleBet}
-                loading={betting}
-              />
-            </ThemedView>
-          )}
-        <ThemedView
-          style={{ justifyContent: 'center', alignItems: 'center', flex: 0.1 }}
-        >
-          <ThemedButton
-            title='↻'
-            loading={isFetching || isLoading}
-            onPress={refreshGame}
-          />
-        </ThemedView>
-      </ThemedView>
       <Modal
         visible={isModalVisible}
         transparent={true}
@@ -388,6 +209,166 @@ export default function Table() {
           </ThemedView>
         </ThemedView>
       </Modal>
+
+      <Modal
+        visible={
+          !!(
+            roundStatus === 'betting' &&
+            me?.current &&
+            !isFetching &&
+            !isLoading
+          )
+        }
+        transparent={true}
+        animationType='slide'
+      >
+        <ThemedView style={styles.modalContainer}>
+          <ThemedView style={styles.modalContent}>
+            <Bet
+              betCount={betCount}
+              betting={betting}
+              cardQuantity={cardQuantity!}
+              checkLimit={checkLimit}
+              handleBet={handleBet}
+              refreshGame={refreshGame}
+              loading={isFetching || isLoading}
+            />
+          </ThemedView>
+        </ThemedView>
+      </Modal>
+      <ThemedView style={styles.track}>
+        <ThemedView style={styles.row}>
+          <ThemedView
+            style={{
+              flex: 1,
+              borderWidth: 1,
+              borderColor: Colors.dark.border,
+              borderRadius: 10,
+              padding: 10,
+              marginVertical: 5,
+              gap: 2,
+            }}
+          >
+            <ThemedText type='subtitle'>
+              {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
+            </ThemedText>
+            <ThemedView />
+            <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
+            <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
+          </ThemedView>
+          <ThemedView style={{ maxWidth: '50%' }}>
+            <TableSeat number={4} player={player4} currentTurn={turn} />
+          </ThemedView>
+          <ThemedView
+            style={{
+              flex: 1,
+              gap: 5,
+            }}
+          >
+            <ThemedView style={styles.popup}>
+              <ThemedText type='title'>
+                {isFetching || isLoading
+                  ? getEmoji('loading')
+                  : getEmoji(roundStatus)}
+              </ThemedText>
+            </ThemedView>
+            <ThemedView
+              style={{
+                borderWidth: 1,
+                borderColor:
+                  checkLimit && me?.current && roundStatus === 'betting'
+                    ? Colors.dark.danger
+                    : Colors.dark.border,
+                borderRadius: 10,
+                minHeight: '60%',
+                padding: 10,
+                marginBottom: 5,
+              }}
+            >
+              {checkLimit &&
+                me?.current &&
+                cardQuantity &&
+                roundStatus === 'betting' && (
+                  <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
+                )}
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+      <ThemedView style={styles.track}>
+        <ThemedView style={styles.row}>
+          <TableSeat number={3} player={player3} currentTurn={turn} />
+          <TableSeat number={5} player={player5} currentTurn={turn} />
+        </ThemedView>
+      </ThemedView>
+      <ThemedView style={styles.trump}>
+        <ThemedText>MANILHA</ThemedText>
+        {roundStatus && (
+          <Card
+            suit={trump?.suit}
+            symbol={trump?.symbol}
+            status={'on hand'}
+            onPress={onTrumpPress}
+          />
+        )}
+      </ThemedView>
+      <ThemedView style={styles.track}>
+        <ThemedView style={styles.row}>
+          <TableSeat number={2} player={player2} currentTurn={turn} />
+          <TableSeat number={6} player={player6} currentTurn={turn} />
+        </ThemedView>
+      </ThemedView>
+
+      <ThemedView
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          gap: 10,
+          marginTop: 20,
+          paddingTop: 5,
+          borderColor: Colors.dark.border,
+          borderTopWidth: 1,
+        }}
+      >
+        {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
+          <ThemedView
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}
+          >
+            <ThemedButton
+              title='dar cartas'
+              loading={dealing}
+              onPress={handleDeal}
+            />
+          </ThemedView>
+        ) : (
+          <ThemedView
+            style={{
+              flex: 1,
+            }}
+          >
+            <TableSeat
+              number={1}
+              player={me}
+              handlePlay={(id) => handlePlay(id as string)}
+              playing={playing}
+              currentTurn={turn}
+            />
+          </ThemedView>
+        )}
+
+        <ThemedView style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <ThemedButton
+            title='↻'
+            loading={isFetching || isLoading}
+            onPress={refreshGame}
+          />
+        </ThemedView>
+      </ThemedView>
     </ThemedView>
   );
 }

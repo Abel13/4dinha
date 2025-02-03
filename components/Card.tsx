@@ -9,6 +9,7 @@ interface CardProps {
   suit?: Suit;
   symbol?: Symbol;
   playing?: boolean;
+  size?: 'small' | 'big';
   onPress?: (id?: string) => void;
 }
 
@@ -18,36 +19,25 @@ export const Card: React.FC<CardProps> = ({
   symbol,
   playing,
   status,
+  size = 'small',
   onPress,
 }) => {
   const visible = symbol && suit;
-  const getSuitColor = (): string => {
-    if (suit === '♥️' || suit === '♦️') {
-      return '#FF4C4C';
-    }
-    return '#000';
-  };
 
   if (playing || status !== 'on hand')
     return (
-      <View style={[styles.card, !visible && styles.cardBack]}>
+      <View style={[styles.card, styles[size], !visible && styles.cardBack]}>
         {visible ? (
           <View style={styles.cardContent}>
-            <Text
-              style={[styles.symbol, styles.left, { color: getSuitColor() }]}
-            >
+            <Text style={[styles[`symbol_${size}`], styles[suit]]}>
               {symbol}
             </Text>
-            <Text
-              style={[styles.suit, styles.center, { color: getSuitColor() }]}
-            >
-              {suit}
-            </Text>
+            <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
           </View>
         ) : (
           <Image
             source={require('../assets/images/logo.png')}
-            style={styles.logo}
+            style={styles[`logo_${size}`]}
           />
         )}
       </View>
@@ -57,6 +47,7 @@ export const Card: React.FC<CardProps> = ({
     <TouchableOpacity
       style={[
         styles.card,
+        styles[size],
         !visible && styles.cardBack,
         visible && styles.notPlayed,
       ]}
@@ -66,17 +57,13 @@ export const Card: React.FC<CardProps> = ({
     >
       {visible ? (
         <View style={styles.cardContent}>
-          <Text style={[styles.symbol, styles.left, { color: getSuitColor() }]}>
-            {symbol}
-          </Text>
-          <Text style={[styles.suit, styles.center, { color: getSuitColor() }]}>
-            {suit}
-          </Text>
+          <Text style={[styles[`symbol_${size}`], styles[suit]]}>{symbol}</Text>
+          <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
         </View>
       ) : (
         <Image
           source={require('../assets/images/logo.png')}
-          style={styles.logo}
+          style={styles[`logo_${size}`]}
         />
       )}
     </TouchableOpacity>
@@ -84,9 +71,15 @@ export const Card: React.FC<CardProps> = ({
 };
 
 const styles = StyleSheet.create({
-  card: {
+  small: {
     width: 35,
     height: 45,
+  },
+  big: {
+    width: 62,
+    height: 80,
+  },
+  card: {
     borderRadius: 4,
     borderWidth: 1,
     borderColor: '#ddd',
@@ -107,28 +100,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
-  left: {
+  symbol_small: {
     textAlign: 'left',
-  },
-  center: {
-    fontSize: 20,
-    textAlign: 'right',
-  },
-  symbol: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: 'bold',
   },
-  suit: {
-    fontSize: 10,
+  symbol_big: {
+    textAlign: 'left',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  logo: {
+  suit_small: { textAlign: 'right', fontSize: 18 },
+  suit_big: { textAlign: 'right', fontSize: 40 },
+  logo_small: {
     width: 35,
     height: 35,
+    resizeMode: 'contain',
+  },
+  logo_big: {
+    width: 60,
+    height: 60,
     resizeMode: 'contain',
   },
   notPlayed: {
     borderColor: Colors.dark.success,
     borderWidth: 2,
     shadowColor: Colors.dark.success,
+  },
+  '♥️': {
+    color: '#FF4C4C',
+  },
+  '♦️': {
+    color: '#FF4C4C',
+  },
+  '♠️': {
+    color: '#000',
+  },
+  '♣️': {
+    color: '#000',
   },
 });

@@ -5,7 +5,6 @@ import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
 import { GamePlayer } from '@/types';
 import { Card } from './Card';
-import { useCallback } from 'react';
 
 const styles = StyleSheet.create({
   seat: {
@@ -56,11 +55,13 @@ export const TableSeat = ({
   player,
   number,
   playing,
+  currentTurn,
   handlePlay,
 }: {
   player?: GamePlayer;
   number: number;
   playing?: boolean;
+  currentTurn: number;
   handlePlay?: (id?: string) => void;
 }) => {
   const { playerName, playerPicture } = usePlayer(player?.user_id as string);
@@ -72,7 +73,7 @@ export const TableSeat = ({
           <ThemedText style={styles.number}>{number}</ThemedText>
         </ThemedView>
         <ThemedView style={styles.row} />
-        <ThemedView style={styles.row}></ThemedView>
+        <ThemedView style={styles.row} />
       </ThemedView>
     );
 
@@ -90,23 +91,61 @@ export const TableSeat = ({
           )}
           <ThemedText type='default'>{playerName}</ThemedText>
         </ThemedView>
-        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.bet)) ? '-' : player.bet}/${Number.isNaN(Number(player.wins)) ? '-' : player.wins}`}</ThemedText>
+        <ThemedText type='subtitle'>{`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.row}>
-        {player.cards &&
-          player.cards.map((card) => {
-            return (
-              <Card
-                key={card.id}
-                id={card.id}
-                suit={card.suit}
-                symbol={card.symbol}
-                status={card.status}
-                playing={playing}
-                onPress={handlePlay}
-              />
-            );
-          })}
+      <ThemedView
+        style={[styles.row, { flex: 1, justifyContent: 'space-between' }]}
+      >
+        <ThemedView style={[styles.row, { flex: 1 }]}>
+          {player.cards &&
+            player.cards
+              .filter((c) => c.status === 'on hand')
+              .map((card) => {
+                return (
+                  <ThemedView
+                    key={card.id}
+                    style={!card.symbol && { marginRight: -25 }}
+                  >
+                    <Card
+                      id={card.id}
+                      suit={card.suit}
+                      symbol={card.symbol}
+                      status={card.status}
+                      playing={playing}
+                      onPress={handlePlay}
+                    />
+                  </ThemedView>
+                );
+              })}
+        </ThemedView>
+        <ThemedView
+          style={{
+            flex: 1,
+            maxWidth: 45,
+            height: '100%',
+            borderRadius: 4,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          darkColor={Colors.dark.table}
+        >
+          {player.cards &&
+            player.cards
+              .filter((c) => c.status === 'on table' && c.turn === currentTurn)
+              .map((card) => {
+                return (
+                  <Card
+                    key={card.id}
+                    id={card.id}
+                    suit={card.suit}
+                    symbol={card.symbol}
+                    status={card.status}
+                    playing={playing}
+                    onPress={handlePlay}
+                  />
+                );
+              })}
+        </ThemedView>
       </ThemedView>
       <ThemedView style={[styles.row, { justifyContent: 'space-between' }]}>
         <ThemedText type='error'>

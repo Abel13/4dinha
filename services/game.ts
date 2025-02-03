@@ -16,22 +16,17 @@ export const updateGame = (gameId: string, token: string) => {
     queryFn: async (): Promise<Game> => {
       if (!gameId) return {} as Game;
 
-      try {
-        const response = await api.get('/api/update', {
-          params: {
-            matchID: gameId,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await api.get('/api/update', {
+        params: {
+          matchID: gameId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const { data } = response;
-
-        return data;
-      } catch (error) {
-        return {} as Game;
-      }
+      const { data } = response;
+      return data;
     },
     initialData: {} as Game,
   };
@@ -53,7 +48,6 @@ export const dealCardsMutation = (token: string) => {
           },
         );
       } catch (error) {
-        console.log(error);
         throw new Error(error.response?.data?.error || 'Failed to deal cards');
       }
     },
@@ -64,8 +58,6 @@ export const finishRoundMutation = (token: string) => {
   return {
     mutationFn: async (gameId: string): Promise<void> => {
       if (!gameId) throw new Error('Game ID is required');
-
-      console.log(gameId);
       try {
         await api.put(
           '/api/finish-round',

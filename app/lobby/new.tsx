@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -10,6 +10,9 @@ import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { format } from 'date-fns';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useMatchList } from '@/hooks/useMatchList';
+import { Feather } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
+import { router } from 'expo-router';
 
 const schema = yup.object({
   name: yup.string().required('Nome da partida é obrigatório'),
@@ -27,7 +30,18 @@ export default function NewMatchScreen() {
 
   return (
     <ThemedView style={styles.titleContainer}>
-      <ThemedText type='title'>Nova Partida</ThemedText>
+      <ThemedView
+        style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
+      >
+        <TouchableOpacity onPress={router.back}>
+          <Feather
+            name='chevron-left'
+            color={Colors.dark.tabIconDefault}
+            size={24}
+          />
+        </TouchableOpacity>
+        <ThemedText type='title'>Nova Partida</ThemedText>
+      </ThemedView>
       <ThemedInput name='name' control={control} />
       <ThemedButton
         title='CRIAR PARTIDA'
@@ -42,7 +56,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
     paddingTop: 100,
-    padding: 20,
+    padding: 10,
     gap: 10,
   },
 });

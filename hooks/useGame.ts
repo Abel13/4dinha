@@ -11,10 +11,9 @@ import {
 } from '@/services/game';
 import { Bet, GamePlayer } from '@/types';
 import { useUserSessionStore } from './useUserSessionStore';
-import useBet from './useBet';
 
 export const useGame = (matchId: string) => {
-  const { session } = useUserSessionStore();
+  const { session, loadSession } = useUserSessionStore();
   const { mutate: mutateDealCards } = useMutation(
     dealCardsMutation(session?.access_token as string),
   );
@@ -28,13 +27,21 @@ export const useGame = (matchId: string) => {
   const [dealing, setDealing] = useState<boolean>(false);
   const [playing, setPlaying] = useState<boolean>(false);
   const [betting, setBetting] = useState<boolean>(false);
+  const [turn, setTurn] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<'indiozinho' | 'end' | null>(
+    null,
+  );
 
   const [me, setMe] = useState<GamePlayer>();
+  const [indiozinho1, setIndiozinho1] = useState<GamePlayer>();
+  const [indiozinho2, setIndiozinho2] = useState<GamePlayer>();
   const [player2, setPlayer2] = useState<GamePlayer>();
   const [player3, setPlayer3] = useState<GamePlayer>();
   const [player4, setPlayer4] = useState<GamePlayer>();
   const [player5, setPlayer5] = useState<GamePlayer>();
   const [player6, setPlayer6] = useState<GamePlayer>();
+
+  const [winner, setWinner] = useState<GamePlayer>();
 
   const [checkLimit, setCheckLimit] = useState(false);
 
@@ -42,12 +49,18 @@ export const useGame = (matchId: string) => {
     data: game,
     isLoading,
     isFetching,
+    error,
     refetch,
   } = useQuery({
     ...updateGame(matchId as string, session?.access_token as string),
     enabled: matchId !== '',
-    refetchInterval: 60000,
   });
+
+  useEffect(() => {
+    if (error) {
+      loadSession();
+    }
+  }, [error]);
 
   const roundNumber = game?.round?.round_number || -1;
 
@@ -65,7 +78,6 @@ export const useGame = (matchId: string) => {
   }, [game]);
 
   const handleFinishRound = useCallback(() => {
-    // setFinishing(true);
     mutateFinishRound(matchId, {
       onSuccess: () => {
         setDealing(false);
@@ -105,6 +117,34 @@ export const useGame = (matchId: string) => {
     [game, me],
   );
 
+  const getEmoji = useCallback(
+    (
+      status?:
+        | 'dealing'
+        | 'betting'
+        | 'playing'
+        | 'finished'
+        | 'loading'
+        | 'indiozinho',
+    ) => {
+      switch (status) {
+        case 'betting':
+          return '💵';
+        case 'playing':
+          return '🎮';
+        case 'loading':
+          return '⏳';
+        case 'finished':
+          return '🏁';
+        case 'indiozinho':
+          return '🏹';
+        default:
+          return '🎰';
+      }
+    },
+    [],
+  );
+
   const getCardQuantity = useCallback((roundNumber: number) => {
     if (roundNumber <= 0) return undefined;
 
@@ -130,31 +170,35 @@ export const useGame = (matchId: string) => {
 
   const betCount = sumBets(game?.bets);
 
-  const { bet, max, add, subtract } = useBet(
-    betCount,
-    cardQuantity,
-    checkLimit,
+  const handleBet = useCallback(
+    (bet: number) => {
+      setBetting(true);
+      mutateBet(
+        { match_id: matchId, round_number: roundNumber, bet },
+        {
+          onError: () => {
+            setBetting(false);
+          },
+          onSuccess: () => {
+            setBetting(false);
+          },
+        },
+      );
+    },
+    [game, roundNumber, matchId],
   );
 
-  const handleBet = useCallback(() => {
-    setBetting(true);
-    mutateBet(
-      { match_id: matchId, round_number: roundNumber, bet },
-      {
-        onError: () => {
-          setBetting(false);
-        },
-        onSuccess: () => {
-          setBetting(false);
-        },
-      },
-    );
-  }, [game, bet, roundNumber, matchId]);
-
   useEffect(() => {
-    if (game.players?.length > 0) {
+    if (game.players?.length >= 2) {
       const { players } = game;
       const me = players.find((player) => player.user_id === session?.user?.id);
+
+      setMe({
+        ...me,
+        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
+        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+      } as GamePlayer);
 
       if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
 
@@ -173,13 +217,6 @@ export const useGame = (matchId: string) => {
       const player6 = players.find(
         (player) => player.table_seat === ((me?.table_seat || 0) + 5) % 6,
       );
-
-      setMe({
-        ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
-      } as GamePlayer);
 
       setPlayer2({
         ...player2,
@@ -211,6 +248,66 @@ export const useGame = (matchId: string) => {
         bet: game.bets.find((p) => p.user_id === player6?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === player6?.user_id)?.wins,
       } as GamePlayer);
+
+      if (game.player_cards) {
+        const turn = Math.max(...game.player_cards.map((r) => r.turn));
+        setTurn(turn);
+      }
+      return;
+    }
+
+    // INDIOZINHO
+    if (game?.players?.length === 2) {
+      setCurrentPage('indiozinho');
+      const { players } = game;
+      const me = players.find((player) => player.user_id === session?.user?.id);
+      setMe({
+        ...me,
+        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
+        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+      } as GamePlayer);
+
+      let indiozinho1 = me;
+      if (!indiozinho1) {
+        indiozinho1 = game.players.sort((i) => i.table_seat)[0];
+      }
+
+      let indiozinho2 = game.players.find(
+        (p) => p.user_id !== indiozinho1.user_id,
+      );
+
+      setIndiozinho1({
+        ...indiozinho1,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === indiozinho1?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === indiozinho1?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === indiozinho1?.user_id)
+          ?.wins,
+      } as GamePlayer);
+
+      setIndiozinho2({
+        ...indiozinho2,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === indiozinho2?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === indiozinho2?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === indiozinho2?.user_id)
+          ?.wins,
+      } as GamePlayer);
+
+      if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
+
+      return;
+    }
+
+    // VENCEDOR
+    if (game?.players?.length <= 1) {
+      const winner = game.players?.find((p) => p.lives > 0);
+      setWinner(winner);
+      setCurrentPage('end');
+      return;
     }
   }, [game]);
 
@@ -243,6 +340,8 @@ export const useGame = (matchId: string) => {
     player4,
     player5,
     player6,
+    indiozinho1,
+    indiozinho2,
     dealing,
     betting,
     playing,
@@ -255,18 +354,18 @@ export const useGame = (matchId: string) => {
     },
     results: game?.results,
     trumps,
-    bet,
     betCount,
-    max,
+    turn,
     cardQuantity,
     roundNumber,
     checkLimit,
-    add,
-    subtract,
+    currentPage,
+    winner,
     handleDeal,
     handlePlay,
     handleBet,
     handleFinishRound,
     refreshGame,
+    getEmoji,
   };
 };

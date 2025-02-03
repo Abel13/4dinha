@@ -8,8 +8,6 @@ export default function useBet(
   const [bet, setBet] = useState(0);
 
   function calculateMaxBet(round_number?: number): number {
-    // if (!round_number) return NaN;
-
     const maxCards = 6;
     const roundAbs = (round_number - 1) % (maxCards * 2);
     return roundAbs < maxCards
@@ -42,11 +40,14 @@ export default function useBet(
     if (checkLimit) {
       if (currentCount === currentRound) {
         setBet(1);
+        return;
       }
     }
   }, [checkLimit, currentCount, currentRound]);
 
-  useEffect(() => {}, [bet]);
+  useEffect(() => {
+    setBet(0);
+  }, []);
 
   return { bet, max, add, subtract };
 }

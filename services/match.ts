@@ -1,5 +1,6 @@
 import { supabase } from '@/providers/supabase';
 import { Match, MatchInsert } from '@/types/Match';
+import { MyMatch } from '@/types/MyMatch';
 
 export const matchesKey = () => {
   return ['matches'];
@@ -7,6 +8,10 @@ export const matchesKey = () => {
 
 export const matchKey = (matchId: string) => {
   return ['match', matchId];
+};
+
+export const myMatchesKey = (userId: string) => {
+  return ['my-matches', userId];
 };
 
 export const fetchMatches = () => {
@@ -20,6 +25,33 @@ export const fetchMatches = () => {
 
       if (data) return data;
       return [];
+    },
+    initialData: [],
+  };
+};
+
+export const fetchInProgressMatch = (userId: string) => {
+  return {
+    queryKey: myMatchesKey(userId),
+    queryFn: async (): Promise<MyMatch[]> => {
+      if (userId === '') return [];
+      const { data, error } = await supabase
+        .from('match_users')
+        .select(
+          `
+              user_id,
+              match_id,
+              matches!inner(*)
+            `,
+        )
+        .neq('matches.status', 'end')
+        .eq('user_id', userId);
+
+      if (error) {
+        return [];
+      }
+
+      return data;
     },
     initialData: [],
   };
@@ -59,6 +91,12 @@ export const createMatchService = async (
 
 export const startMatchService = async (matchId: string): Promise<void> => {
   await supabase.rpc('update_match_status_to_started', {
+    _match_id: matchId,
+  });
+};
+
+export const endMatchService = async (matchId: string): Promise<void> => {
+  await supabase.rpc('update_match_status_to_end', {
     _match_id: matchId,
   });
 };
