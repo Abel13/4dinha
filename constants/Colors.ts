@@ -16,6 +16,7 @@ export const Colors = {
     tabIconSelected: tintColorDark,
     link: '#0a7ea4',
     table: '#856200DD',
+    disabledButton: '#A2A3AA',
 
     // status colors
     danger: '#ef5350',

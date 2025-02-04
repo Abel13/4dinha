@@ -15,7 +15,7 @@ import { Button, Modal, StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 7,
     paddingTop: 50,
     paddingBottom: 40,
   },
@@ -35,12 +35,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
-    width: 120,
-    height: 100,
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: Colors.dark.tint,
+    width: 100,
+    height: 70,
+    borderRadius: 10,
+    flexDirection: 'row',
+    margin: 3,
   },
   popup: {
     flex: 1,
@@ -237,7 +236,7 @@ export default function Table() {
         </ThemedView>
       </Modal>
       <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
+        <ThemedView style={[{ marginBottom: 10 }, styles.row]}>
           <ThemedView
             style={{
               flex: 1,
@@ -249,7 +248,7 @@ export default function Table() {
               gap: 2,
             }}
           >
-            <ThemedText type='subtitle'>
+            <ThemedText type='h4'>
               {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
             </ThemedText>
             <ThemedView />
