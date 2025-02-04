@@ -1,4 +1,10 @@
-import { StyleSheet, Platform, ScrollView, useColorScheme } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  Touchable,
+  TouchableOpacity,
+} from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -60,19 +66,9 @@ export default function HomeScreen() {
         loading={loggingOut}
       />
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{' '}
-          <ThemedText type='defaultSemiBold'>app/(tabs)/index.tsx</ThemedText>{' '}
-          to see changes. Press{' '}
-          <ThemedText type='defaultSemiBold'>
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
+        <TouchableOpacity onPress={() => router.push('/animations/card')}>
+          <ThemedText>GIFT</ThemedText>
+        </TouchableOpacity>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type='subtitle'>Step 2: Explore</ThemedText>

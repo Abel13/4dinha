@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "device": "expo run --device",
@@ -54,7 +53,8 @@
     "react-native-screens": "~4.4.0",
     "yup": "^1.6.1",
     "zustand": "^5.0.2",
-    "lottie-react-native": "7.1.0"
+    "lottie-react-native": "7.1.0",
+    "react-native-pager-view": "6.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
