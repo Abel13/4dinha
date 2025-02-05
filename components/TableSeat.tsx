@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
+import { Image, StyleSheet, Vibration } from 'react-native';
+
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from './ThemedView';
-import { Image, StyleSheet } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
 import { GamePlayer } from '@/types';
@@ -83,20 +85,32 @@ const styles = StyleSheet.create({
   },
 });
 
-export const TableSeat = ({
-  player,
-  number,
-  playing,
-  currentTurn,
-  handlePlay,
-}: {
+interface TableSeatProps {
+  me?: GamePlayer;
   player?: GamePlayer;
   number: number;
   playing?: boolean;
   currentTurn: number;
   handlePlay?: (id?: string) => void;
-}) => {
+}
+
+const VIBRATION_DURATION_IN_MS = 500;
+
+export const TableSeat = ({
+  me,
+  player,
+  number,
+  playing,
+  currentTurn,
+  handlePlay,
+}: TableSeatProps) => {
   const { playerName, playerPicture } = usePlayer(player?.user_id as string);
+
+  useEffect(() => {
+    player?.current &&
+      player.id === me?.id &&
+      Vibration.vibrate(VIBRATION_DURATION_IN_MS);
+  }, [player?.current]);
 
   if (!player?.user_id)
     return (

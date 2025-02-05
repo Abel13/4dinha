@@ -256,7 +256,7 @@ export default function Table() {
             <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
           </ThemedView>
           <ThemedView style={{ maxWidth: '50%' }}>
-            <TableSeat number={4} player={player4} currentTurn={turn} />
+            <TableSeat number={4} player={player4} currentTurn={turn} me={me} />
           </ThemedView>
           <ThemedView
             style={{
@@ -296,8 +296,8 @@ export default function Table() {
       </ThemedView>
       <ThemedView style={styles.track}>
         <ThemedView style={styles.row}>
-          <TableSeat number={3} player={player3} currentTurn={turn} />
-          <TableSeat number={5} player={player5} currentTurn={turn} />
+          <TableSeat number={3} player={player3} currentTurn={turn} me={me} />
+          <TableSeat number={5} player={player5} currentTurn={turn} me={me} />
         </ThemedView>
       </ThemedView>
       <ThemedView style={styles.trump}>
@@ -313,8 +313,8 @@ export default function Table() {
       </ThemedView>
       <ThemedView style={styles.track}>
         <ThemedView style={styles.row}>
-          <TableSeat number={2} player={player2} currentTurn={turn} />
-          <TableSeat number={6} player={player6} currentTurn={turn} />
+          <TableSeat number={2} player={player2} currentTurn={turn} me={me} />
+          <TableSeat number={6} player={player6} currentTurn={turn} me={me} />
         </ThemedView>
       </ThemedView>
 
@@ -356,6 +356,7 @@ export default function Table() {
               handlePlay={(id) => handlePlay(id as string)}
               playing={playing}
               currentTurn={turn}
+              me={me}
             />
           </ThemedView>
         )}
