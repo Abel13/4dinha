@@ -1,4 +1,4 @@
-import { BetInsert, Deck, Game } from '@/types';
+import { type BetInsert, type Deck, type Game } from '@/types';
 import { api } from './api';
 import { supabase } from '@/providers/supabase';
 

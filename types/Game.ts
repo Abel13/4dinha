@@ -1,7 +1,7 @@
-import { Bet } from './Bet';
-import { Match } from './Match';
-import { PlayerCardOnGame } from './PlayerCard';
-import { GameRound } from './Round';
+import { type Bet } from './Bet';
+import { type Match } from './Match';
+import { type PlayerCardOnGame } from './PlayerCard';
+import { type GameRound } from './Round';
 
 /**
  * Representa um jogador em uma partida de jogo.

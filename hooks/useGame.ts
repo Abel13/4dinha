@@ -9,19 +9,19 @@ import {
   getTrumps,
   finishRoundMutation,
 } from '@/services/game';
-import { Bet, GamePlayer } from '@/types';
+import { type Bet, type GamePlayer } from '@/types';
 import { useUserSessionStore } from './useUserSessionStore';
 
 export const useGame = (matchId: string) => {
   const { session, loadSession } = useUserSessionStore();
   const { mutate: mutateDealCards } = useMutation(
-    dealCardsMutation(session?.access_token as string),
+    dealCardsMutation(session?.access_token!),
   );
   const { mutate: mutateFinishRound } = useMutation(
-    finishRoundMutation(session?.access_token as string),
+    finishRoundMutation(session?.access_token!),
   );
   const { mutate: mutatePlay } = useMutation(
-    playMutation(session?.access_token as string),
+    playMutation(session?.access_token!),
   );
   const { mutate: mutateBet } = useMutation(betMutation());
   const [dealing, setDealing] = useState<boolean>(false);
@@ -52,7 +52,7 @@ export const useGame = (matchId: string) => {
     error,
     refetch,
   } = useQuery({
-    ...updateGame(matchId as string, session?.access_token as string),
+    ...updateGame(matchId, session?.access_token!),
     enabled: matchId !== '',
   });
 
@@ -65,11 +65,7 @@ export const useGame = (matchId: string) => {
   const roundNumber = game?.round?.round_number || -1;
 
   const { data: trumps } = useQuery({
-    ...getTrumps(
-      matchId as string,
-      roundNumber,
-      session?.access_token as string,
-    ),
+    ...getTrumps(matchId, roundNumber, session?.access_token!),
     enabled: roundNumber > 0,
   });
 
@@ -273,7 +269,7 @@ export const useGame = (matchId: string) => {
         indiozinho1 = game.players.sort((i) => i.table_seat)[0];
       }
 
-      let indiozinho2 = game.players.find(
+      const indiozinho2 = game.players.find(
         (p) => p.user_id !== indiozinho1.user_id,
       );
 
@@ -307,7 +303,6 @@ export const useGame = (matchId: string) => {
       const winner = game.players?.find((p) => p.lives > 0);
       setWinner(winner);
       setCurrentPage('end');
-      return;
     }
   }, [game]);
 

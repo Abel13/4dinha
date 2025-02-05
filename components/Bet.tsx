@@ -52,18 +52,20 @@ export const Bet = ({
             gap: 20,
           }}
         >
-          <ThemedButton title='-' onPress={subtract} disabled={bet === 0} />
+          <ThemedButton title="-" onPress={subtract} disabled={bet === 0} />
           <ThemedText>{bet}</ThemedText>
-          <ThemedButton title='+' onPress={add} disabled={bet === max} />
+          <ThemedButton title="+" onPress={add} disabled={bet === max} />
         </View>
         <ThemedButton
-          title='APOSTAR'
-          onPress={() => handleBet(bet)}
+          title="APOSTAR"
+          onPress={() => {
+            handleBet(bet);
+          }}
           loading={betting}
         />
       </View>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <ThemedButton title='↻' loading={loading} onPress={refreshGame} />
+        <ThemedButton title="↻" loading={loading} onPress={refreshGame} />
       </View>
     </View>
   );

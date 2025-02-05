@@ -1,8 +1,8 @@
-import { StyleSheet, TextInput, TextInputProps } from 'react-native';
+import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
-import { Control, useController, useFormContext } from 'react-hook-form';
+import { type Control, useController, useFormContext } from 'react-hook-form';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 
@@ -16,7 +16,7 @@ export type ThemedInputProps = TextInputProps & {
   error?: string;
 };
 
-export function ThemedInput({
+export const ThemedInput = ({
   style,
   lightColor,
   darkColor,
@@ -26,7 +26,7 @@ export function ThemedInput({
   type = 'default',
   error,
   ...rest
-}: ThemedInputProps) {
+}: ThemedInputProps) => {
   const color = useThemeColor({ dark: darkColor }, 'text');
   const {
     field: { value, onChange },
@@ -51,10 +51,10 @@ export function ThemedInput({
         cursorColor={Colors.dark.tint}
         {...rest}
       />
-      {error && <ThemedText type='error'>{error}</ThemedText>}
+      {error && <ThemedText type="error">{error}</ThemedText>}
     </ThemedView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   default: {

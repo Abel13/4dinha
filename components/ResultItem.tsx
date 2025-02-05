@@ -2,7 +2,7 @@ import { Colors } from '@/constants/Colors';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
-import { GameResult } from '@/types';
+import { type GameResult } from '@/types';
 import { Image } from 'react-native';
 
 export const ResultItem = ({ result }: { result: GameResult }) => {
@@ -31,7 +31,7 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
         {playerPicture && (
           <Image
             source={{
-              uri: playerPicture as string,
+              uri: playerPicture,
             }}
             style={{
               width: 35,
@@ -40,7 +40,7 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
             }}
           />
         )}
-        <ThemedText type='subtitle'>{playerName}</ThemedText>
+        <ThemedText type="subtitle">{playerName}</ThemedText>
       </ThemedView>
       <ThemedView
         style={{
@@ -50,7 +50,7 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
           gap: 20,
         }}
       >
-        <ThemedText type='title'>{`${result.bets}/${result.wins}`}</ThemedText>
+        <ThemedText type="title">{`${result.bets}/${result.wins}`}</ThemedText>
         <ThemedText>
           {`${Array.from(Array(lives)).fill('❤️').join('')}${Array.from(
             Array(5 - (lives || 0)),

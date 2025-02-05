@@ -30,20 +30,20 @@ export default function LoginScreen() {
     <ThemedView style={styles.titleContainer}>
       <Image
         source={require('@/assets/images/logo.png')}
-        style={{ alignSelf: 'center', width: 200, height: 200 }}
+        style={{ alignSelf: 'center', width: 40, height: 40 }}
       />
-      <ThemedText type='title'>LOGIN</ThemedText>
+      <ThemedText type="title">LOGIN</ThemedText>
       <ThemedView>
         <ThemedText>e-mail</ThemedText>
         <ThemedInput
-          name='email'
-          inputMode='email'
-          keyboardType='email-address'
-          autoCapitalize='none'
+          name="email"
+          inputMode="email"
+          keyboardType="email-address"
+          autoCapitalize="none"
           autoCorrect={false}
-          autoComplete='off'
+          autoComplete="off"
           control={control}
-          error={errors['email']?.message}
+          error={errors.email?.message}
         />
       </ThemedView>
       <ThemedView>
@@ -52,13 +52,13 @@ export default function LoginScreen() {
           name={'password'}
           control={control}
           secureTextEntry
-          textContentType='password'
-          error={errors['password']?.message}
+          textContentType="password"
+          error={errors.password?.message}
         />
       </ThemedView>
-      <ThemedText type='error'>{t(authError as any)}</ThemedText>
+      <ThemedText type="error">{t(authError as any)}</ThemedText>
       <ThemedButton
-        title='ENTRAR'
+        title="ENTRAR"
         onPress={handleSubmit(onAuth)}
         loading={loading}
       />
@@ -69,7 +69,9 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
-    paddingTop: 100,
+    width: '50%',
+    alignSelf: 'center',
+    paddingHorizontal: 60,
     padding: 20,
     gap: 10,
   },

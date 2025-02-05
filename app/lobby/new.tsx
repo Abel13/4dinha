@@ -35,16 +35,16 @@ export default function NewMatchScreen() {
       >
         <TouchableOpacity onPress={router.back}>
           <Feather
-            name='chevron-left'
+            name="chevron-left"
             color={Colors.dark.tabIconDefault}
             size={24}
           />
         </TouchableOpacity>
-        <ThemedText type='title'>Nova Partida</ThemedText>
+        <ThemedText type="title">Nova Partida</ThemedText>
       </ThemedView>
-      <ThemedInput name='name' control={control} />
+      <ThemedInput name="name" control={control} />
       <ThemedButton
-        title='CRIAR PARTIDA'
+        title="CRIAR PARTIDA"
         onPress={handleSubmit(createMatch)}
         loading={creatingMatch}
       />

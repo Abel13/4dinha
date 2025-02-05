@@ -1,5 +1,5 @@
 import { supabase } from '@/providers/supabase';
-import { Session } from '@supabase/supabase-js';
+import { type Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';

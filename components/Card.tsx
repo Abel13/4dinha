@@ -1,6 +1,6 @@
-import React from 'react';
+import type React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { HandStatus, Suit, Symbol } from '@/types/Card';
+import { type HandStatus, type Suit, type Symbol } from '@/types/Card';
 import { Colors } from '@/constants/Colors';
 
 interface CardProps {

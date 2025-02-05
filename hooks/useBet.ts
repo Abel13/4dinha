@@ -40,7 +40,6 @@ export default function useBet(
     if (checkLimit) {
       if (currentCount === currentRound) {
         setBet(1);
-        return;
       }
     }
   }, [checkLimit, currentCount, currentRound]);

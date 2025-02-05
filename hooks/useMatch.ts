@@ -27,7 +27,7 @@ export const useMatch = (matchId: string) => {
   });
 
   const startMatch = useCallback(async () => {
-    startMatchMutation.mutate(matchId as string);
+    startMatchMutation.mutate(matchId);
   }, []);
 
   const endMatchMutation = useMutation({
@@ -37,7 +37,7 @@ export const useMatch = (matchId: string) => {
   });
 
   const endMatch = useCallback(async () => {
-    endMatchMutation.mutate(matchId as string);
+    endMatchMutation.mutate(matchId);
   }, []);
 
   useEffect(() => {

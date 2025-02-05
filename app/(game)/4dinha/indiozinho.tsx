@@ -118,7 +118,7 @@ export default function Indiozinho() {
       <Modal
         visible={isModalVisible}
         transparent={true}
-        animationType='slide'
+        animationType="slide"
         onRequestClose={closeModal}
       >
         <ThemedView style={styles.modalContainer}>
@@ -132,9 +132,9 @@ export default function Indiozinho() {
                 },
               ]}
             >
-              <ThemedText type='title'>Trunfos</ThemedText>
+              <ThemedText type="title">Trunfos</ThemedText>
               <Feather
-                name='x-circle'
+                name="x-circle"
                 onPress={closeModal}
                 color={Colors.dark.link}
                 size={24}
@@ -151,7 +151,7 @@ export default function Indiozinho() {
                 return (
                   <Card
                     key={`${card.symbol}${card.suit}`}
-                    status='played'
+                    status="played"
                     suit={card.suit}
                     symbol={card.symbol}
                   />
@@ -165,7 +165,7 @@ export default function Indiozinho() {
       <Modal
         visible={roundStatus === 'finished'}
         transparent={true}
-        animationType='slide'
+        animationType="slide"
       >
         <ThemedView style={styles.modalContainer}>
           <ThemedView style={styles.modalContent}>
@@ -178,7 +178,7 @@ export default function Indiozinho() {
                 },
               ]}
             >
-              <ThemedText type='title'>{`Fim da rodada ${roundNumber}`}</ThemedText>
+              <ThemedText type="title">{`Fim da rodada ${roundNumber}`}</ThemedText>
             </ThemedView>
             <ThemedView style={{ width: '100%', gap: 5 }}>
               {results &&
@@ -189,7 +189,7 @@ export default function Indiozinho() {
             <ThemedView style={{}}>
               {me?.dealer ? (
                 <Button
-                  title='Concluir Rodada'
+                  title="Concluir Rodada"
                   color={Colors.dark.success}
                   onPress={handleFinishRound}
                 />
@@ -211,7 +211,7 @@ export default function Indiozinho() {
           )
         }
         transparent={true}
-        animationType='slide'
+        animationType="slide"
       >
         <ThemedView style={styles.modalContainer}>
           <ThemedView style={styles.modalContent}>
@@ -242,7 +242,7 @@ export default function Indiozinho() {
             height: '100%',
           }}
         >
-          <ThemedText type='subtitle'>
+          <ThemedText type="subtitle">
             {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
           </ThemedText>
           <ThemedView />
@@ -276,7 +276,7 @@ export default function Indiozinho() {
           }}
         >
           <ThemedView style={styles.popup}>
-            <ThemedText type='title'>
+            <ThemedText type="title">
               {isFetching || isLoading
                 ? getEmoji('loading')
                 : getEmoji(roundStatus)}
@@ -299,7 +299,7 @@ export default function Indiozinho() {
               me?.current &&
               cardQuantity &&
               roundStatus === 'betting' && (
-                <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
+                <ThemedText type="error">{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
               )}
           </ThemedView>
         </ThemedView>
@@ -313,7 +313,7 @@ export default function Indiozinho() {
           }}
         >
           <ThemedButton
-            title='dar cartas'
+            title="dar cartas"
             loading={dealing}
             onPress={handleDeal}
           />

@@ -1,6 +1,6 @@
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
-import { Match } from '@/types/Match';
+import { type Match } from '@/types/Match';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useMatch } from '@/hooks/useMatch';
@@ -8,14 +8,16 @@ import { useCallback } from 'react';
 
 const styles = StyleSheet.create({
   container: {
+    maxWidth: 400,
     padding: 10,
     borderColor: Colors.dark.border,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 4,
     marginVertical: 5,
+    backgroundColor: 'transparent',
   },
   matchPicture: {
     width: 30,
@@ -29,6 +31,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 5,
+    backgroundColor: 'transparent',
   },
 });
 
@@ -76,7 +79,7 @@ export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
         />
         <ThemedText>{match.name}</ThemedText>
       </ThemedView>
-      <ThemedText type='default' darkColor={Colors.dark.success}>
+      <ThemedText type="default" darkColor={Colors.dark.success}>
         {getStatus(match?.status)}
       </ThemedText>
     </Pressable>

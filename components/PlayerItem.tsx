@@ -1,6 +1,6 @@
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
-import { MatchUser } from '@/types/MatchUser';
+import { type MatchUser } from '@/types/MatchUser';
 import { Image, StyleSheet } from 'react-native';
 import { usePlayer } from '@/hooks/usePlayer';
 import { Colors } from '@/constants/Colors';
@@ -46,7 +46,7 @@ export const PlayerItem = ({ matchUser }: Props) => {
           }}
           style={styles.profileImage}
         />
-        <ThemedText type='default'>{playerName}</ThemedText>
+        <ThemedText type="default">{playerName}</ThemedText>
       </ThemedView>
       <ThemedText darkColor={Colors.dark.success}>
         {matchUser.ready ? 'PRONTO' : ''}

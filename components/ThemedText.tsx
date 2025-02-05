@@ -15,12 +15,12 @@ export type ThemedTextProps = TextProps & {
     | 'error';
 };
 
-export function ThemedText({
+export const ThemedText = ({
   style,
   darkColor,
   type = 'default',
   ...rest
-}: ThemedTextProps) {
+}: ThemedTextProps) => {
   const color = useThemeColor({ dark: darkColor }, 'text');
 
   return (
@@ -39,7 +39,7 @@ export function ThemedText({
       {...rest}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   default: {

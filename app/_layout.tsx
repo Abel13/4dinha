@@ -3,6 +3,7 @@ import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -24,6 +25,10 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+  }, []);
+
   if (!loaded) {
     return null;
   }
@@ -32,7 +37,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DarkTheme}>
         <Slot />
-        <StatusBar style='auto' />
+        <StatusBar style="auto" hidden />
       </ThemeProvider>
     </QueryClientProvider>
   );

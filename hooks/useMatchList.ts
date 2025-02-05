@@ -5,7 +5,7 @@ import {
   fetchMatches,
 } from '@/services/match';
 import { enterMatchService } from '@/services/matchUsers';
-import { MatchInsert } from '@/types/Match';
+import { type MatchInsert } from '@/types/Match';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';

@@ -4,7 +4,7 @@
     "name": "4dinha",
     "slug": "4dinha",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "x4dinha",
     "userInterfaceStyle": "dark",

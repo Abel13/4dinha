@@ -1,10 +1,10 @@
-import { Database } from '@/types';
+import { type Database } from '@/types';
 import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 
 const ExpoSecureStoreAdapter = {
-  getItem: (key: string): Promise<string | null> => {
-    return SecureStore.getItemAsync(key);
+  getItem: async (key: string): Promise<string | null> => {
+    return await SecureStore.getItemAsync(key);
   },
   setItem: (key: string, value: string): void => {
     SecureStore.setItemAsync(key, value);

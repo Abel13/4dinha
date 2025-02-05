@@ -23,4 +23,26 @@ export const Colors = {
     success: '#34a424',
     info: '#1a4e89',
   },
+  light: {
+    // default colors
+    tint: tintColorDark,
+
+    // style colors
+    text: '#151718',
+    background: '#EBE9EA',
+    border: '#6E6D66',
+
+    // component colors
+    icon: '#756E6A',
+    tabIconDefault: '#7556E6A',
+    tabIconSelected: tintColorDark,
+    link: '#0a7ea4',
+    table: '#856200DD',
+    disabledButton: '#A2A3AA',
+
+    // status colors
+    danger: '#ef5350',
+    success: '#34a424',
+    info: '#1a4e89',
+  },
 };

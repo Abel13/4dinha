@@ -1,6 +1,6 @@
 import { supabase } from '@/providers/supabase';
-import { MatchUser } from '@/types/MatchUser';
-import { UpdateStatusPayload } from '@/types/UpdateStatus';
+import { type MatchUser } from '@/types/MatchUser';
+import { type UpdateStatusPayload } from '@/types/UpdateStatus';
 
 export const matchesKey = (matchId: string) => {
   return ['match-users', matchId];

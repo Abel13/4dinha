@@ -7,8 +7,8 @@ export default function AuthLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name='[matchId]' />
-      <Stack.Screen name='new' />
+      <Stack.Screen name="[matchId]" />
+      <Stack.Screen name="new" />
     </Stack>
   );
 }

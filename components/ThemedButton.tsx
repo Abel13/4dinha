@@ -1,4 +1,4 @@
-import { TouchableOpacity, StyleSheet, ButtonProps } from 'react-native';
+import { TouchableOpacity, StyleSheet, type ButtonProps } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
 import Animated, {
@@ -24,13 +24,13 @@ const TypeColors = {
   outlined: Colors.dark.tint,
 };
 
-export function ThemedButton({
+export const ThemedButton = ({
   type = 'default',
   loading = false,
   title,
   disabled = false,
   ...rest
-}: ThemedButtonProps) {
+}: ThemedButtonProps) => {
   const rotation = useSharedValue(0);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ export function ThemedButton({
           { justifyContent: 'center', alignItems: 'center' },
         ]}
       >
-        <Feather name='loader' color={Colors.dark.tint} size={24} />
+        <Feather name="loader" color={Colors.dark.tint} size={24} />
       </Animated.View>
     );
 
@@ -90,7 +90,7 @@ export function ThemedButton({
       </ThemedText>
     </TouchableOpacity>
   );
-}
+};
 
 const styles = StyleSheet.create({
   button: {

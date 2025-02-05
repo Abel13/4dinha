@@ -3,7 +3,7 @@ import { ThemedView } from './ThemedView';
 import { Image, StyleSheet } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
-import { GamePlayer } from '@/types';
+import { type GamePlayer } from '@/types';
 import { Card } from './Card';
 
 const styles = StyleSheet.create({
@@ -96,7 +96,7 @@ export const TableSeat = ({
   currentTurn: number;
   handlePlay?: (id?: string) => void;
 }) => {
-  const { playerName, playerPicture } = usePlayer(player?.user_id as string);
+  const { playerName, playerPicture } = usePlayer(player?.user_id!);
 
   if (!player?.user_id)
     return (
@@ -116,16 +116,16 @@ export const TableSeat = ({
           {playerPicture && (
             <Image
               source={{
-                uri: playerPicture as string,
+                uri: playerPicture,
               }}
               style={styles.profileImage}
             />
           )}
-          <ThemedText type='default' numberOfLines={1} style={{ maxWidth: 85 }}>
+          <ThemedText type="default" numberOfLines={1} style={{ maxWidth: 85 }}>
             {playerName}
           </ThemedText>
         </ThemedView>
-        <ThemedText type='h4'>
+        <ThemedText type="h4">
           {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}
         </ThemedText>
       </ThemedView>
@@ -187,7 +187,7 @@ export const TableSeat = ({
         </ThemedView>
       </ThemedView>
       <ThemedView style={[styles.row, { justifyContent: 'space-between' }]}>
-        <ThemedText type='error'>
+        <ThemedText type="error">
           {`${Array.from(Array(player.lives)).fill('❤️').join('')}${Array.from(
             Array(5 - player.lives),
           )
@@ -197,12 +197,12 @@ export const TableSeat = ({
 
         <ThemedView style={styles.roundInfoContainer}>
           <ThemedView style={styles.dealerEmojiContainer}>
-            <ThemedText type='error'>{player.dealer && '🟡'}</ThemedText>
-            <ThemedText type='error' style={styles.dealerText}>
+            <ThemedText type="error">{player.dealer && '🟡'}</ThemedText>
+            <ThemedText type="error" style={styles.dealerText}>
               {player.dealer && 'D'}
             </ThemedText>
           </ThemedView>
-          <ThemedText type='error'>{player.current && '🎲'}</ThemedText>
+          <ThemedText type="error">{player.current && '🎲'}</ThemedText>
         </ThemedView>
       </ThemedView>
     </ThemedView>

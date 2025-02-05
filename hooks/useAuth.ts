@@ -1,5 +1,5 @@
 import { supabase } from '@/providers/supabase';
-import { SignInWithPasswordCredentials } from '@supabase/supabase-js';
+import { type SignInWithPasswordCredentials } from '@supabase/supabase-js';
 import { useState } from 'react';
 import { useUserSessionStore } from './useUserSessionStore';
 import { useRouter } from 'expo-router';
