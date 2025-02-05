@@ -1,4 +1,5 @@
-import { Image, StyleSheet } from 'react-native';
+import { useRef } from 'react';
+import { Image, StyleSheet, TextInput } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -18,6 +19,7 @@ const schema = yup.object({
 export default function LoginScreen() {
   const { onAuth, authError, loading } = useAuth();
   const { t } = useTranslation();
+  const inputPasswordRef = useRef<TextInput>(null);
   const {
     control,
     handleSubmit,
@@ -44,16 +46,21 @@ export default function LoginScreen() {
           autoComplete='off'
           control={control}
           error={errors['email']?.message}
+          returnKeyType='next'
+          onSubmitEditing={() => inputPasswordRef.current?.focus()}
         />
       </ThemedView>
       <ThemedView>
         <ThemedText>senha</ThemedText>
         <ThemedInput
+          ref={inputPasswordRef}
           name={'password'}
           control={control}
           secureTextEntry
           textContentType='password'
           error={errors['password']?.message}
+          returnKeyType='done'
+          onSubmitEditing={handleSubmit(onAuth)}
         />
       </ThemedView>
       <ThemedText type='error'>{t(authError as any)}</ThemedText>
