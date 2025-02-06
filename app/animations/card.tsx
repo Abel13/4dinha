@@ -1,14 +1,16 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
-import { CardBack } from '../../components/animated/CardBack';
+import { Card } from '../../components/animated/CardBack';
 import PagerView from 'react-native-pager-view';
 
 export default function WinningCardScreen() {
+  const SCALE = 0.3;
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#88a',
+        backgroundColor: '#022',
       }}
     >
       <PagerView
@@ -22,16 +24,64 @@ export default function WinningCardScreen() {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+            zIndex: 1000,
           }}
           key='1'
         >
-          <CardBack backgroundColor='black' borderColor='#fbd84d'>
-            <Image
-              source={require('@/assets/images/card-back/back05.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
+          <Card
+            backgroundColor='#fbd84d'
+            backBorderColor='#fbd84d'
+            frontBorderColor='#fbd84d'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back05.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
+                  ❤️
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
         </View>
         <View
           style={{
@@ -41,13 +91,60 @@ export default function WinningCardScreen() {
           }}
           key='2'
         >
-          <CardBack backgroundColor='black' borderColor='#958855'>
-            <Image
-              source={require('@/assets/images/card-back/back03.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
+          <Card
+            backgroundColor='#1a1a1a'
+            backBorderColor='#958855'
+            frontBorderColor='#202020'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back03.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
+                  ❤️
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
         </View>
         <View
           style={{
@@ -57,13 +154,60 @@ export default function WinningCardScreen() {
           }}
           key='3'
         >
-          <CardBack backgroundColor='black' borderColor='#000'>
-            <Image
-              source={require('@/assets/images/card-back/back02.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
+          <Card
+            backgroundColor='black'
+            backBorderColor='#000'
+            frontBorderColor='#000'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back02.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
+                  ❤️
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
         </View>
         <View
           style={{
@@ -73,13 +217,192 @@ export default function WinningCardScreen() {
           }}
           key='4'
         >
-          <CardBack backgroundColor='black' borderColor='#ddd' key={4}>
-            <Image
-              source={require('@/assets/images/card-back/back01.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
+          <Card
+            backgroundColor='#ddd'
+            backBorderColor='#ddd'
+            frontBorderColor='#ddd'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back01.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
+                  ❤️
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#D22',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          key='6'
+        >
+          <Card
+            backgroundColor='#f2483e'
+            backBorderColor='#f2483e'
+            frontBorderColor='#f2483e'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back07.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#fff',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 200 * SCALE,
+                    textAlign: 'center',
+                    color: '#fff',
+                  }}
+                >
+                  🤍
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#fff',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          key='7'
+        >
+          <Card
+            backgroundColor='#095761'
+            backBorderColor='#095761'
+            frontBorderColor='#095761'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back06.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#FFF',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
+                  🤍
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#FFF',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
         </View>
         <View
           style={{
@@ -89,45 +412,60 @@ export default function WinningCardScreen() {
           }}
           key='5'
         >
-          <CardBack backgroundColor='black' borderColor='#f2483e' key={4}>
-            <Image
-              source={require('@/assets/images/card-back/back07.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          key='6'
-        >
-          <CardBack backgroundColor='black' borderColor='#095761' key={4}>
-            <Image
-              source={require('@/assets/images/card-back/back06.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          key='6'
-        >
-          <CardBack backgroundColor='black' borderColor='#9a01c3' key={4}>
-            <Image
-              source={require('@/assets/images/card-back/back08.jpg')}
-              style={{ alignSelf: 'center', flex: 1 }}
-              resizeMode='contain'
-            />
-          </CardBack>
+          <Card
+            backgroundColor='#9a01c3'
+            backBorderColor='#000'
+            frontBorderColor='#9a01c3'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back08.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  padding: 10 * SCALE,
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <View>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#FFF',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
+                  🤍
+                </Text>
+                <View style={{ alignSelf: 'flex-end' }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#FFF',
+                      fontSize: 90 * SCALE,
+                      transform: [{ rotateX: '180deg' }],
+                      zIndex: 3000,
+                      backfaceVisibility: 'visible',
+                    }}
+                  >
+                    A
+                  </Text>
+                </View>
+              </View>
+            }
+          />
         </View>
       </PagerView>
     </View>

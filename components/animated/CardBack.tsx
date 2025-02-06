@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   Animated,
   PanResponder,
@@ -6,110 +6,165 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { ThemedText } from '../ThemedText';
 
-interface CardBackProps {
-  /**
-   * Cor de fundo da carta (ou pode ser customizado para usar um ImageBackground).
-   */
+interface CardProps {
   backgroundColor?: string;
-  borderColor?: string;
-  /**
-   * Estilos adicionais para personalização do container da carta.
-   */
+  frontBorderColor?: string;
+  backBorderColor?: string;
   style?: ViewStyle;
-  /**
-   * Porcentagem da altura original 570x800
-   * @default 0.5
-   * @satisfies 0 < size < 1
-   */
   scale?: number;
-  children?: ReactNode;
+  front?: ReactNode;
+  back?: ReactNode;
 }
 
 const WIDTH = 570;
 const HEIGHT = 800;
 
-export const CardBack: React.FC<CardBackProps> = ({
+export const Card: React.FC<CardProps> = ({
   backgroundColor = '#fff',
-  borderColor = '#fff',
+  frontBorderColor = '#fff',
+  backBorderColor = '#FFF',
   style,
-  children,
   scale = 0.5,
+  front,
+  back,
 }) => {
   const resizedWidth = WIDTH * scale;
   const resizedHeight = HEIGHT * scale;
+  const resizedBorder = 10 * scale;
+  const resizedRadius = 50 * scale;
 
-  // Animated.ValueXY para rastrear os deslocamentos dx e dy
   const tilt = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+  const flipAnim = useRef(new Animated.Value(0)).current;
 
-  // Cria um PanResponder para capturar os gestos do usuário
+  const [flipped, setFlipped] = useState(false);
+  const [flipping, setFlipping] = useState(false);
+  const [showOtherSide, setShowOtherSide] = useState(false);
+
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
-        // Atualiza o valor do tilt com o deslocamento
         tilt.setValue({ x: gestureState.dx, y: gestureState.dy });
       },
-      onPanResponderRelease: () => {
-        // Anima a volta para a posição neutra ao liberar o toque
-        Animated.spring(tilt, {
-          toValue: { x: 0, y: 0 },
-          useNativeDriver: true,
-        }).start();
+      onPanResponderRelease: (evt, gestureState) => {
+        const flipThreshold = 80;
+        if (Math.abs(gestureState.dx) > flipThreshold) {
+          setFlipping(true);
+          Animated.parallel([
+            Animated.timing(flipAnim, {
+              toValue: flipped ? 0 : gestureState.dx > 0 ? 180 : -180,
+              useNativeDriver: true,
+            }),
+            Animated.spring(tilt, {
+              toValue: { x: 0, y: 0 },
+              useNativeDriver: true,
+            }),
+          ]).start(() => {
+            setFlipped((prev) => {
+              const newFlipped = !prev;
+              setFlipping(false);
+
+              flipAnim.setValue(0);
+              return newFlipped;
+            });
+          });
+        } else {
+          Animated.spring(tilt, {
+            toValue: { x: 0, y: 0 },
+            useNativeDriver: true,
+          }).start();
+        }
       },
     }),
   ).current;
 
-  // Interpola o valor vertical para rotação em X:
-  // - Quando o usuário arrasta para cima (dy negativo), rotateX fica negativo (inclina para frente)
-  // - Quando arrasta para baixo, rotateX fica positivo (inclina para trás)
-  const rotateX = tilt.y?.interpolate({
+  const rotateX = tilt.y.interpolate({
     inputRange: [-100, 100],
     outputRange: ['20deg', '-20deg'],
     extrapolate: 'clamp',
   });
 
-  // Interpola o valor horizontal para rotação em Y:
-  // Queremos que ao arrastar para a esquerda (dx negativo) o lado esquerdo se aproxime.
-  // Para isso, invertemos a saída: dx negativo gera um valor positivo para rotateY.
-  const rotateY = tilt.x.interpolate({
+  const rotateYTilt = tilt.x.interpolate({
     inputRange: [-100, 100],
-    outputRange: ['-20deg', '20deg'],
+    outputRange: ['-40deg', '40deg'],
     extrapolate: 'clamp',
   });
+
+  const rotateYFlip = flipAnim.interpolate({
+    inputRange: [0, 180],
+    outputRange: ['0deg', '180deg'],
+  });
+
+  const rotateY = flipping ? rotateYFlip : rotateYTilt;
+
+  const animatedStyle = {
+    width: resizedWidth,
+    height: resizedHeight,
+    transform: [{ perspective: 1000 }, { rotateX }, { rotateY }],
+  };
+
+  useEffect(() => {
+    const listener = flipAnim.addListener(({ value }) => {
+      setShowOtherSide(Math.abs(value) >= 90);
+    });
+
+    return () => {
+      flipAnim.removeListener(listener);
+    };
+  }, [rotateYFlip]);
 
   return (
     <Animated.View
       {...panResponder.panHandlers}
       style={[
+        animatedStyle,
         styles.card,
         { width: resizedWidth, height: resizedHeight },
-        { backgroundColor },
+        { backgroundColor, borderRadius: resizedRadius },
         style,
-        {
-          transform: [
-            { perspective: 1000 }, // Perspectiva para efeito 3D
-            { rotateX },
-            { rotateY },
-          ],
-        },
       ]}
     >
-      <View style={[{ borderColor }, styles.art]}>{children}</View>
+      {(showOtherSide && flipped) || (!showOtherSide && !flipped) ? (
+        <View style={[showOtherSide ? styles.flip : { flex: 1 }]}>
+          <View
+            style={[
+              {
+                borderColor: backBorderColor,
+                borderWidth: resizedBorder,
+                borderRadius: resizedRadius,
+              },
+              styles.art,
+            ]}
+          >
+            {back}
+          </View>
+        </View>
+      ) : (
+        <View style={[showOtherSide ? styles.flip : { flex: 1 }]}>
+          <View
+            style={[
+              {
+                borderColor: frontBorderColor,
+                borderWidth: resizedBorder,
+                borderRadius: resizedRadius,
+              },
+              styles.art,
+            ]}
+          >
+            {front}
+          </View>
+        </View>
+      )}
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 20,
     backgroundColor: '#fff',
-    transform: [
-      { perspective: 1000 },
-      { rotateX: '10deg' },
-      { rotateY: '5deg' },
-    ],
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
@@ -118,9 +173,16 @@ const styles = StyleSheet.create({
   },
   art: {
     flex: 1,
-    borderRadius: 20,
     zIndex: -1000,
     overflow: 'hidden',
-    borderWidth: 5,
+  },
+  flip: {
+    flex: 1,
+    backfaceVisibility: 'visible',
+    transform: [
+      {
+        rotateY: '180deg',
+      },
+    ],
   },
 });
