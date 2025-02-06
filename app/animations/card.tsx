@@ -25,12 +25,11 @@ export default function WinningCardScreen() {
           }}
           key='1'
         >
-          <CardBack backgroundColor='black' borderColor='#661122'>
+          <CardBack backgroundColor='black' borderColor='#fbd84d'>
             <Image
-              source={require('@/assets/images/card-back/back04.jpg')}
-              style={{ alignSelf: 'center', flex: 1, marginVertical: -50 }}
+              source={require('@/assets/images/card-back/back05.jpg')}
+              style={{ alignSelf: 'center', flex: 1 }}
               resizeMode='contain'
-              resizeMethod='auto'
             />
           </CardBack>
         </View>
@@ -45,9 +44,8 @@ export default function WinningCardScreen() {
           <CardBack backgroundColor='black' borderColor='#958855'>
             <Image
               source={require('@/assets/images/card-back/back03.jpg')}
-              style={{ alignSelf: 'center', flex: 1, marginVertical: -10 }}
+              style={{ alignSelf: 'center', flex: 1 }}
               resizeMode='contain'
-              resizeMethod='auto'
             />
           </CardBack>
         </View>
@@ -62,9 +60,8 @@ export default function WinningCardScreen() {
           <CardBack backgroundColor='black' borderColor='#000'>
             <Image
               source={require('@/assets/images/card-back/back02.jpg')}
-              style={{ alignSelf: 'center', flex: 1, marginVertical: -10 }}
+              style={{ alignSelf: 'center', flex: 1 }}
               resizeMode='contain'
-              resizeMethod='auto'
             />
           </CardBack>
         </View>
@@ -76,17 +73,59 @@ export default function WinningCardScreen() {
           }}
           key='4'
         >
-          <CardBack
-            backgroundColor='black'
-            borderColor='#ddd'
-            // style={{ marginBottom: 0 }}
-            key={4}
-          >
+          <CardBack backgroundColor='black' borderColor='#ddd' key={4}>
             <Image
               source={require('@/assets/images/card-back/back01.jpg')}
-              style={{ alignSelf: 'center', flex: 1, marginVertical: -10 }}
+              style={{ alignSelf: 'center', flex: 1 }}
               resizeMode='contain'
-              resizeMethod='auto'
+            />
+          </CardBack>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          key='5'
+        >
+          <CardBack backgroundColor='black' borderColor='#f2483e' key={4}>
+            <Image
+              source={require('@/assets/images/card-back/back07.jpg')}
+              style={{ alignSelf: 'center', flex: 1 }}
+              resizeMode='contain'
+            />
+          </CardBack>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          key='6'
+        >
+          <CardBack backgroundColor='black' borderColor='#095761' key={4}>
+            <Image
+              source={require('@/assets/images/card-back/back06.jpg')}
+              style={{ alignSelf: 'center', flex: 1 }}
+              resizeMode='contain'
+            />
+          </CardBack>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          key='6'
+        >
+          <CardBack backgroundColor='black' borderColor='#9a01c3' key={4}>
+            <Image
+              source={require('@/assets/images/card-back/back08.jpg')}
+              style={{ alignSelf: 'center', flex: 1 }}
+              resizeMode='contain'
             />
           </CardBack>
         </View>

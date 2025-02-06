@@ -17,15 +17,28 @@ interface CardBackProps {
    * Estilos adicionais para personalização do container da carta.
    */
   style?: ViewStyle;
+  /**
+   * Porcentagem da altura original 570x800
+   * @default 0.5
+   * @satisfies 0 < size < 1
+   */
+  scale?: number;
   children?: ReactNode;
 }
+
+const WIDTH = 570;
+const HEIGHT = 800;
 
 export const CardBack: React.FC<CardBackProps> = ({
   backgroundColor = '#fff',
   borderColor = '#fff',
   style,
   children,
+  scale = 0.5,
 }) => {
+  const resizedWidth = WIDTH * scale;
+  const resizedHeight = HEIGHT * scale;
+
   // Animated.ValueXY para rastrear os deslocamentos dx e dy
   const tilt = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
@@ -71,8 +84,8 @@ export const CardBack: React.FC<CardBackProps> = ({
       {...panResponder.panHandlers}
       style={[
         styles.card,
+        { width: resizedWidth, height: resizedHeight },
         { backgroundColor },
-        { borderColor },
         style,
         {
           transform: [
@@ -83,15 +96,13 @@ export const CardBack: React.FC<CardBackProps> = ({
         },
       ]}
     >
-      <View style={styles.art}>{children}</View>
+      <View style={[{ borderColor }, styles.art]}>{children}</View>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    width: 320,
-    height: 450,
     borderRadius: 20,
     backgroundColor: '#fff',
     transform: [
@@ -104,12 +115,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 8,
-    borderWidth: 5,
   },
   art: {
     flex: 1,
     borderRadius: 20,
-    zIndex: 0,
+    zIndex: -1000,
     overflow: 'hidden',
+    borderWidth: 5,
   },
 });
