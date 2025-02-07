@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Image, StyleSheet, TextInput } from 'react-native';
+import { Image, ScrollView, StyleSheet, TextInput } from 'react-native';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -30,45 +30,47 @@ export default function LoginScreen() {
 
   return (
     <ThemedView style={styles.titleContainer}>
-      <Image
-        source={require('@/assets/images/logo.png')}
-        style={{ alignSelf: 'center', width: 40, height: 40 }}
-      />
-      <ThemedText type='title'>LOGIN</ThemedText>
-      <ThemedView>
-        <ThemedText>e-mail</ThemedText>
-        <ThemedInput
-          name='email'
-          inputMode='email'
-          keyboardType='email-address'
-          autoCapitalize='none'
-          autoCorrect={false}
-          autoComplete='off'
-          control={control}
-          error={errors.email?.message}
-          returnKeyType='next'
-          onSubmitEditing={() => inputPasswordRef.current?.focus()}
+      <ScrollView>
+        <Image
+          source={require('@/assets/images/logo.png')}
+          style={{ alignSelf: 'center', width: 200, height: 200 }}
         />
-      </ThemedView>
-      <ThemedView>
-        <ThemedText>senha</ThemedText>
-        <ThemedInput
-          ref={inputPasswordRef}
-          name='password'
-          control={control}
-          secureTextEntry
-          textContentType='password'
-          error={errors.password?.message}
-          returnKeyType='done'
-          onSubmitEditing={handleSubmit(onAuth)}
+        <ThemedText type='title'>LOGIN</ThemedText>
+        <ThemedView>
+          <ThemedText>e-mail</ThemedText>
+          <ThemedInput
+            name='email'
+            inputMode='email'
+            keyboardType='email-address'
+            autoCapitalize='none'
+            autoCorrect={false}
+            autoComplete='off'
+            control={control}
+            error={errors.email?.message}
+            returnKeyType='next'
+            onSubmitEditing={() => inputPasswordRef.current?.focus()}
+          />
+        </ThemedView>
+        <ThemedView>
+          <ThemedText>senha</ThemedText>
+          <ThemedInput
+            ref={inputPasswordRef}
+            name='password'
+            control={control}
+            secureTextEntry
+            textContentType='password'
+            error={errors.password?.message}
+            returnKeyType='done'
+            onSubmitEditing={handleSubmit(onAuth)}
+          />
+        </ThemedView>
+        <ThemedText type='error'>{t(authError as any)}</ThemedText>
+        <ThemedButton
+          title='ENTRAR'
+          onPress={handleSubmit(onAuth)}
+          loading={loading}
         />
-      </ThemedView>
-      <ThemedText type='error'>{t(authError as any)}</ThemedText>
-      <ThemedButton
-        title='ENTRAR'
-        onPress={handleSubmit(onAuth)}
-        loading={loading}
-      />
+      </ScrollView>
     </ThemedView>
   );
 }

@@ -16,6 +16,7 @@ interface CardProps {
   scale?: number;
   front?: ReactNode;
   back?: ReactNode;
+  borderless?: boolean;
 }
 
 const WIDTH = 570;
@@ -29,6 +30,7 @@ export const Card: React.FC<CardProps> = ({
   scale = 0.5,
   front,
   back,
+  borderless = false,
 }) => {
   const resizedWidth = WIDTH * scale;
   const resizedHeight = HEIGHT * scale;
@@ -133,7 +135,7 @@ export const Card: React.FC<CardProps> = ({
             style={[
               {
                 borderColor: backBorderColor,
-                borderWidth: resizedBorder,
+                borderWidth: borderless ? 0 : resizedBorder,
                 borderRadius: resizedRadius,
               },
               styles.art,
@@ -148,7 +150,7 @@ export const Card: React.FC<CardProps> = ({
             style={[
               {
                 borderColor: frontBorderColor,
-                borderWidth: resizedBorder,
+                borderWidth: borderless ? 0 : resizedBorder,
                 borderRadius: resizedRadius,
               },
               styles.art,
