@@ -24,6 +24,88 @@ export default function WinningCardScreen() {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
+          }}
+          key='0'
+        >
+          <Card
+            backgroundColor='#000'
+            backBorderColor='#444'
+            frontBorderColor='#fff'
+            scale={SCALE}
+            back={
+              <Image
+                source={require('@/assets/images/card-back/back00.jpg')}
+                style={{ alignSelf: 'center', flex: 1 }}
+                resizeMode='contain'
+              />
+            }
+            front={
+              <View
+                style={{
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'space-between',
+                  backfaceVisibility: 'visible',
+                }}
+              >
+                <Image
+                  source={require('@/assets/images/card-front/front00.jpg')}
+                  style={{ alignSelf: 'center', flex: 1 }}
+                  resizeMode='contain'
+                />
+                <View
+                  style={{
+                    flex: 1,
+                    position: 'absolute',
+                    justifyContent: 'space-between',
+                    top: 5,
+                    bottom: 5,
+                    right: 10,
+                    left: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#000',
+                      fontSize: 90 * SCALE,
+                    }}
+                  >
+                    A<Text style={{ fontSize: 60 * SCALE }}>♧</Text>
+                  </Text>
+
+                  <Text
+                    style={{ fontSize: 150 * SCALE, textAlign: 'center' }}
+                  ></Text>
+                  <View
+                    style={{
+                      alignSelf: 'flex-end',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        color: '#000',
+                        fontSize: 90 * SCALE,
+                        transform: [{ rotateX: '180deg' }],
+                        zIndex: 3000,
+                        backfaceVisibility: 'visible',
+                      }}
+                    >
+                      <Text style={{ fontSize: 60 * SCALE }}>♧</Text>A
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            }
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
             zIndex: 1000,
           }}
           key='1'
