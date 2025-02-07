@@ -37,7 +37,7 @@ export default function NewMatchScreen() {
           <Feather
             name="chevron-left"
             color={Colors.dark.tabIconDefault}
-            size={24}
+            size={28}
           />
         </TouchableOpacity>
         <ThemedText type="title">Nova Partida</ThemedText>
@@ -55,8 +55,7 @@ export default function NewMatchScreen() {
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
-    paddingTop: 100,
-    padding: 10,
-    gap: 10,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 60,
   },
 });

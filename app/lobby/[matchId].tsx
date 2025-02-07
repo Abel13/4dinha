@@ -64,7 +64,7 @@ export default function LobbyScreen() {
           <Feather
             name="chevron-left"
             color={Colors.dark.tabIconDefault}
-            size={24}
+            size={28}
           />
         </TouchableOpacity>
         <Image

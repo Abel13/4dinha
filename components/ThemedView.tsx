@@ -15,7 +15,7 @@ export const ThemedView = ({
 }: ThemedViewProps) => {
   const backgroundColor = useThemeColor(
     { dark: darkColor, light: lightColor },
-    'background',
+    'transparent',
   );
 
   return <View style={[{ backgroundColor }, style]} {...otherProps} />;

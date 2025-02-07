@@ -18,6 +18,8 @@ import { HelloWave } from '@/components/HelloWave';
 import { Colors } from '@/constants/Colors';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { MatchItem } from '@/components/MatchItem';
+import { useHome } from '@/hooks/useHome';
+import MenuIcon from '@/components/MenuIcon';
 
 export default function LobbyScreen() {
   const router = useRouter();
@@ -25,10 +27,10 @@ export default function LobbyScreen() {
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
 
+  const { footerMenu, headerMenu } = useHome();
+
   const handleNewMatch = useCallback(() => {
-    router.push({
-      pathname: '/lobby/new',
-    });
+    router.push({ pathname: '/lobby/new' });
   }, []);
 
   return (
@@ -46,132 +48,84 @@ export default function LobbyScreen() {
               onPress={() => router.push('/(tabs)/profile')}
             >
               <Image
-                source={{
-                  uri: profilePicture,
-                }}
+                source={{ uri: profilePicture }}
                 style={[styles.profile_pic, styles[`${theme}_border`]]}
               />
-              <ThemedText
-                type="defaultSemiBold"
-                darkColor="#070f2b"
-              >{`Olá, ${username}!`}</ThemedText>
+              <ThemedText type="defaultSemiBold" darkColor="#070f2b">
+                {`Olá, ${username}!`}
+              </ThemedText>
               <HelloWave size={14} />
             </TouchableOpacity>
 
-            <ThemedView darkColor="transparent" style={{ marginTop: 10 }}>
-              <ThemedView
-                style={{
-                  backgroundColor: 'transparent',
-                  flexDirection: 'row',
-                  gap: 10,
-                }}
-              >
-                <ThemedView
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 10,
-                    borderRadius: 50,
-                    paddingRight: 10,
-                    backgroundColor: '#9290c3',
-                  }}
-                >
-                  <ThemedView
-                    style={{
-                      borderRadius: 50,
-                      padding: 6,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderWidth: 1,
-                      borderColor: '#9290c3',
-                    }}
-                    darkColor="#1b1a55"
-                  >
-                    <FontAwesome6
-                      name="coins"
-                      size={14}
-                      color={Colors[theme].text}
-                    />
+            <ThemedView darkColor="transparent" style={styles.topContainer}>
+              <ThemedView style={styles.rowContainer}>
+                {[
+                  { icon: 'coins', value: '1.520' },
+                  { icon: 'sack-dollar', value: '0' },
+                ].map((item, index) => (
+                  <ThemedView key={index} style={styles.coinContainer}>
+                    <ThemedView style={styles.iconWrapper} darkColor="#1b1a55">
+                      <FontAwesome6
+                        name={item.icon}
+                        size={14}
+                        color={Colors[theme].text}
+                      />
+                    </ThemedView>
+                    <ThemedText darkColor="#070f2b" type="h4">
+                      {item.value}
+                    </ThemedText>
                   </ThemedView>
-                  <ThemedText darkColor="#070f2b" type="h4">
-                    1.520
-                  </ThemedText>
-                </ThemedView>
-                <ThemedView
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 10,
-                    borderRadius: 50,
-                    paddingRight: 10,
-                    backgroundColor: '#9290c3',
-                  }}
-                >
-                  <ThemedView
-                    style={{
-                      borderRadius: 50,
-                      padding: 6,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderWidth: 1,
-                      borderColor: '#9290c3',
-                    }}
-                    darkColor="#1b1a55"
-                  >
-                    <FontAwesome6
-                      name="sack-dollar"
-                      size={14}
-                      color={Colors[theme].text}
-                    />
-                  </ThemedView>
-                  <ThemedText darkColor="#070f2b" type="h4">
-                    0
-                  </ThemedText>
-                </ThemedView>
+                ))}
               </ThemedView>
             </ThemedView>
 
             <ThemedView style={styles.iconsMenu}>
-              <Ionicons
-                name="chatbox-ellipses-outline"
-                size={28}
-                color={'#FFF'}
-              />
-              <Ionicons name="list-outline" size={28} color={'#FFF'} />
-              <Ionicons name="settings-outline" size={28} color={'#FFF'} />
+              {headerMenu.map((icon, index) => (
+                <Ionicons
+                  key={index}
+                  name={icon as keyof typeof Ionicons.glyphMap}
+                  size={28}
+                  color={'#FFF'}
+                />
+              ))}
             </ThemedView>
           </ThemedView>
 
           <ThemedView style={styles.center}>
-            <ScrollView horizontal style={{ paddingLeft: 60 }}>
+            <ScrollView horizontal style={styles.scrollContainer}>
               <ThemedView style={styles.menuContainer}>
-                <ThemedView style={styles.menu}>
+                <TouchableOpacity style={styles.menu} onPress={handleNewMatch}>
                   <ThemedText type="subtitle">Criar partida</ThemedText>
                   <Image
                     source={require('@/assets/images/logo.png')}
-                    style={{ width: 100, height: 100 }}
+                    style={styles.logo}
                   />
-                </ThemedView>
-                <ThemedView style={styles.menu}>
-                  <ThemedText lineBreakMode="tail" numberOfLines={2}>
-                    Voltar para {inProgressMatches[0]?.matches?.name}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.menu}
+                  onPress={() => {
+                    router.replace({
+                      pathname: '/(game)/4dinha',
+                      params: {
+                        gameId: inProgressMatches[0]?.matches?.id,
+                      },
+                    });
+                  }}
+                >
+                  <ThemedText
+                    lineBreakMode="tail"
+                    type="subtitle"
+                    numberOfLines={3}
+                  >
+                    Voltar para:{' '}
+                    <ThemedText>
+                      {inProgressMatches[0]?.matches?.name}
+                    </ThemedText>
                   </ThemedText>
-                </ThemedView>
+                </TouchableOpacity>
               </ThemedView>
             </ScrollView>
-            <ThemedView
-              style={{
-                backgroundColor: '#1b1a55DD',
-                padding: 10,
-                borderTopStartRadius: 8,
-                borderBottomStartRadius: 8,
-                shadowColor: '#1b1a55DD',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.8,
-                shadowRadius: 3,
-                elevation: 5,
-              }}
-            >
+            <ThemedView style={styles.matchContainer}>
               <ThemedText type="subtitle">Novas Partidas</ThemedText>
               <FlatList
                 data={matches}
@@ -179,7 +133,7 @@ export default function LobbyScreen() {
                 renderItem={({ item }) => (
                   <MatchItem
                     match={item}
-                    enterMatch={() => enterMatch}
+                    enterMatch={() => enterMatch(item.id)}
                     continueMatch={() => {}}
                   />
                 )}
@@ -188,34 +142,14 @@ export default function LobbyScreen() {
           </ThemedView>
 
           <ThemedView style={styles.footer}>
-            <ThemedView
-              darkColor="transparent"
-              style={{ alignItems: 'center' }}
-            >
-              <Ionicons name="people-outline" size={36} color={'#9290c3'} />
-              <ThemedText type="default">Amigos</ThemedText>
-            </ThemedView>
-            <ThemedView
-              darkColor="transparent"
-              style={{ alignItems: 'center' }}
-            >
-              <Ionicons name="cart-outline" size={36} color={'#9290c3'} />
-              <ThemedText type="default">Loja</ThemedText>
-            </ThemedView>
-            <ThemedView
-              darkColor="transparent"
-              style={{ alignItems: 'center' }}
-            >
-              <Ionicons name="shirt-outline" size={36} color={'#9290c3'} />
-              <ThemedText type="default">Itens</ThemedText>
-            </ThemedView>
-            <ThemedView
-              darkColor="transparent"
-              style={{ alignItems: 'center' }}
-            >
-              <Ionicons name="ribbon-outline" size={36} color={'#9290c3'} />
-              <ThemedText type="default">Conquistas</ThemedText>
-            </ThemedView>
+            {footerMenu.map((item) => (
+              <MenuIcon
+                key={item.text}
+                icon={item.icon}
+                onPress={() => {}}
+                text={item.text}
+              />
+            ))}
           </ThemedView>
         </ThemedView>
       </ImageBackground>
@@ -224,55 +158,52 @@ export default function LobbyScreen() {
 }
 
 const styles = StyleSheet.create({
+  screen: { flex: 1 },
+  container: { flex: 1, justifyContent: 'space-between' },
+  background: { flex: 1, alignItems: 'flex-start' },
   header: {
     flexDirection: 'row',
     width: '100%',
-    backgroundColor: 'transparent',
     justifyContent: 'space-between',
     paddingHorizontal: 60,
   },
   profile: {
-    borderBottomStartRadius: 10,
-    borderBottomEndRadius: 10,
-    backgroundColor: '#9290c3',
     flexDirection: 'row',
     padding: 10,
     gap: 10,
+    borderBottomStartRadius: 10,
+    borderBottomEndRadius: 10,
+    backgroundColor: '#9290c3',
     shadowColor: '#9290c3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
     shadowRadius: 3,
-    elevation: 5,
+    elevation: 8,
   },
-  footer: {
-    gap: 30,
-    paddingBottom: 15,
-    padding: 5,
-    paddingHorizontal: 20,
-    borderTopStartRadius: 10,
-    borderTopEndRadius: 10,
+  profile_pic: { height: 50, width: 50, borderRadius: 8, borderWidth: 3 },
+  topContainer: { marginTop: 10 },
+  rowContainer: { flexDirection: 'row', gap: 10 },
+  coinContainer: {
     flexDirection: 'row',
-    alignSelf: 'center',
     alignItems: 'center',
+    gap: 10,
+    paddingRight: 10,
+    backgroundColor: '#9290c3',
+    borderRadius: 50,
+  },
+  iconWrapper: {
+    borderRadius: 50,
+    padding: 6,
     justifyContent: 'center',
-    backgroundColor: '#070f2b88',
-    borderColor: '#9290c3',
+    alignItems: 'center',
     borderWidth: 1,
-    borderBottomWidth: 0,
-    shadowColor: '#9290c3',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
+    borderColor: '#9290c3',
   },
-  iconsMenu: {
-    flexDirection: 'row',
-    gap: 20,
-    backgroundColor: 'transparent',
-    marginTop: 10,
-  },
+  iconsMenu: { flexDirection: 'row', gap: 20, marginTop: 10 },
+  center: { flex: 1, flexDirection: 'row', marginVertical: 10 },
+  scrollContainer: { paddingLeft: 60 },
+  menuContainer: { flexDirection: 'row', gap: 20 },
   menu: {
-    height: '80%',
     width: 150,
     justifyContent: 'center',
     alignItems: 'center',
@@ -282,38 +213,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
-  menuContainer: {
-    flex: 1,
-    width: '100%',
+  logo: { width: 100, height: 100 },
+  matchContainer: {
+    backgroundColor: '#1b1a55DD',
+    padding: 10,
+    paddingRight: 60,
+    borderTopStartRadius: 10,
+    borderBottomStartRadius: 10,
+  },
+  footer: {
+    alignSelf: 'center',
     flexDirection: 'row',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 20,
+    gap: 30,
+    padding: 15,
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
+    backgroundColor: '#070f2b88',
+    borderColor: '#9290c3',
+    borderWidth: 1,
+    borderBottomWidth: 0,
   },
-  screen: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  center: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    marginVertical: 10,
-  },
-  background: {
-    flex: 1,
-    alignItems: 'flex-start',
-  },
-  profile_pic: {
-    height: 50,
-    width: 50,
-    borderRadius: 8,
-    borderWidth: 3,
-  },
+  footerItem: { alignItems: 'center' },
   dark_border: {
     borderColor: Colors.dark.border,
   },

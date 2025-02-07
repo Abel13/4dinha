@@ -1,21 +1,32 @@
-import { Image, StyleSheet, Platform, ScrollView } from 'react-native';
+import { StyleSheet, Platform, ScrollView, useColorScheme } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
   const { username, profilePicture } = useUserSessionStore((state) => state);
 
+  const theme = useColorScheme() || 'dark';
+
   return (
-    <ScrollView style={{ backgroundColor: 'transparent' }}>
+    <ScrollView
+      style={{ backgroundColor: 'transparent', paddingHorizontal: 60 }}
+    >
       <ThemedView style={styles.titleContainer}>
+        <Feather
+          name="chevron-left"
+          color={Colors[theme].icon}
+          size={28}
+          onPress={router.back}
+        />
         <ThemedText type="title">{`Olá, ${username}!`}</ThemedText>
         <HelloWave />
       </ThemedView>
@@ -67,6 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    paddingTop: 10,
   },
   stepContainer: {
     gap: 8,
