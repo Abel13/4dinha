@@ -10,7 +10,7 @@ export default function WinningCardScreen() {
     <View
       style={{
         flex: 1,
-        backgroundColor: '#022',
+        backgroundColor: '#add',
       }}
     >
       <PagerView
@@ -129,11 +129,25 @@ export default function WinningCardScreen() {
                   width: '100%',
                   height: '100%',
                   justifyContent: 'space-between',
-                  padding: 10 * SCALE,
                   backfaceVisibility: 'visible',
                 }}
               >
-                <View>
+                {/* <Image
+                  source={require('@/assets/images/card-front/front00.jpg')}
+                  style={{ alignSelf: 'center', flex: 1 }}
+                  resizeMode='contain'
+                /> */}
+                <View
+                  style={{
+                    flex: 1,
+                    position: 'absolute',
+                    justifyContent: 'space-between',
+                    top: 5,
+                    bottom: 5,
+                    right: 10,
+                    left: 10,
+                  }}
+                >
                   <Text
                     style={{
                       fontWeight: 'bold',
@@ -143,23 +157,29 @@ export default function WinningCardScreen() {
                   >
                     A
                   </Text>
-                </View>
-                <Text style={{ fontSize: 200 * SCALE, textAlign: 'center' }}>
-                  ❤️
-                </Text>
-                <View style={{ alignSelf: 'flex-end' }}>
-                  <Text
+
+                  <Text style={{ fontSize: 150 * SCALE, textAlign: 'center' }}>
+                    ❤️
+                  </Text>
+                  <View
                     style={{
-                      fontWeight: 'bold',
-                      color: '#D22',
-                      fontSize: 90 * SCALE,
-                      transform: [{ rotateX: '180deg' }],
-                      zIndex: 3000,
-                      backfaceVisibility: 'visible',
+                      alignSelf: 'flex-end',
                     }}
                   >
-                    A
-                  </Text>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        textAlign: 'right',
+                        color: '#D22',
+                        fontSize: 90 * SCALE,
+                        transform: [{ rotateX: '180deg' }],
+                        zIndex: 3000,
+                        backfaceVisibility: 'visible',
+                      }}
+                    >
+                      A
+                    </Text>
+                  </View>
                 </View>
               </View>
             }
@@ -192,7 +212,8 @@ export default function WinningCardScreen() {
                   width: '100%',
                   height: '100%',
                   justifyContent: 'space-between',
-                  padding: 10 * SCALE,
+                  paddingVertical: 10 * SCALE,
+                  paddingHorizontal: 20 * SCALE,
                   backfaceVisibility: 'visible',
                 }}
               >
@@ -214,6 +235,7 @@ export default function WinningCardScreen() {
                   <Text
                     style={{
                       fontWeight: 'bold',
+                      textAlign: 'right',
                       color: '#D22',
                       fontSize: 90 * SCALE,
                       transform: [{ rotateX: '180deg' }],
@@ -277,6 +299,7 @@ export default function WinningCardScreen() {
                   <Text
                     style={{
                       fontWeight: 'bold',
+                      textAlign: 'right',
                       color: '#D22',
                       fontSize: 90 * SCALE,
                       transform: [{ rotateX: '180deg' }],
@@ -340,6 +363,7 @@ export default function WinningCardScreen() {
                   <Text
                     style={{
                       fontWeight: 'bold',
+                      textAlign: 'right',
                       color: '#D22',
                       fontSize: 90 * SCALE,
                       transform: [{ rotateX: '180deg' }],
@@ -410,6 +434,7 @@ export default function WinningCardScreen() {
                     style={{
                       fontWeight: 'bold',
                       color: '#fff',
+                      textAlign: 'right',
                       fontSize: 90 * SCALE,
                       transform: [{ rotateX: '180deg' }],
                       zIndex: 3000,
@@ -474,6 +499,7 @@ export default function WinningCardScreen() {
                       fontWeight: 'bold',
                       color: '#FFF',
                       fontSize: 90 * SCALE,
+                      textAlign: 'right',
                       transform: [{ rotateX: '180deg' }],
                       zIndex: 3000,
                       backfaceVisibility: 'visible',
@@ -537,6 +563,7 @@ export default function WinningCardScreen() {
                       fontWeight: 'bold',
                       color: '#FFF',
                       fontSize: 90 * SCALE,
+                      textAlign: 'right',
                       transform: [{ rotateX: '180deg' }],
                       zIndex: 3000,
                       backfaceVisibility: 'visible',
@@ -626,6 +653,7 @@ export default function WinningCardScreen() {
                       style={{
                         fontWeight: 'bold',
                         color: '#FFF',
+                        textAlign: 'right',
                         fontSize: 90 * SCALE,
                         transform: [{ rotateX: '180deg' }],
                         zIndex: 3000,
