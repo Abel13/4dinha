@@ -1,8 +1,9 @@
-import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
+import React, { forwardRef } from 'react';
+import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
-import { type Control, useController, useFormContext } from 'react-hook-form';
+import { Control, useController } from 'react-hook-form';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 
@@ -16,45 +17,51 @@ export type ThemedInputProps = TextInputProps & {
   error?: string;
 };
 
-export const ThemedInput = ({
-  style,
-  lightColor,
-  darkColor,
-  control,
-  name,
-  rules,
-  type = 'default',
-  error,
-  ...rest
-}: ThemedInputProps) => {
-  const color = useThemeColor({ dark: darkColor }, 'text');
-  const {
-    field: { value, onChange },
-  } = useController({
-    name,
-    control,
-    rules,
-  });
+export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(
+  (
+    {
+      style,
+      lightColor,
+      darkColor,
+      control,
+      name,
+      rules,
+      type = 'default',
+      error,
+      ...rest
+    },
+    ref,
+  ) => {
+    const color = useThemeColor({ dark: darkColor }, 'text');
+    const {
+      field: { value, onChange },
+    } = useController({
+      name,
+      control,
+      rules,
+    });
 
-  return (
-    <ThemedView>
-      <TextInput
-        id={name}
-        style={[
-          { color },
-          type === 'default' ? styles.default : undefined,
-          style,
-        ]}
-        value={value}
-        onChangeText={onChange}
-        selectionColor={Colors.dark.tint}
-        cursorColor={Colors.dark.tint}
-        {...rest}
-      />
-      {error && <ThemedText type="error">{error}</ThemedText>}
-    </ThemedView>
-  );
-};
+    return (
+      <ThemedView>
+        <TextInput
+          ref={ref}
+          id={name}
+          style={[
+            { color },
+            type === 'default' ? styles.default : undefined,
+            style,
+          ]}
+          value={value}
+          onChangeText={onChange}
+          selectionColor={Colors.dark.tint}
+          cursorColor={Colors.dark.tint}
+          {...rest}
+        />
+        {error && <ThemedText type="error">{error}</ThemedText>}
+      </ThemedView>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   default: {

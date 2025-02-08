@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
+import { Image, StyleSheet } from 'react-native';
+
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from './ThemedView';
-import { Image, StyleSheet } from 'react-native';
 import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
-import { type GamePlayer } from '@/types';
+import { useVibration } from '@/hooks/useVibration';
+import { GamePlayer } from '@/types';
 import { Card } from './Card';
 
 const styles = StyleSheet.create({
@@ -83,31 +86,33 @@ const styles = StyleSheet.create({
   },
 });
 
+interface TableSeatProps {
+  player?: GamePlayer;
+  number: number;
+  playing?: boolean;
+  currentTurn: number;
+  handlePlay?: (id?: string) => void;
+}
+
 export const TableSeat = ({
   player,
   number,
   playing,
   currentTurn,
   handlePlay,
-}: {
-  player?: GamePlayer;
-  number: number;
-  playing?: boolean;
-  currentTurn: number;
-  handlePlay?: (id?: string) => void;
-}) => {
-  const { playerName, playerPicture } = usePlayer(player?.user_id!);
+}: TableSeatProps) => {
+  const { playerName, playerPicture } = usePlayer(player?.user_id as string);
+  const isMyTurn = (player?.current && number === 1) || false;
+  const { vibrate } = useVibration();
+
+  useEffect(() => {
+    if (isMyTurn) {
+      vibrate();
+    }
+  }, [isMyTurn, vibrate]);
 
   if (!player?.user_id)
-    return (
-      <ThemedView style={[styles.seat, styles.empty]}>
-        {/* <ThemedView style={styles.row}>
-          <ThemedText style={styles.number}>{number}</ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.row} />
-        <ThemedView style={styles.row} /> */}
-      </ThemedView>
-    );
+    return <ThemedView style={[styles.seat, styles.empty]} />;
 
   return (
     <ThemedView style={[styles.seat, player.current && styles.current]}>
