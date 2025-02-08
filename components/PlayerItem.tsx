@@ -1,7 +1,7 @@
+import { Image, StyleSheet } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 import { type MatchUser } from '@/types/MatchUser';
-import { Image, StyleSheet } from 'react-native';
 import { usePlayer } from '@/hooks/usePlayer';
 import { Colors } from '@/constants/Colors';
 

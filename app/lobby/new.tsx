@@ -1,18 +1,18 @@
 import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedInput } from '@/components/ThemedInput';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { format } from 'date-fns';
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedInput } from '@/components/ThemedInput';
+import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useMatchList } from '@/hooks/useMatchList';
-import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import { router } from 'expo-router';
 
 const schema = yup.object({
   name: yup.string().required('Nome da partida é obrigatório'),

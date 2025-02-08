@@ -1,12 +1,3 @@
-import { Bet } from '@/components/Bet';
-import { Card } from '@/components/Card';
-import { ResultItem } from '@/components/ResultItem';
-import { TableSeat } from '@/components/TableSeat';
-import { ThemedButton } from '@/components/ThemedButton';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { Colors } from '@/constants/Colors';
-import { useGame } from '@/hooks/useGame';
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
@@ -17,6 +8,15 @@ import {
   Modal,
   StyleSheet,
 } from 'react-native';
+import { Bet } from '@/components/Bet';
+import { Card } from '@/components/Card';
+import { ResultItem } from '@/components/ResultItem';
+import { TableSeat } from '@/components/TableSeat';
+import { ThemedButton } from '@/components/ThemedButton';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
+import { useGame } from '@/hooks/useGame';
 
 const styles = StyleSheet.create({
   container: {
@@ -101,10 +101,10 @@ export default function Table() {
     trumps,
     results,
     currentPage,
+    betting,
     handleDeal,
     handlePlay,
     handleBet,
-    betting,
     handleFinishRound,
     refreshGame,
     getEmoji,
@@ -129,11 +129,31 @@ export default function Table() {
     }
   }, [currentPage]);
 
+
+  const getStatus = useCallback(() => {
+    if (me?.dealer)
+      return 'DISTRIBUA AS CARTAS!'
+
+    if (!roundStatus)
+      return 'AGUARDANDO O DEALER DISTRIBUIR AS CARTAS'
+
+    if (!me?.current && roundStatus === 'betting')
+      return 'AGUARDE [] APOSTAR'
+
+    if (me?.current)
+      return
+    `SUA VEZ ${roundStatus === 'betting' ? ' DE APOSTAR' : 'DE JOGAR'}`
+
+
+  }, [])
+
+  const status = getStatus()
+
   return (
     <ThemedView style={styles.container}>
       <Modal
         visible={isModalVisible}
-        transparent={true}
+        transparent
         animationType="fade"
         onRequestClose={closeModal}
         supportedOrientations={['portrait', 'landscape']}
@@ -201,7 +221,7 @@ export default function Table() {
 
       <Modal
         visible={roundStatus === 'finished'}
-        transparent={true}
+        transparent
         animationType="slide"
         supportedOrientations={['portrait', 'landscape']}
       >
@@ -270,7 +290,7 @@ export default function Table() {
             !isLoading
           )
         }
-        transparent={true}
+        transparent
         animationType="fade"
         supportedOrientations={['portrait', 'landscape']}
       >
@@ -314,7 +334,7 @@ export default function Table() {
                   <Card
                     suit={trump?.suit}
                     symbol={trump?.symbol}
-                    status={'on hand'}
+                    status="on hand"
                     onPress={onTrumpPress}
                   />
                 </ThemedView>
@@ -373,7 +393,7 @@ export default function Table() {
               <ThemedButton
                 title="dar cartas"
                 loading={dealing}
-                color={'white'}
+                color="white"
                 onPress={handleDeal}
               />
             </ThemedView>
@@ -425,16 +445,11 @@ export default function Table() {
                     : getEmoji(roundStatus)}
                 </ThemedText>
               </ThemedView>
-              {me?.current ? (
-                <ThemedText type="defaultSemiBold" style={{ padding: 4 }}>
-                  SUA VEZ{' '}
-                  {roundStatus === 'betting' ? ' DE APOSTAR' : 'DE JOGAR'}
-                </ThemedText>
-              ) : (
+
                 <ThemedText type="h4" style={{ padding: 2 }}>
-                  AGUARDE!
+                  {status}
                 </ThemedText>
-              )}
+
 
               <ThemedText type="error">
                 {checkLimit &&
@@ -461,7 +476,7 @@ export default function Table() {
             <ThemedButton
               title="↻"
               loading={isFetching || isLoading}
-              color={'white'}
+              color="white"
               onPress={refreshGame}
             />
           </ThemedView>

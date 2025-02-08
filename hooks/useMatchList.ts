@@ -1,3 +1,7 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import { supabase } from '@/providers/supabase';
 import {
   createMatchService,
@@ -6,10 +10,6 @@ import {
 } from '@/services/match';
 import { enterMatchService } from '@/services/matchUsers';
 import { type MatchInsert } from '@/types/Match';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
 import { useUserSessionStore } from './useUserSessionStore';
 
 export const useMatchList = () => {

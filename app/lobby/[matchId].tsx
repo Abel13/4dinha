@@ -1,15 +1,15 @@
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { router, useLocalSearchParams } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedFlatList } from '@/components/ThemedFlatList';
-import { router, useLocalSearchParams } from 'expo-router';
 import { useMatchUsers } from '@/hooks/useMatchUsers';
 import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
-import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 
 const styles = StyleSheet.create({

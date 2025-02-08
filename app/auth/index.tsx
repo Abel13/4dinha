@@ -1,14 +1,14 @@
 import { useRef } from 'react';
 import { Image, StyleSheet, TextInput } from 'react-native';
 
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedInput } from '@/components/ThemedInput';
 import { ThemedButton } from '@/components/ThemedButton';
-import { useForm } from 'react-hook-form';
 import { useAuth } from '@/hooks/useAuth';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const schema = yup.object({
@@ -45,7 +45,7 @@ export default function LoginScreen() {
           autoCorrect={false}
           autoComplete="off"
           control={control}
-          error={errors['email']?.message}
+          error={errors.email?.message}
           returnKeyType="next"
           onSubmitEditing={() => inputPasswordRef.current?.focus()}
         />
@@ -54,11 +54,11 @@ export default function LoginScreen() {
         <ThemedText>senha</ThemedText>
         <ThemedInput
           ref={inputPasswordRef}
-          name={'password'}
+          name="password"
           control={control}
           secureTextEntry
           textContentType="password"
-          error={errors['password']?.message}
+          error={errors.password?.message}
           returnKeyType="done"
           onSubmitEditing={handleSubmit(onAuth)}
         />

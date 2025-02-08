@@ -8,15 +8,15 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
+import { FontAwesome6, Ionicons } from '@expo/vector-icons';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { useMatchList } from '@/hooks/useMatchList';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { HelloWave } from '@/components/HelloWave';
 import { Colors } from '@/constants/Colors';
-import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { MatchItem } from '@/components/MatchItem';
 import { useHome } from '@/hooks/useHome';
 import MenuIcon from '@/components/MenuIcon';
@@ -85,7 +85,7 @@ export default function LobbyScreen() {
                   key={index}
                   name={icon as keyof typeof Ionicons.glyphMap}
                   size={28}
-                  color={'#FFF'}
+                  color="#FFF"
                 />
               ))}
             </ThemedView>

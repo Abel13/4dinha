@@ -1,4 +1,7 @@
-node_modules/
-dist/
-build/
-package-lock.json
+**/*.js
+node_modules
+build
+android
+ios
+/*.js
+app/+html.tsx

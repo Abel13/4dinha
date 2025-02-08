@@ -2,50 +2,50 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function useBet(
   currentCount: number,
-  currentRound?: number,
+  cardQuantity: number,
   checkLimit: boolean = false,
 ) {
   const [bet, setBet] = useState(0);
 
-  function calculateMaxBet(round_number?: number): number {
+  function calculateMaxBet(round_number: number): number {
     const maxCards = 6;
     const roundAbs = (round_number - 1) % (maxCards * 2);
     return roundAbs < maxCards
       ? roundAbs + 1
       : maxCards - (roundAbs % maxCards);
   }
-  const max = calculateMaxBet(currentRound);
+  const max = calculateMaxBet(cardQuantity);
 
   const add = useCallback(() => {
     let newBet = bet + 1;
-    if (newBet + currentCount === currentRound && checkLimit) {
+    if (newBet + currentCount === cardQuantity && checkLimit) {
       newBet += 1;
     }
     if (newBet <= max) {
       setBet(newBet);
     }
-  }, [bet, checkLimit, currentCount, currentRound, max]);
+  }, [bet, checkLimit, currentCount, cardQuantity, max]);
 
   const subtract = useCallback(() => {
     let newBet = bet - 1;
-    if (newBet + currentCount === currentRound && checkLimit) {
+    if (newBet + currentCount === cardQuantity && checkLimit) {
       newBet -= 1;
     }
     if (newBet >= 0) {
       setBet(newBet);
     }
-  }, [bet, checkLimit, currentCount, currentRound]);
+  }, [bet, checkLimit, currentCount, cardQuantity]);
 
   useEffect(() => {
     if (checkLimit) {
-      if (currentCount === currentRound) {
+      if (currentCount === cardQuantity) {
         setBet(1);
       }
     }
-  }, [checkLimit, currentCount, currentRound]);
+  }, [checkLimit, currentCount, cardQuantity]);
 
   useEffect(() => {
-    setBet(0);
+    setBet(NaN);
   }, []);
 
   return { bet, max, add, subtract };

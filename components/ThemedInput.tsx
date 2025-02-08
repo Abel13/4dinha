@@ -1,9 +1,9 @@
 import React, { forwardRef } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 
+import { Control, useController } from 'react-hook-form';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
-import { Control, useController } from 'react-hook-form';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 

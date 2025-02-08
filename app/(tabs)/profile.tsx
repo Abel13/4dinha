@@ -1,5 +1,7 @@
 import { StyleSheet, Platform, ScrollView, useColorScheme } from 'react-native';
 
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,8 +9,6 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
-import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
 
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();

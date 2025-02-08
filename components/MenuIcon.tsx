@@ -1,7 +1,6 @@
-import { TouchableOpacity, useColorScheme } from 'react-native';
+import { TouchableOpacity, useColorScheme, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
-import { StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
 
 interface MenuIconProps {

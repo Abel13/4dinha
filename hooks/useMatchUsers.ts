@@ -1,7 +1,7 @@
-import { supabase } from '@/providers/supabase';
-import { fetchMatchUsers, updateStatusService } from '@/services/matchUsers';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
+import { supabase } from '@/providers/supabase';
+import { fetchMatchUsers, updateStatusService } from '@/services/matchUsers';
 
 export const useMatchUsers = (matchId: string) => {
   const {

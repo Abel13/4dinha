@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { View, Animated, Easing, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import useBet from '@/hooks/useBet';
 import { ThemedButton } from './ThemedButton';
 import { ThemedText } from './ThemedText';
-import { View, Animated, Easing, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from './ThemedView';
 
@@ -119,14 +119,14 @@ export const Bet = ({
             activeOpacity={0.8}
             style={{}}
           >
-            <Feather name={'refresh-cw'} color={Colors.dark.tint} size={22} />
+            <Feather name="refresh-cw" color={Colors.dark.tint} size={22} />
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleHide} activeOpacity={0.8} style={{}}>
-            <Feather
+            {loading ? <ActivityIndicator color={Colors.dark.tint}/> : <Feather
               name={hide ? 'chevron-down' : 'chevron-up'}
               color={Colors.dark.tint}
               size={28}
-            />
+            />}
           </TouchableOpacity>
         </ThemedView>
       </Animated.View>

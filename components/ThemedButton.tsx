@@ -1,6 +1,5 @@
 import { TouchableOpacity, StyleSheet, type ButtonProps } from 'react-native';
 
-import { Colors } from '@/constants/Colors';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 
 type ButtonType = 'default' | 'danger' | 'outlined';

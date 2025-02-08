@@ -1,12 +1,12 @@
-import { supabase } from '@/providers/supabase';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
 import {
   endMatchService,
   fetchMatch,
   startMatchService,
 } from '@/services/match';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { supabase } from '@/providers/supabase';
 
 export const useMatch = (matchId: string) => {
   const router = useRouter();

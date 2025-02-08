@@ -1,9 +1,9 @@
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
-import { useGame } from '@/hooks/useGame';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, Image, StyleSheet } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { useGame } from '@/hooks/useGame';
 import { Colors } from '@/constants/Colors';
 import { usePlayer } from '@/hooks/usePlayer';
 import { ThemedButton } from '@/components/ThemedButton';

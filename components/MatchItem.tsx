@@ -1,10 +1,10 @@
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { useCallback } from 'react';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 import { type Match } from '@/types/Match';
-import { Image, Pressable, StyleSheet } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { useMatch } from '@/hooks/useMatch';
-import { useCallback } from 'react';
 
 const styles = StyleSheet.create({
   container: {

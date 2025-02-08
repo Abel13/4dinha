@@ -1,8 +1,8 @@
-import { supabase } from '@/providers/supabase';
 import { type SignInWithPasswordCredentials } from '@supabase/supabase-js';
 import { useState } from 'react';
-import { useUserSessionStore } from './useUserSessionStore';
 import { useRouter } from 'expo-router';
+import { useUserSessionStore } from './useUserSessionStore';
+import { supabase } from '@/providers/supabase';
 
 export const useAuth = () => {
   const { setSession } = useUserSessionStore((state) => state);

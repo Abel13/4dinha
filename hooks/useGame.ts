@@ -1,6 +1,6 @@
-import { supabase } from '@/providers/supabase';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '@/providers/supabase';
 import {
   dealCardsMutation,
   updateGame,
