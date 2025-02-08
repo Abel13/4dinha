@@ -15,8 +15,8 @@ import { Colors } from '@/constants/Colors';
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
-    paddingTop: 100,
-    paddingBottom: 50,
+    paddingHorizontal: 60,
+    paddingBottom: 20,
     gap: 10,
   },
   matchPicture: {

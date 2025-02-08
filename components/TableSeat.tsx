@@ -9,15 +9,15 @@ import { Card } from './Card';
 const styles = StyleSheet.create({
   seat: {
     flex: 1,
-    minWidth: '45%',
-    margin: 5,
     borderWidth: 1,
     borderColor: Colors.dark.tint,
     borderRadius: 10,
     padding: 5,
+    backgroundColor: Colors.dark.background,
   },
   empty: {
-    borderColor: Colors.dark.tabIconDefault,
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
   },
   current: {
     borderColor: Colors.dark.success,
@@ -45,15 +45,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.tint,
   },
   userContainer: {
-    flex: 0.5,
-    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    top: -17,
+    top: -23,
     zIndex: 3,
     backgroundColor: Colors.dark.background,
     paddingHorizontal: 8,
+    paddingTop: 5,
+    borderRadius: 10,
     alignSelf: 'center',
   },
   profileImage: {
@@ -101,11 +101,11 @@ export const TableSeat = ({
   if (!player?.user_id)
     return (
       <ThemedView style={[styles.seat, styles.empty]}>
-        <ThemedView style={styles.row}>
+        {/* <ThemedView style={styles.row}>
           <ThemedText style={styles.number}>{number}</ThemedText>
         </ThemedView>
         <ThemedView style={styles.row} />
-        <ThemedView style={styles.row} />
+        <ThemedView style={styles.row} /> */}
       </ThemedView>
     );
 

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   defaultSemiBold: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 15,
     fontWeight: '600',
     fontFamily: 'BarlowCondensedSemiBold',
   },
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     color: Colors.dark.link,
   },
   error: {
-    lineHeight: 16,
+    lineHeight: 12,
     fontSize: 12,
     color: Colors.dark.danger,
   },

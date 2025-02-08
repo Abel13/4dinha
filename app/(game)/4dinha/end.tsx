@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: '50%',
-    padding: 20,
+    paddingHorizontal: 60,
+    paddingVertical: 20,
     backgroundColor: Colors.dark.background,
   },
   title: {

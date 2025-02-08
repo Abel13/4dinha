@@ -29,6 +29,7 @@ export const ThemedButton = ({
   loading = false,
   title,
   disabled = false,
+  color,
   ...rest
 }: ThemedButtonProps) => {
   const rotation = useSharedValue(0);
@@ -61,7 +62,7 @@ export const ThemedButton = ({
           { justifyContent: 'center', alignItems: 'center' },
         ]}
       >
-        <Feather name="loader" color={Colors.dark.tint} size={24} />
+        <Feather name="loader" color={color || TypeColors[type]} size={24} />
       </Animated.View>
     );
 
@@ -83,8 +84,11 @@ export const ThemedButton = ({
     >
       <ThemedText
         style={{
-          color: !disabled ? TypeColors[type] : Colors.dark.disabledButton,
+          color: !disabled
+            ? color || TypeColors[type]
+            : Colors.dark.disabledButton,
         }}
+        type="subtitle"
       >
         {title}
       </ThemedText>
@@ -94,6 +98,7 @@ export const ThemedButton = ({
 
 const styles = StyleSheet.create({
   button: {
+    flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 10,
