@@ -432,7 +432,7 @@ export default function Table() {
                 </ThemedText>
               ) : (
                 <ThemedText type="h4" style={{ padding: 2 }}>
-                  AGUARDE {!me?.lives && ', VOCÊ PERDEU!'}
+                  AGUARDE!
                 </ThemedText>
               )}
 
