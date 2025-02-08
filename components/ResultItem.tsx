@@ -1,9 +1,9 @@
 import { Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
 import { type GameResult } from '@/types';
+import { ThemedView } from './ThemedView';
+import { ThemedText } from './ThemedText';
 
 export const ResultItem = ({ result }: { result: GameResult }) => {
   const { playerName, playerPicture } = usePlayer(result.user_id);

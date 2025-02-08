@@ -51,7 +51,7 @@ export const useMatch = (matchId: string) => {
           event: 'UPDATE',
           filter: `id=eq.${matchId}`,
         },
-        (payload) => {
+        payload => {
           if (payload.new.status === 'started') {
             router.replace({
               pathname: '/(game)/4dinha',

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 
 export default function TabLayout() {
-  const { session, loadSession } = useUserSessionStore((state) => state);
+  const { session, loadSession } = useUserSessionStore(state => state);
 
   useEffect(() => {
     loadSession();

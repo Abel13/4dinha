@@ -147,7 +147,7 @@ export default function Indiozinho() {
                 justifyContent: 'space-evenly',
               }}
             >
-              {trumps.map((card) => {
+              {trumps.map(card => {
                 return (
                   <Card
                     key={`${card.symbol}${card.suit}`}
@@ -182,7 +182,7 @@ export default function Indiozinho() {
             </ThemedView>
             <ThemedView style={{ width: '100%', gap: 5 }}>
               {results &&
-                results.map((result) => {
+                results.map(result => {
                   return <ResultItem result={result} key={result.user_id} />;
                 })}
             </ThemedView>
@@ -246,7 +246,9 @@ export default function Indiozinho() {
             {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
           </ThemedText>
           <ThemedView />
-          <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
+          <ThemedText>{`${cardQuantity || '-'} carta${
+            cardQuantity === 1 ? '' : 's'
+          }`}</ThemedText>
           <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
         </ThemedView>
         <ThemedView
@@ -299,7 +301,9 @@ export default function Indiozinho() {
               me?.current &&
               cardQuantity &&
               roundStatus === 'betting' && (
-                <ThemedText type="error">{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
+                <ThemedText type="error">{`Sua aposta precisa ser diferente de: ${Math.abs(
+                  betCount - cardQuantity,
+                )}`}</ThemedText>
               )}
           </ThemedView>
         </ThemedView>
@@ -327,7 +331,7 @@ export default function Indiozinho() {
           <TableSeat
             number={1}
             player={indiozinho1}
-            handlePlay={(id) => {
+            handlePlay={id => {
               if (me) handlePlay(id!);
             }}
             playing={playing}

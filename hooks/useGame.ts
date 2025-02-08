@@ -187,66 +187,66 @@ export const useGame = (matchId: string) => {
   useEffect(() => {
     if (game.players?.length >= 2) {
       const { players } = game;
-      const me = players.find((player) => player.user_id === session?.user?.id);
+      const me = players.find(player => player.user_id === session?.user?.id);
 
       setMe({
         ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === me?.user_id),
+        bet: game.bets.find(p => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === me?.user_id)?.wins,
       } as GamePlayer);
 
       if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
 
       const player2 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 1) % 6,
+        player => player.table_seat === ((me?.table_seat || 0) + 1) % 6,
       );
       const player3 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 2) % 6,
+        player => player.table_seat === ((me?.table_seat || 0) + 2) % 6,
       );
       const player4 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 3) % 6,
+        player => player.table_seat === ((me?.table_seat || 0) + 3) % 6,
       );
       const player5 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 4) % 6,
+        player => player.table_seat === ((me?.table_seat || 0) + 4) % 6,
       );
       const player6 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 5) % 6,
+        player => player.table_seat === ((me?.table_seat || 0) + 5) % 6,
       );
 
       setPlayer2({
         ...player2,
-        cards: game.player_cards.filter((p) => p.user_id === player2?.user_id),
-        bet: game.bets.find((p) => p.user_id === player2?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player2?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === player2?.user_id),
+        bet: game.bets.find(p => p.user_id === player2?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === player2?.user_id)?.wins,
       } as GamePlayer);
       setPlayer3({
         ...player3,
-        cards: game.player_cards.filter((p) => p.user_id === player3?.user_id),
-        bet: game.bets.find((p) => p.user_id === player3?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player3?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === player3?.user_id),
+        bet: game.bets.find(p => p.user_id === player3?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === player3?.user_id)?.wins,
       } as GamePlayer);
       setPlayer4({
         ...player4,
-        cards: game.player_cards.filter((p) => p.user_id === player4?.user_id),
-        bet: game.bets.find((p) => p.user_id === player4?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player4?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === player4?.user_id),
+        bet: game.bets.find(p => p.user_id === player4?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === player4?.user_id)?.wins,
       } as GamePlayer);
       setPlayer5({
         ...player5,
-        cards: game.player_cards.filter((p) => p.user_id === player5?.user_id),
-        bet: game.bets.find((p) => p.user_id === player5?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player5?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === player5?.user_id),
+        bet: game.bets.find(p => p.user_id === player5?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === player5?.user_id)?.wins,
       } as GamePlayer);
       setPlayer6({
         ...player6,
-        cards: game.player_cards.filter((p) => p.user_id === player6?.user_id),
-        bet: game.bets.find((p) => p.user_id === player6?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player6?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === player6?.user_id),
+        bet: game.bets.find(p => p.user_id === player6?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === player6?.user_id)?.wins,
       } as GamePlayer);
 
       if (game.player_cards) {
-        const turn = Math.max(...game.player_cards.map((r) => r.turn));
+        const turn = Math.max(...game.player_cards.map(r => r.turn));
         setTurn(turn);
       }
       return;
@@ -256,40 +256,40 @@ export const useGame = (matchId: string) => {
     if (game?.players?.length === 2) {
       setCurrentPage('indiozinho');
       const { players } = game;
-      const me = players.find((player) => player.user_id === session?.user?.id);
+      const me = players.find(player => player.user_id === session?.user?.id);
       setMe({
         ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+        cards: game.player_cards.filter(p => p.user_id === me?.user_id),
+        bet: game.bets.find(p => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === me?.user_id)?.wins,
       } as GamePlayer);
 
       let indiozinho1 = me;
       if (!indiozinho1) {
-        indiozinho1 = game.players.sort((i) => i.table_seat)[0];
+        indiozinho1 = game.players.sort(i => i.table_seat)[0];
       }
 
       const indiozinho2 = game.players.find(
-        (p) => p.user_id !== indiozinho1.user_id,
+        p => p.user_id !== indiozinho1.user_id,
       );
 
       setIndiozinho1({
         ...indiozinho1,
         cards: game.player_cards.filter(
-          (p) => p.user_id === indiozinho1?.user_id,
+          p => p.user_id === indiozinho1?.user_id,
         ),
-        bet: game.bets.find((p) => p.user_id === indiozinho1?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === indiozinho1?.user_id)
+        bet: game.bets.find(p => p.user_id === indiozinho1?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === indiozinho1?.user_id)
           ?.wins,
       } as GamePlayer);
 
       setIndiozinho2({
         ...indiozinho2,
         cards: game.player_cards.filter(
-          (p) => p.user_id === indiozinho2?.user_id,
+          p => p.user_id === indiozinho2?.user_id,
         ),
-        bet: game.bets.find((p) => p.user_id === indiozinho2?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === indiozinho2?.user_id)
+        bet: game.bets.find(p => p.user_id === indiozinho2?.user_id)?.bet,
+        wins: game?.results?.find(r => r.user_id === indiozinho2?.user_id)
           ?.wins,
       } as GamePlayer);
 
@@ -300,7 +300,7 @@ export const useGame = (matchId: string) => {
 
     // VENCEDOR
     if (game?.players?.length <= 1) {
-      const winner = game.players?.find((p) => p.lives > 0);
+      const winner = game.players?.find(p => p.lives > 0);
       setWinner(winner);
       setCurrentPage('end');
     }

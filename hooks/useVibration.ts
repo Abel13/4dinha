@@ -6,7 +6,7 @@ import { useSettingsStore } from './useSettingsStore';
 const VIBRATION_DURATION_IN_MS = 500;
 
 export const useVibration = () => {
-  const vibrationEnabled = useSettingsStore((state) => state.vibrationEnabled);
+  const vibrationEnabled = useSettingsStore(state => state.vibrationEnabled);
 
   const vibrate = useCallback(() => {
     if (vibrationEnabled) {

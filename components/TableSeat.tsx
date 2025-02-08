@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { Image, StyleSheet } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVibration } from '@/hooks/useVibration';
 import { GamePlayer } from '@/types';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 import { Card } from './Card';
 
 const styles = StyleSheet.create({
@@ -131,7 +131,9 @@ export const TableSeat = ({
           </ThemedText>
         </ThemedView>
         <ThemedText type="h4">
-          {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}
+          {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${
+            Number.isNaN(Number(player.bet)) ? '-' : player.bet
+          }`}
         </ThemedText>
       </ThemedView>
       <ThemedView
@@ -143,8 +145,8 @@ export const TableSeat = ({
         <ThemedView style={[styles.row, { flex: 1 }]}>
           {player.cards &&
             player.cards
-              .filter((c) => c.status === 'on hand')
-              .map((card) => {
+              .filter(c => c.status === 'on hand')
+              .map(card => {
                 return (
                   <ThemedView
                     key={card.id}
@@ -175,8 +177,8 @@ export const TableSeat = ({
         >
           {player.cards &&
             player.cards
-              .filter((c) => c.status === 'on table' && c.turn === currentTurn)
-              .map((card) => {
+              .filter(c => c.status === 'on table' && c.turn === currentTurn)
+              .map(card => {
                 return (
                   <Card
                     key={card.id}

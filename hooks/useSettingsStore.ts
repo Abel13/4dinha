@@ -11,21 +11,21 @@ interface SettingsState {
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
-    (set) => ({
+    set => ({
       soundEnabled: true,
       vibrationEnabled: true,
       toggleSound: () =>
-        set((state) => ({
+        set(state => ({
           soundEnabled: !state.soundEnabled,
         })),
       toggleVibration: () =>
-        set((state) => ({
+        set(state => ({
           vibrationEnabled: !state.vibrationEnabled,
         })),
     }),
     {
       name: 'settings-storage', // Nome da chave no armazenamento
-      partialize: (state) => ({
+      partialize: state => ({
         // Define quais campos devem ser persistidos
         soundEnabled: state.soundEnabled,
         vibrationEnabled: state.vibrationEnabled,

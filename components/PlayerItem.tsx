@@ -1,9 +1,9 @@
 import { Image, StyleSheet } from 'react-native';
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
 import { type MatchUser } from '@/types/MatchUser';
 import { usePlayer } from '@/hooks/usePlayer';
 import { Colors } from '@/constants/Colors';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 
 const styles = StyleSheet.create({
   container: {

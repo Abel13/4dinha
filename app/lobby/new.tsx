@@ -19,7 +19,7 @@ const schema = yup.object({
 });
 
 export default function NewMatchScreen() {
-  const { username } = useUserSessionStore((state) => state);
+  const { username } = useUserSessionStore(state => state);
   const { createMatch, creatingMatch } = useMatchList();
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),

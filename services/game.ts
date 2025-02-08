@@ -1,6 +1,6 @@
 import { type BetInsert, type Deck, type Game } from '@/types';
-import { api } from './api';
 import { supabase } from '@/providers/supabase';
+import { api } from './api';
 
 export const gameKey = (gameId: string) => {
   return ['game', gameId];

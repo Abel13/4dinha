@@ -12,7 +12,7 @@ import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { username, profilePicture } = useUserSessionStore(state => state);
 
   const theme = useColorScheme() || 'dark';
 

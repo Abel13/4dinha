@@ -25,7 +25,7 @@ export default function LobbyScreen() {
   const router = useRouter();
   const theme = useColorScheme() || 'light';
   const { matches, enterMatch, inProgressMatches } = useMatchList();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { username, profilePicture } = useUserSessionStore(state => state);
 
   const { footerMenu, headerMenu } = useHome();
 
@@ -129,7 +129,7 @@ export default function LobbyScreen() {
               <ThemedText type="subtitle">Novas Partidas</ThemedText>
               <FlatList
                 data={matches}
-                keyExtractor={(item) => item.id}
+                keyExtractor={item => item.id}
                 renderItem={({ item }) => (
                   <MatchItem
                     match={item}
@@ -142,7 +142,7 @@ export default function LobbyScreen() {
           </ThemedView>
 
           <ThemedView style={styles.footer}>
-            {footerMenu.map((item) => (
+            {footerMenu.map(item => (
               <MenuIcon
                 key={item.text}
                 icon={item.icon}

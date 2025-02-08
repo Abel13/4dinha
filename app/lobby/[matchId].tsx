@@ -42,13 +42,13 @@ const styles = StyleSheet.create({
 
 export default function LobbyScreen() {
   const { matchId } = useLocalSearchParams();
-  const { session } = useUserSessionStore((state) => state);
+  const { session } = useUserSessionStore(state => state);
   const { match, matchPicture, startMatch } = useMatch(matchId as string);
   const { players, loadingLobby, updateStatus } = useMatchUsers(
     matchId as string,
   );
 
-  const me = players.find((p) => p.user_id === session?.user.id);
+  const me = players.find(p => p.user_id === session?.user.id);
 
   if (!me)
     return (
@@ -84,7 +84,7 @@ export default function LobbyScreen() {
         Jogadores
       </ThemedText>
       <ThemedFlatList
-        data={players.filter((p) => p.user_id !== session?.user.id)}
+        data={players.filter(p => p.user_id !== session?.user.id)}
         renderItem={({ item }) => {
           return <PlayerItem matchUser={item} />;
         }}
@@ -101,7 +101,7 @@ export default function LobbyScreen() {
         {match?.user_id === session?.user.id && (
           <ThemedButton
             title="INICIAR PARTIDA"
-            disabled={!!players.find((p) => !p.ready) || players.length < 3}
+            disabled={!!players.find(p => !p.ready) || players.length < 3}
             onPress={() => {
               startMatch();
             }}

@@ -129,25 +129,19 @@ export default function Table() {
     }
   }, [currentPage]);
 
-
   const getStatus = useCallback(() => {
-    if (me?.dealer)
-      return 'DISTRIBUA AS CARTAS!'
+    if (me?.dealer) return 'DISTRIBUA AS CARTAS!';
 
-    if (!roundStatus)
-      return 'AGUARDANDO O DEALER DISTRIBUIR AS CARTAS'
+    console.log(roundStatus)
+    if (!roundStatus) return 'AGUARDANDO O DEALER DISTRIBUIR AS CARTAS';
 
-    if (!me?.current && roundStatus === 'betting')
-      return 'AGUARDE [] APOSTAR'
+    if (!me?.current && roundStatus === 'betting') return 'AGUARDE [] APOSTAR';
 
-    if (me?.current)
-      return
-    `SUA VEZ ${roundStatus === 'betting' ? ' DE APOSTAR' : 'DE JOGAR'}`
+    if (me?.current) return;
+    `SUA VEZ ${roundStatus === 'betting' ? ' DE APOSTAR' : 'DE JOGAR'}`;
+  }, []);
 
-
-  }, [])
-
-  const status = getStatus()
+  const status = getStatus();
 
   return (
     <ThemedView style={styles.container}>
@@ -204,7 +198,7 @@ export default function Table() {
                 justifyContent: 'space-evenly',
               }}
             >
-              {trumps.map((card) => {
+              {trumps.map(card => {
                 return (
                   <Card
                     key={`${card.symbol}${card.suit}`}
@@ -240,7 +234,7 @@ export default function Table() {
             }}
           >
             <FlatList
-              keyExtractor={(i) => i.user_id}
+              keyExtractor={i => i.user_id}
               data={results}
               stickyHeaderIndices={[0]}
               renderItem={({ item }) => {
@@ -373,7 +367,9 @@ export default function Table() {
             <ThemedView />
             {roundNumber > 0 && (
               <ThemedView>
-                <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
+                <ThemedText>{`${cardQuantity || '-'} carta${
+                  cardQuantity === 1 ? '' : 's'
+                }`}</ThemedText>
                 <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
               </ThemedView>
             )}
@@ -406,7 +402,7 @@ export default function Table() {
               <TableSeat
                 number={1}
                 player={me}
-                handlePlay={async (id) => {
+                handlePlay={async id => {
                   await handlePlay(id!);
                 }}
                 playing={playing}
@@ -446,17 +442,18 @@ export default function Table() {
                 </ThemedText>
               </ThemedView>
 
-                <ThemedText type="h4" style={{ padding: 2 }}>
-                  {status}
-                </ThemedText>
-
+              <ThemedText type="h4" style={{ padding: 2 }}>
+                {status}
+              </ThemedText>
 
               <ThemedText type="error">
                 {checkLimit &&
                   me?.current &&
                   cardQuantity &&
                   roundStatus === 'betting' &&
-                  `Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}
+                  `Sua aposta precisa ser diferente de: ${Math.abs(
+                    betCount - cardQuantity,
+                  )}`}
               </ThemedText>
             </ThemedView>
           </ThemedView>

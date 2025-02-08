@@ -31,7 +31,7 @@ export const useMatchList = () => {
 
   const enterMatchMutation = useMutation({
     mutationFn: enterMatchService,
-    onSuccess: (matchId) => {
+    onSuccess: matchId => {
       if (matchId)
         router.push({
           pathname: '/lobby/[matchId]',
@@ -44,7 +44,7 @@ export const useMatchList = () => {
 
   const createMatchUserMutation = useMutation({
     mutationFn: enterMatchService,
-    onSuccess: (matchId) => {
+    onSuccess: matchId => {
       if (matchId)
         router.dismissTo({
           pathname: '/lobby/[matchId]',
@@ -57,7 +57,7 @@ export const useMatchList = () => {
 
   const createMatchMutation = useMutation({
     mutationFn: createMatchService,
-    onSuccess: async (matchId) => {
+    onSuccess: async matchId => {
       if (matchId) {
         createMatchUserMutation.mutate({ matchId });
       }
