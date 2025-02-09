@@ -45,7 +45,9 @@ export default function useBet(
   }, [checkLimit, currentCount, cardQuantity]);
 
   useEffect(() => {
-    setBet(NaN);
+    if (!checkLimit) {
+      setBet(0);
+    }
   }, []);
 
   return { bet, max, add, subtract };

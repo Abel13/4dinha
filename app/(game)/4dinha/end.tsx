@@ -24,27 +24,27 @@ export default function End() {
     return (
       <ThemedView style={styles.container}>
         <ThemedView>
-          <ThemedText type="title" style={styles.title}>
+          <ThemedText type='title' style={styles.title}>
             🫠 Ops! 🫠
           </ThemedText>
           <ThemedText style={styles.message}>Ninguém ganhou essa!</ThemedText>
         </ThemedView>
 
         {session?.user?.id === match?.user_id ? (
-          <ThemedButton title="Finalizar partida" onPress={endMatch} />
+          <ThemedButton title='Finalizar partida' onPress={endMatch} />
         ) : (
           <ThemedText>Aguarde a finalização da partida...</ThemedText>
         )}
       </ThemedView>
     );
 
-  if (!playerName || !playerPicture)
+  if (!playerName || !playerPicture || !match)
     return <ActivityIndicator size={100} color={Colors.dark.info} />;
 
   return (
     <ThemedView style={styles.container}>
       <ThemedView>
-        <ThemedText type="title" style={styles.title}>
+        <ThemedText type='title' style={styles.title}>
           🎉 Parabéns, {playerName}! 🎉
         </ThemedText>
         <ThemedText style={styles.message}>O mestre do 4dinha!!</ThemedText>
@@ -60,16 +60,16 @@ export default function End() {
             style={{ width: 100, height: 100, borderRadius: 50 }}
           />
         )}
-        <ThemedText type="subtitle" style={styles.winnerName}>
+        <ThemedText type='subtitle' style={styles.winnerName}>
           🏆 {playerName} 🏆
         </ThemedText>
-        <ThemedText type="defaultSemiBold" style={styles.stats}>
+        <ThemedText type='defaultSemiBold' style={styles.stats}>
           Venceu {(match?.round_number || 0) - 1} Rodadas!
         </ThemedText>
       </ThemedView>
 
       {session?.user?.id === match?.user_id ? (
-        <ThemedButton title="Finalizar partida" onPress={endMatch} />
+        <ThemedButton title='Finalizar partida' onPress={endMatch} />
       ) : (
         <ThemedText>Aguarde a finalização da partida...</ThemedText>
       )}

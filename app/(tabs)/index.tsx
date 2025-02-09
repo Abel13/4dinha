@@ -25,7 +25,7 @@ export default function LobbyScreen() {
   const router = useRouter();
   const theme = useColorScheme() || 'light';
   const { matches, enterMatch, inProgressMatches } = useMatchList();
-  const { username, profilePicture } = useUserSessionStore(state => state);
+  const { username, profilePicture } = useUserSessionStore((state) => state);
 
   const { footerMenu, headerMenu } = useHome();
 
@@ -37,11 +37,11 @@ export default function LobbyScreen() {
     <ThemedView style={styles.screen}>
       <ImageBackground
         source={require('@/assets/images/background.jpg')}
-        resizeMode="cover"
+        resizeMode='cover'
         style={styles.background}
         blurRadius={3}
       >
-        <ThemedView style={styles.container} darkColor="transparent">
+        <ThemedView style={styles.container} darkColor='transparent'>
           <ThemedView style={styles.header}>
             <TouchableOpacity
               style={styles.profile}
@@ -51,27 +51,27 @@ export default function LobbyScreen() {
                 source={{ uri: profilePicture }}
                 style={[styles.profile_pic, styles[`${theme}_border`]]}
               />
-              <ThemedText type="defaultSemiBold" darkColor="#070f2b">
+              <ThemedText type='defaultSemiBold' darkColor='#070f2b'>
                 {`Olá, ${username}!`}
               </ThemedText>
               <HelloWave size={14} />
             </TouchableOpacity>
 
-            <ThemedView darkColor="transparent" style={styles.topContainer}>
+            <ThemedView darkColor='transparent' style={styles.topContainer}>
               <ThemedView style={styles.rowContainer}>
                 {[
                   { icon: 'coins', value: '1.520' },
                   { icon: 'sack-dollar', value: '0' },
                 ].map((item, index) => (
                   <ThemedView key={index} style={styles.coinContainer}>
-                    <ThemedView style={styles.iconWrapper} darkColor="#1b1a55">
+                    <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
                       <FontAwesome6
                         name={item.icon}
                         size={14}
                         color={Colors[theme].text}
                       />
                     </ThemedView>
-                    <ThemedText darkColor="#070f2b" type="h4">
+                    <ThemedText darkColor='#070f2b' type='h4'>
                       {item.value}
                     </ThemedText>
                   </ThemedView>
@@ -85,7 +85,7 @@ export default function LobbyScreen() {
                   key={index}
                   name={icon as keyof typeof Ionicons.glyphMap}
                   size={28}
-                  color="#FFF"
+                  color='#FFF'
                 />
               ))}
             </ThemedView>
@@ -95,41 +95,43 @@ export default function LobbyScreen() {
             <ScrollView horizontal style={styles.scrollContainer}>
               <ThemedView style={styles.menuContainer}>
                 <TouchableOpacity style={styles.menu} onPress={handleNewMatch}>
-                  <ThemedText type="subtitle">Criar partida</ThemedText>
+                  <ThemedText type='subtitle'>Criar partida</ThemedText>
                   <Image
                     source={require('@/assets/images/logo.png')}
                     style={styles.logo}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.menu}
-                  onPress={() => {
-                    router.replace({
-                      pathname: '/(game)/4dinha',
-                      params: {
-                        gameId: inProgressMatches[0]?.matches?.id,
-                      },
-                    });
-                  }}
-                >
-                  <ThemedText
-                    lineBreakMode="tail"
-                    type="subtitle"
-                    numberOfLines={3}
+                {inProgressMatches.length > 0 && (
+                  <TouchableOpacity
+                    style={styles.menu}
+                    onPress={() => {
+                      router.replace({
+                        pathname: '/(game)/4dinha',
+                        params: {
+                          gameId: inProgressMatches[0]?.matches?.id,
+                        },
+                      });
+                    }}
                   >
-                    Voltar para:{' '}
-                    <ThemedText>
-                      {inProgressMatches[0]?.matches?.name}
+                    <ThemedText
+                      lineBreakMode='tail'
+                      type='subtitle'
+                      numberOfLines={3}
+                    >
+                      Voltar para:{' '}
+                      <ThemedText>
+                        {inProgressMatches[0]?.matches?.name}
+                      </ThemedText>
                     </ThemedText>
-                  </ThemedText>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                )}
               </ThemedView>
             </ScrollView>
             <ThemedView style={styles.matchContainer}>
-              <ThemedText type="subtitle">Novas Partidas</ThemedText>
+              <ThemedText type='subtitle'>Novas Partidas</ThemedText>
               <FlatList
                 data={matches}
-                keyExtractor={item => item.id}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                   <MatchItem
                     match={item}
@@ -142,7 +144,7 @@ export default function LobbyScreen() {
           </ThemedView>
 
           <ThemedView style={styles.footer}>
-            {footerMenu.map(item => (
+            {footerMenu.map((item) => (
               <MenuIcon
                 key={item.text}
                 icon={item.icon}

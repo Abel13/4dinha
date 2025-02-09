@@ -16,13 +16,17 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
     link: '#0a7ea4',
-    table: '#856200DD',
+    table: '#55aa4488',
     disabledButton: '#A2A3AA',
 
     // status colors
     danger: '#ef5350',
     success: '#34a424',
     info: '#1a4e89',
+
+    // colors
+    black: '#000',
+    white: '#fff',
   },
   light: {
     // default colors
@@ -46,5 +50,9 @@ export const Colors = {
     danger: '#ef5350',
     success: '#34a424',
     info: '#1a4e89',
+
+    // colors
+    black: '#000',
+    white: '#fff',
   },
 };

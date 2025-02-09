@@ -54,18 +54,6 @@ export const ThemedButton = ({
     ],
   }));
 
-  if (loading)
-    return (
-      <Animated.View
-        style={[
-          animatedStyle,
-          { justifyContent: 'center', alignItems: 'center' },
-        ]}
-      >
-        <Feather name="loader" color={color || TypeColors[type]} size={24} />
-      </Animated.View>
-    );
-
   const buttonStyles = [
     styles.button,
     type === 'outlined' && {
@@ -74,6 +62,18 @@ export const ThemedButton = ({
     },
     disabled && { opacity: 0.5 },
   ];
+
+  if (loading)
+    return (
+      <Animated.View
+        style={[
+          animatedStyle,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
+        <Feather name='loader' color={color || TypeColors[type]} size={24} />
+      </Animated.View>
+    );
 
   return (
     <TouchableOpacity
@@ -88,7 +88,7 @@ export const ThemedButton = ({
             ? color || TypeColors[type]
             : Colors.dark.disabledButton,
         }}
-        type="subtitle"
+        type='subtitle'
       >
         {title}
       </ThemedText>

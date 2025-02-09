@@ -118,7 +118,7 @@ export default function Indiozinho() {
       <Modal
         visible={isModalVisible}
         transparent
-        animationType="slide"
+        animationType='slide'
         onRequestClose={closeModal}
       >
         <ThemedView style={styles.modalContainer}>
@@ -132,9 +132,9 @@ export default function Indiozinho() {
                 },
               ]}
             >
-              <ThemedText type="title">Trunfos</ThemedText>
+              <ThemedText type='title'>Trunfos</ThemedText>
               <Feather
-                name="x-circle"
+                name='x-circle'
                 onPress={closeModal}
                 color={Colors.dark.link}
                 size={24}
@@ -147,11 +147,11 @@ export default function Indiozinho() {
                 justifyContent: 'space-evenly',
               }}
             >
-              {trumps.map(card => {
+              {trumps.map((card) => {
                 return (
                   <Card
                     key={`${card.symbol}${card.suit}`}
-                    status="played"
+                    status='played'
                     suit={card.suit}
                     symbol={card.symbol}
                   />
@@ -165,7 +165,7 @@ export default function Indiozinho() {
       <Modal
         visible={roundStatus === 'finished'}
         transparent
-        animationType="slide"
+        animationType='slide'
       >
         <ThemedView style={styles.modalContainer}>
           <ThemedView style={styles.modalContent}>
@@ -178,18 +178,18 @@ export default function Indiozinho() {
                 },
               ]}
             >
-              <ThemedText type="title">{`Fim da rodada ${roundNumber}`}</ThemedText>
+              <ThemedText type='title'>{`Fim da rodada ${roundNumber}`}</ThemedText>
             </ThemedView>
             <ThemedView style={{ width: '100%', gap: 5 }}>
               {results &&
-                results.map(result => {
+                results.map((result) => {
                   return <ResultItem result={result} key={result.user_id} />;
                 })}
             </ThemedView>
             <ThemedView style={{}}>
               {me?.dealer ? (
                 <Button
-                  title="Concluir Rodada"
+                  title='Concluir Rodada'
                   color={Colors.dark.success}
                   onPress={handleFinishRound}
                 />
@@ -211,7 +211,7 @@ export default function Indiozinho() {
           )
         }
         transparent
-        animationType="slide"
+        animationType='slide'
       >
         <ThemedView style={styles.modalContainer}>
           <ThemedView style={styles.modalContent}>
@@ -242,7 +242,7 @@ export default function Indiozinho() {
             height: '100%',
           }}
         >
-          <ThemedText type="subtitle">
+          <ThemedText type='subtitle'>
             {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
           </ThemedText>
           <ThemedView />
@@ -266,7 +266,7 @@ export default function Indiozinho() {
             <Card
               suit={trump?.suit}
               symbol={trump?.symbol}
-              status="on hand"
+              status='on hand'
               onPress={onTrumpPress}
             />
           </ThemedView>
@@ -278,7 +278,7 @@ export default function Indiozinho() {
           }}
         >
           <ThemedView style={styles.popup}>
-            <ThemedText type="title">
+            <ThemedText type='title'>
               {isFetching || isLoading
                 ? getEmoji('loading')
                 : getEmoji(roundStatus)}
@@ -301,7 +301,7 @@ export default function Indiozinho() {
               me?.current &&
               cardQuantity &&
               roundStatus === 'betting' && (
-                <ThemedText type="error">{`Sua aposta precisa ser diferente de: ${Math.abs(
+                <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(
                   betCount - cardQuantity,
                 )}`}</ThemedText>
               )}
@@ -317,7 +317,7 @@ export default function Indiozinho() {
           }}
         >
           <ThemedButton
-            title="dar cartas"
+            title='dar cartas'
             loading={dealing}
             onPress={handleDeal}
           />
@@ -331,7 +331,7 @@ export default function Indiozinho() {
           <TableSeat
             number={1}
             player={indiozinho1}
-            handlePlay={id => {
+            handlePlay={(id) => {
               if (me) handlePlay(id!);
             }}
             playing={playing}

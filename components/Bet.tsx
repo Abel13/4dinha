@@ -48,6 +48,10 @@ export const Bet = ({
     }).start();
   };
 
+  useEffect(() => {
+    if (cardQuantity === 1) toggleHide();
+  }, []);
+
   return (
     <View
       style={{
@@ -57,25 +61,23 @@ export const Bet = ({
         alignItems: 'center',
       }}
     >
-      {/* Área de apostas e botão animados juntos */}
       <Animated.View
         style={{
           transform: [
             {
               translateY: slideAnim.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, -150], // Move tudo para cima ao esconder
+                outputRange: [0, -150],
               }),
             },
           ],
           opacity: slideAnim.interpolate({
             inputRange: [0, 1],
-            outputRange: [1, 0.9], // Reduz um pouco a opacidade quando recolhido
+            outputRange: [1, 0.9],
           }),
           alignItems: 'center',
         }}
       >
-        {/* Área de apostas */}
         <View
           style={{
             backgroundColor: 'rgba(0,0,0,0.9)',
@@ -85,6 +87,11 @@ export const Bet = ({
             paddingTop: 10,
             paddingHorizontal: 10,
             height: 150,
+            shadowColor: Colors.dark.background,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.4,
+            shadowRadius: 5,
+            elevation: 5,
           }}
         >
           <View
@@ -94,18 +101,23 @@ export const Bet = ({
               justifyContent: 'center',
             }}
           >
-            <ThemedButton title="-" onPress={subtract} disabled={bet === 0} />
+            <ThemedButton title='-' onPress={subtract} disabled={bet === 0} />
             <ThemedText>{bet}</ThemedText>
-            <ThemedButton title="+" onPress={add} disabled={bet === max} />
+            <ThemedButton title='+' onPress={add} disabled={bet === max} />
           </View>
+          <ThemedText type='error'>
+            {checkLimit &&
+              `Sua aposta precisa ser diferente de: ${Math.abs(
+                betCount - cardQuantity,
+              )}`}
+          </ThemedText>
           <ThemedButton
-            title="APOSTAR"
+            title='APOSTAR'
             onPress={() => handleBet(bet)}
             loading={betting}
           />
         </View>
 
-        {/* Botão de esconder/mostrar (agora animado junto com o painel) */}
         <ThemedView
           style={{
             flexDirection: 'row',
@@ -118,14 +130,22 @@ export const Bet = ({
             paddingHorizontal: 10,
             paddingVertical: 5,
             gap: 20,
+            shadowColor: Colors.dark.background,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.4,
+            shadowRadius: 5,
+            elevation: 5,
           }}
         >
+          {hide && (
+            <ThemedText type='link'>desça o painel para apostar</ThemedText>
+          )}
           <TouchableOpacity
             onPress={refreshGame}
             activeOpacity={0.8}
             style={{}}
           >
-            <Feather name="refresh-cw" color={Colors.dark.tint} size={22} />
+            <Feather name='refresh-cw' color={Colors.dark.tint} size={22} />
           </TouchableOpacity>
           <TouchableOpacity onPress={toggleHide} activeOpacity={0.8} style={{}}>
             {loading ? (
