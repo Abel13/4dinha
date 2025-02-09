@@ -44,7 +44,7 @@ export const fetchInProgressMatch = (userId: string) => {
               matches!inner(*)
             `,
         )
-        .neq('matches.status', 'end')
+        .eq('matches.status', 'started')
         .eq('user_id', userId);
 
       if (error) {
