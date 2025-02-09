@@ -8,6 +8,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import { Feather } from '@expo/vector-icons';
+import { useKeepAwake } from 'expo-keep-awake';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { Button, Image, Modal, StyleSheet } from 'react-native';
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Indiozinho() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isModalVisible, setModalVisible] = useState(false);
 

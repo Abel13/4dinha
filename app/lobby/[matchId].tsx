@@ -11,6 +11,7 @@ import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -41,6 +42,7 @@ const styles = StyleSheet.create({
 });
 
 export default function LobbyScreen() {
+  useKeepAwake();
   const { matchId } = useLocalSearchParams();
   const { session } = useUserSessionStore((state) => state);
   const { match, matchPicture, startMatch } = useMatch(matchId as string);

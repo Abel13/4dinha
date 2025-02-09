@@ -8,6 +8,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import { Feather } from '@expo/vector-icons';
+import { useKeepAwake } from 'expo-keep-awake';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Button, Modal, StyleSheet } from 'react-native';
@@ -70,6 +71,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Table() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isModalVisible, setModalVisible] = useState(false);
 

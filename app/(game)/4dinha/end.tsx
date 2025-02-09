@@ -9,8 +9,10 @@ import { usePlayer } from '@/hooks/usePlayer';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { useMatch } from '@/hooks/useMatch';
+import { useKeepAwake } from 'expo-keep-awake';
 
 export default function End() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const { session } = useUserSessionStore();
 
