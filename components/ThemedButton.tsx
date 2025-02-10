@@ -1,4 +1,5 @@
-import { Button, ButtonProps } from 'react-native';
+import { TouchableOpacity, StyleSheet, ButtonProps } from 'react-native';
+
 import { Colors } from '@/constants/Colors';
 import Animated, {
   useAnimatedStyle,
@@ -8,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
+import { ThemedText } from './ThemedText';
 
 type ButtonType = 'default' | 'danger' | 'outlined';
 
@@ -25,6 +27,8 @@ const TypeColors = {
 export function ThemedButton({
   type = 'default',
   loading = false,
+  title,
+  disabled = false,
   ...rest
 }: ThemedButtonProps) {
   const rotation = useSharedValue(0);
@@ -61,5 +65,40 @@ export function ThemedButton({
       </Animated.View>
     );
 
-  return <Button color={TypeColors[type]} {...rest} />;
+  const buttonStyles = [
+    styles.button,
+    type === 'outlined' && {
+      borderWidth: 2,
+      borderColor: Colors.dark.tint,
+    },
+    disabled && { opacity: 0.5 },
+  ];
+
+  return (
+    <TouchableOpacity
+      style={buttonStyles}
+      disabled={disabled}
+      activeOpacity={0.5}
+      {...rest}
+    >
+      <ThemedText
+        style={{
+          color: !disabled ? TypeColors[type] : Colors.dark.disabledButton,
+        }}
+      >
+        {title}
+      </ThemedText>
+    </TouchableOpacity>
+  );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 40,
+  },
+});

@@ -10,6 +10,7 @@ export type ThemedTextProps = TextProps & {
     | 'title'
     | 'defaultSemiBold'
     | 'subtitle'
+    | 'h4'
     | 'link'
     | 'error';
 };
@@ -30,6 +31,7 @@ export function ThemedText({
         type === 'title' ? styles.title : undefined,
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
+        type === 'h4' ? styles.h4 : undefined,
         type === 'link' ? styles.link : undefined,
         type === 'error' ? styles.error : undefined,
         style,
@@ -59,6 +61,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
+  },
+  h4: {
+    fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'BarlowCondensedBold',
   },

@@ -75,7 +75,9 @@ export default function LobbyScreen() {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText type='subtitle'>{match?.name}</ThemedText>
+        <ThemedText type='subtitle' style={{ width: '90%' }}>
+          {match?.name}
+        </ThemedText>
       </ThemedView>
       <ThemedView />
       <PlayerItem matchUser={me} />

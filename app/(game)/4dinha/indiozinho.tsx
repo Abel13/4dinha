@@ -248,7 +248,9 @@ export default function Indiozinho() {
             {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
           </ThemedText>
           <ThemedView />
-          <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
+          <ThemedText>{`${cardQuantity || '-'} carta${
+            cardQuantity === 1 ? '' : 's'
+          }`}</ThemedText>
           <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
         </ThemedView>
         <ThemedView
@@ -301,7 +303,9 @@ export default function Indiozinho() {
               me?.current &&
               cardQuantity &&
               roundStatus === 'betting' && (
-                <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
+                <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(
+                  betCount - cardQuantity,
+                )}`}</ThemedText>
               )}
           </ThemedView>
         </ThemedView>
