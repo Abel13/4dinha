@@ -14,7 +14,7 @@ interface Props {
   size?: number;
 }
 
-export const HelloWave = ({ size = 28 }: Props) => {
+export function HelloWave({ size = 28 }: Props) {
   const rotationAnimation = useSharedValue(0);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const HelloWave = ({ size = 28 }: Props) => {
       <ThemedText style={[styles.text, { fontSize: size }]}>👋</ThemedText>
     </Animated.View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   text: {

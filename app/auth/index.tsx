@@ -34,19 +34,19 @@ export default function LoginScreen() {
         source={require('@/assets/images/logo.png')}
         style={{ alignSelf: 'center', width: 40, height: 40 }}
       />
-      <ThemedText type="title">LOGIN</ThemedText>
+      <ThemedText type='title'>LOGIN</ThemedText>
       <ThemedView>
         <ThemedText>e-mail</ThemedText>
         <ThemedInput
-          name="email"
-          inputMode="email"
-          keyboardType="email-address"
-          autoCapitalize="none"
+          name='email'
+          inputMode='email'
+          keyboardType='email-address'
+          autoCapitalize='none'
           autoCorrect={false}
-          autoComplete="off"
+          autoComplete='off'
           control={control}
           error={errors.email?.message}
-          returnKeyType="next"
+          returnKeyType='next'
           onSubmitEditing={() => inputPasswordRef.current?.focus()}
         />
       </ThemedView>
@@ -54,18 +54,18 @@ export default function LoginScreen() {
         <ThemedText>senha</ThemedText>
         <ThemedInput
           ref={inputPasswordRef}
-          name="password"
+          name='password'
           control={control}
           secureTextEntry
-          textContentType="password"
+          textContentType='password'
           error={errors.password?.message}
-          returnKeyType="done"
+          returnKeyType='done'
           onSubmitEditing={handleSubmit(onAuth)}
         />
       </ThemedView>
-      <ThemedText type="error">{t(authError as any)}</ThemedText>
+      <ThemedText type='error'>{t(authError as any)}</ThemedText>
       <ThemedButton
-        title="ENTRAR"
+        title='ENTRAR'
         onPress={handleSubmit(onAuth)}
         loading={loading}
       />

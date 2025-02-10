@@ -13,7 +13,7 @@ import { ThemedButton } from './ThemedButton';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 
-export const Bet = ({
+export function Bet({
   betCount,
   cardQuantity,
   checkLimit,
@@ -29,7 +29,7 @@ export const Bet = ({
   betting: boolean;
   handleBet: (bet: number) => void;
   refreshGame: () => void;
-}) => {
+}) {
   const { bet, max, add, subtract } = useBet(
     betCount,
     cardQuantity,
@@ -162,4 +162,4 @@ export const Bet = ({
       </Animated.View>
     </View>
   );
-};
+}

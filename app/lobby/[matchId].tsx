@@ -42,18 +42,18 @@ const styles = StyleSheet.create({
 
 export default function LobbyScreen() {
   const { matchId } = useLocalSearchParams();
-  const { session } = useUserSessionStore(state => state);
+  const { session } = useUserSessionStore((state) => state);
   const { match, matchPicture, startMatch } = useMatch(matchId as string);
   const { players, loadingLobby, updateStatus } = useMatchUsers(
     matchId as string,
   );
 
-  const me = players.find(p => p.user_id === session?.user.id);
+  const me = players.find((p) => p.user_id === session?.user.id);
 
   if (!me)
     return (
       <ThemedView style={[styles.titleContainer, styles.padding]}>
-        <ThemedText type="subtitle">{match?.name}</ThemedText>
+        <ThemedText type='subtitle'>{match?.name}</ThemedText>
       </ThemedView>
     );
 
@@ -62,7 +62,7 @@ export default function LobbyScreen() {
       <ThemedView style={[styles.row, styles.padding]}>
         <TouchableOpacity onPress={router.back}>
           <Feather
-            name="chevron-left"
+            name='chevron-left'
             color={Colors.dark.tabIconDefault}
             size={28}
           />
@@ -73,18 +73,18 @@ export default function LobbyScreen() {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText type="subtitle" style={{ width: '90%' }}>
+        <ThemedText type='subtitle' style={{ width: '90%' }}>
           {match?.name}
         </ThemedText>
       </ThemedView>
       <ThemedView />
       <PlayerItem matchUser={me} />
       <ThemedView />
-      <ThemedText style={styles.paddingHorizontal} type="subtitle">
+      <ThemedText style={styles.paddingHorizontal} type='subtitle'>
         Jogadores
       </ThemedText>
       <ThemedFlatList
-        data={players.filter(p => p.user_id !== session?.user.id)}
+        data={players.filter((p) => p.user_id !== session?.user.id)}
         renderItem={({ item }) => {
           return <PlayerItem matchUser={item} />;
         }}
@@ -100,8 +100,8 @@ export default function LobbyScreen() {
         />
         {match?.user_id === session?.user.id && (
           <ThemedButton
-            title="INICIAR PARTIDA"
-            disabled={!!players.find(p => !p.ready) || players.length < 3}
+            title='INICIAR PARTIDA'
+            disabled={!!players.find((p) => !p.ready) || players.length < 3}
             onPress={() => {
               startMatch();
             }}

@@ -19,7 +19,7 @@ const schema = yup.object({
 });
 
 export default function NewMatchScreen() {
-  const { username } = useUserSessionStore(state => state);
+  const { username } = useUserSessionStore((state) => state);
   const { createMatch, creatingMatch } = useMatchList();
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(schema),
@@ -35,16 +35,16 @@ export default function NewMatchScreen() {
       >
         <TouchableOpacity onPress={router.back}>
           <Feather
-            name="chevron-left"
+            name='chevron-left'
             color={Colors.dark.tabIconDefault}
             size={28}
           />
         </TouchableOpacity>
-        <ThemedText type="title">Nova Partida</ThemedText>
+        <ThemedText type='title'>Nova Partida</ThemedText>
       </ThemedView>
-      <ThemedInput name="name" control={control} />
+      <ThemedInput name='name' control={control} />
       <ThemedButton
-        title="CRIAR PARTIDA"
+        title='CRIAR PARTIDA'
         onPress={handleSubmit(createMatch)}
         loading={creatingMatch}
       />

@@ -14,7 +14,7 @@ interface ISessionStore {
 
 export const useUserSessionStore = create<ISessionStore>()(
   persist(
-    set => ({
+    (set) => ({
       session: null,
       loadSession: async () => {
         const {
@@ -29,7 +29,7 @@ export const useUserSessionStore = create<ISessionStore>()(
         const profilePicture = `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${session?.user.email}&scale=90`;
         set({ session, username, profilePicture });
       },
-      setSession: session => {
+      setSession: (session) => {
         set({ session });
       },
     }),

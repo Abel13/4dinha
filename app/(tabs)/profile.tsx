@@ -12,7 +12,7 @@ import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture } = useUserSessionStore(state => state);
+  const { username, profilePicture } = useUserSessionStore((state) => state);
 
   const theme = useColorScheme() || 'dark';
 
@@ -22,27 +22,27 @@ export default function HomeScreen() {
     >
       <ThemedView style={styles.titleContainer}>
         <Feather
-          name="chevron-left"
+          name='chevron-left'
           color={Colors[theme].icon}
           size={28}
           onPress={router.back}
         />
-        <ThemedText type="title">{`Olá, ${username}!`}</ThemedText>
+        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedButton
-        title="SAIR"
-        type="outlined"
+        title='SAIR'
+        type='outlined'
         onPress={signOut}
         loading={loggingOut}
       />
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+        <ThemedText type='subtitle'>Step 1: Try it</ThemedText>
         <ThemedText>
           Edit{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{' '}
+          <ThemedText type='defaultSemiBold'>app/(tabs)/index.tsx</ThemedText>{' '}
           to see changes. Press{' '}
-          <ThemedText type="defaultSemiBold">
+          <ThemedText type='defaultSemiBold'>
             {Platform.select({
               ios: 'cmd + d',
               android: 'cmd + m',
@@ -52,21 +52,21 @@ export default function HomeScreen() {
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
+        <ThemedText type='subtitle'>Step 2: Explore</ThemedText>
         <ThemedText>
           Tap the Explore tab to learn more about what's included in this
           starter app.
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
+        <ThemedText type='subtitle'>Step 3: Get a fresh start</ThemedText>
         <ThemedText>
           When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{' '}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{' '}
+          <ThemedText type='defaultSemiBold'>npm run reset-project</ThemedText>{' '}
+          to get a fresh <ThemedText type='defaultSemiBold'>app</ThemedText>{' '}
           directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+          <ThemedText type='defaultSemiBold'>app</ThemedText> to{' '}
+          <ThemedText type='defaultSemiBold'>app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
     </ScrollView>

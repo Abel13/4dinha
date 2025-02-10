@@ -5,7 +5,7 @@ import { type GameResult } from '@/types';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
 
-export const ResultItem = ({ result }: { result: GameResult }) => {
+export function ResultItem({ result }: { result: GameResult }) {
   const { playerName, playerPicture } = usePlayer(result.user_id);
   let lives = result.lives - Math.abs(result.bets - result.wins);
   if (lives < 0) lives = 0;
@@ -40,7 +40,7 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
             }}
           />
         )}
-        <ThemedText type="subtitle">{playerName}</ThemedText>
+        <ThemedText type='subtitle'>{playerName}</ThemedText>
       </ThemedView>
       <ThemedView
         style={{
@@ -50,7 +50,7 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
           gap: 20,
         }}
       >
-        <ThemedText type="title">{`${result.bets}/${result.wins}`}</ThemedText>
+        <ThemedText type='title'>{`${result.bets}/${result.wins}`}</ThemedText>
         <ThemedText>
           {`${Array.from(Array(lives)).fill('❤️').join('')}${Array.from(
             Array(5 - (lives || 0)),
@@ -61,4 +61,4 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
       </ThemedView>
     </ThemedView>
   );
-};
+}

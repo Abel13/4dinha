@@ -24,14 +24,14 @@ const TypeColors = {
   outlined: Colors.dark.tint,
 };
 
-export const ThemedButton = ({
+export function ThemedButton({
   type = 'default',
   loading = false,
   title,
   disabled = false,
   color,
   ...rest
-}: ThemedButtonProps) => {
+}: ThemedButtonProps) {
   const rotation = useSharedValue(0);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export const ThemedButton = ({
       </ThemedText>
     </TouchableOpacity>
   );
-};
+}
 
 const styles = StyleSheet.create({
   button: {

@@ -7,7 +7,7 @@ interface CardProps {
   id?: string;
   status: HandStatus;
   suit?: Suit;
-  symbol?: Symbol;
+  symbol?: symbol;
   playing?: boolean;
   size?: 'small' | 'big';
   onPress?: (id?: string) => void;

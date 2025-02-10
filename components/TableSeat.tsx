@@ -94,13 +94,13 @@ interface TableSeatProps {
   handlePlay?: (id?: string) => void;
 }
 
-export const TableSeat = ({
+export function TableSeat({
   player,
   number,
   playing,
   currentTurn,
   handlePlay,
-}: TableSeatProps) => {
+}: TableSeatProps) {
   const { playerName, playerPicture } = usePlayer(player?.user_id as string);
   const isMyTurn = (player?.current && number === 1) || false;
   const { vibrate } = useVibration();
@@ -126,11 +126,11 @@ export const TableSeat = ({
               style={styles.profileImage}
             />
           )}
-          <ThemedText type="default" numberOfLines={1} style={{ maxWidth: 85 }}>
+          <ThemedText type='default' numberOfLines={1} style={{ maxWidth: 85 }}>
             {playerName}
           </ThemedText>
         </ThemedView>
-        <ThemedText type="h4">
+        <ThemedText type='h4'>
           {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${
             Number.isNaN(Number(player.bet)) ? '-' : player.bet
           }`}
@@ -145,8 +145,8 @@ export const TableSeat = ({
         <ThemedView style={[styles.row, { flex: 1 }]}>
           {player.cards &&
             player.cards
-              .filter(c => c.status === 'on hand')
-              .map(card => {
+              .filter((c) => c.status === 'on hand')
+              .map((card) => {
                 return (
                   <ThemedView
                     key={card.id}
@@ -177,8 +177,8 @@ export const TableSeat = ({
         >
           {player.cards &&
             player.cards
-              .filter(c => c.status === 'on table' && c.turn === currentTurn)
-              .map(card => {
+              .filter((c) => c.status === 'on table' && c.turn === currentTurn)
+              .map((card) => {
                 return (
                   <Card
                     key={card.id}
@@ -194,7 +194,7 @@ export const TableSeat = ({
         </ThemedView>
       </ThemedView>
       <ThemedView style={[styles.row, { justifyContent: 'space-between' }]}>
-        <ThemedText type="error">
+        <ThemedText type='error'>
           {`${Array.from(Array(player.lives)).fill('❤️').join('')}${Array.from(
             Array(5 - player.lives),
           )
@@ -204,14 +204,14 @@ export const TableSeat = ({
 
         <ThemedView style={styles.roundInfoContainer}>
           <ThemedView style={styles.dealerEmojiContainer}>
-            <ThemedText type="error">{player.dealer && '🟡'}</ThemedText>
-            <ThemedText type="error" style={styles.dealerText}>
+            <ThemedText type='error'>{player.dealer && '🟡'}</ThemedText>
+            <ThemedText type='error' style={styles.dealerText}>
               {player.dealer && 'D'}
             </ThemedText>
           </ThemedView>
-          <ThemedText type="error">{player.current && '🎲'}</ThemedText>
+          <ThemedText type='error'>{player.current && '🎲'}</ThemedText>
         </ThemedView>
       </ThemedView>
     </ThemedView>
   );
-};
+}

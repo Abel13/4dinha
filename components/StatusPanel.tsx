@@ -2,10 +2,10 @@ import { usePlayer } from '@/hooks/usePlayer';
 import { GamePlayer } from '@/types';
 import { RoundStatus } from '@/types/Round';
 import { useCallback, useState } from 'react';
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
 import { Colors } from '@/constants/Colors';
 import { StyleSheet } from 'react-native';
+import { ThemedView } from './ThemedView';
+import { ThemedText } from './ThemedText';
 
 interface Props {
   currentPlayer?: GamePlayer;
@@ -14,12 +14,12 @@ interface Props {
   loading: boolean;
 }
 
-export const StatusPanel = ({
+export function StatusPanel({
   currentPlayer,
   loading,
   me,
   roundStatus,
-}: Props) => {
+}: Props) {
   const { playerName } = usePlayer(currentPlayer?.user_id!);
 
   const getEmoji = useCallback(
@@ -55,7 +55,7 @@ export const StatusPanel = ({
 
     switch (roundStatus) {
       case 'betting': {
-        if (me?.current) return `Sua vez de apostar`;
+        if (me?.current) return 'Sua vez de apostar';
         return `Vez de ${playerName} apostar`;
       }
       case 'playing': {
@@ -102,7 +102,7 @@ export const StatusPanel = ({
       </ThemedView>
     </ThemedView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   popup: {

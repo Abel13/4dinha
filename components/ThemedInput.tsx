@@ -57,7 +57,7 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(
           cursorColor={Colors.dark.tint}
           {...rest}
         />
-        {error && <ThemedText type="error">{error}</ThemedText>}
+        {error && <ThemedText type='error'>{error}</ThemedText>}
       </ThemedView>
     );
   },

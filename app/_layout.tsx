@@ -37,7 +37,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DarkTheme}>
         <Slot />
-        <StatusBar style="auto" hidden />
+        <StatusBar style='auto' hidden />
       </ThemeProvider>
     </QueryClientProvider>
   );

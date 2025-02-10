@@ -15,7 +15,7 @@ const MenuIcon: React.FC<MenuIconProps> = ({ icon, text, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.footerItem}>
       <Ionicons name={icon} size={36} color={Colors[theme].icon} />
-      <ThemedText type="default">{text}</ThemedText>
+      <ThemedText type='default'>{text}</ThemedText>
     </TouchableOpacity>
   );
 };

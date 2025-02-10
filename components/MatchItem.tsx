@@ -41,7 +41,7 @@ interface Props {
   continueMatch: () => void;
 }
 
-export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
+export function MatchItem({ match, enterMatch, continueMatch }: Props) {
   const { matchPicture } = useMatch(match.id);
 
   const getStatus = useCallback((status: string | null) => {
@@ -79,9 +79,9 @@ export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
         />
         <ThemedText>{match.name}</ThemedText>
       </ThemedView>
-      <ThemedText type="default" darkColor={Colors.dark.success}>
+      <ThemedText type='default' darkColor={Colors.dark.success}>
         {getStatus(match?.status)}
       </ThemedText>
     </Pressable>
   );
-};
+}

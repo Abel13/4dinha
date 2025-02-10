@@ -7,9 +7,9 @@ export default function AuthLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="end" />
-      <Stack.Screen name="indiozinho" />
+      <Stack.Screen name='index' />
+      <Stack.Screen name='end' />
+      <Stack.Screen name='indiozinho' />
     </Stack>
   );
 }

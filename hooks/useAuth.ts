@@ -5,7 +5,7 @@ import { supabase } from '@/providers/supabase';
 import { useUserSessionStore } from './useUserSessionStore';
 
 export const useAuth = () => {
-  const { setSession } = useUserSessionStore(state => state);
+  const { setSession } = useUserSessionStore((state) => state);
   const [authError, setAuthError] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
   const router = useRouter();

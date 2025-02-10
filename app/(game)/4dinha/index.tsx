@@ -380,8 +380,8 @@ export default function Table() {
               {roundNumber > 0
                 ? `RODADA ${roundNumber}`
                 : me?.dealer
-                  ? 'DISTRIBUA AS CARTAS'
-                  : 'INICIANDO A RODADA\nAGUARDE!'}
+                ? 'DISTRIBUA AS CARTAS'
+                : 'INICIANDO A RODADA\nAGUARDE!'}
             </ThemedText>
             <ThemedView />
             {roundNumber > 0 && (

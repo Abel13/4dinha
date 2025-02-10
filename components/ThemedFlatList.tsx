@@ -8,9 +8,9 @@ import { ThemedView } from './ThemedView';
 
 export type ThemedFlatListProps = FlatListProps<any> & {};
 
-export const ThemedFlatList = ({ style, ...rest }: ThemedFlatListProps) => {
+export function ThemedFlatList({ style, ...rest }: ThemedFlatListProps) {
   return <FlatList style={[style, styles.default]} {...rest} />;
-};
+}
 
 const styles = StyleSheet.create({
   default: {

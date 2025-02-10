@@ -27,7 +27,7 @@ interface Props {
   matchUser: MatchUser;
 }
 
-export const PlayerItem = ({ matchUser }: Props) => {
+export function PlayerItem({ matchUser }: Props) {
   const { playerName, playerPicture } = usePlayer(matchUser.user_id);
 
   if (playerName === null || playerPicture === null)
@@ -46,11 +46,11 @@ export const PlayerItem = ({ matchUser }: Props) => {
           }}
           style={styles.profileImage}
         />
-        <ThemedText type="default">{playerName}</ThemedText>
+        <ThemedText type='default'>{playerName}</ThemedText>
       </ThemedView>
       <ThemedText darkColor={Colors.dark.success}>
         {matchUser.ready ? 'PRONTO' : ''}
       </ThemedText>
     </ThemedView>
   );
-};
+}
