@@ -28,12 +28,6 @@ export default function TabLayout() {
         }}
       />
       <Stack.Screen
-        name='explore'
-        options={{
-          title: 'Histórico',
-        }}
-      />
-      <Stack.Screen
         name='profile'
         options={{
           animationDuration: 1500,

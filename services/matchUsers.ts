@@ -41,16 +41,14 @@ export const enterMatchService = async ({
   return null;
 };
 
-export const updateStatusService = async (payload: UpdateStatusPayload) => {
-  try {
-    const { data, error } = await supabase.rpc('update_ready_status', payload);
+export const updateStatusService = async (
+  payload: UpdateStatusPayload,
+): Promise<undefined> => {
+  const { data, error } = await supabase.rpc('update_ready_status', payload);
 
-    if (error) {
-      throw error;
-    }
-
-    return data;
-  } catch (e) {
-    // ignore error
+  if (error) {
+    throw error;
   }
+
+  return data;
 };

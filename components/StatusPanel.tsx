@@ -1,11 +1,25 @@
 import { usePlayer } from '@/hooks/usePlayer';
 import { GamePlayer } from '@/types';
 import { RoundStatus } from '@/types/Round';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Colors } from '@/constants/Colors';
 import { StyleSheet } from 'react-native';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
+
+const styles = StyleSheet.create({
+  popup: {
+    width: '100%',
+    backgroundColor: Colors.dark.info,
+    borderBottomWidth: 2,
+    padding: 5,
+    borderColor: Colors.dark.tint,
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 interface Props {
   currentPlayer?: GamePlayer;
@@ -67,7 +81,7 @@ export function StatusPanel({
         if (!roundStatus) return 'O dealer está distribuindo as cartas';
       }
     }
-  }, [roundStatus, currentPlayer, loading, me, playerName]);
+  }, [roundStatus, loading, me, playerName]);
 
   return (
     <ThemedView
@@ -103,17 +117,3 @@ export function StatusPanel({
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  popup: {
-    width: '100%',
-    backgroundColor: Colors.dark.info,
-    borderBottomWidth: 2,
-    padding: 5,
-    borderColor: Colors.dark.tint,
-    borderTopStartRadius: 10,
-    borderTopEndRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

@@ -3,44 +3,6 @@ import { Text, type TextProps, StyleSheet } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
 
-export type ThemedTextProps = TextProps & {
-  darkColor?: string;
-  type?:
-    | 'default'
-    | 'title'
-    | 'defaultSemiBold'
-    | 'subtitle'
-    | 'h4'
-    | 'link'
-    | 'error';
-};
-
-export function ThemedText({
-  style,
-  darkColor,
-  type = 'default',
-  ...rest
-}: ThemedTextProps) {
-  const color = useThemeColor({ dark: darkColor }, 'text');
-
-  return (
-    <Text
-      style={[
-        { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'h4' ? styles.h4 : undefined,
-        type === 'link' ? styles.link : undefined,
-        type === 'error' ? styles.error : undefined,
-        style,
-      ]}
-      {...rest}
-    />
-  );
-}
-
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
@@ -80,3 +42,41 @@ const styles = StyleSheet.create({
     color: Colors.dark.danger,
   },
 });
+
+export type ThemedTextProps = TextProps & {
+  darkColor?: string;
+  type?:
+    | 'default'
+    | 'title'
+    | 'defaultSemiBold'
+    | 'subtitle'
+    | 'h4'
+    | 'link'
+    | 'error';
+};
+
+export function ThemedText({
+  style,
+  darkColor,
+  type = 'default',
+  ...rest
+}: ThemedTextProps) {
+  const color = useThemeColor({ dark: darkColor }, 'text');
+
+  return (
+    <Text
+      style={[
+        { color },
+        type === 'default' ? styles.default : undefined,
+        type === 'title' ? styles.title : undefined,
+        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
+        type === 'subtitle' ? styles.subtitle : undefined,
+        type === 'h4' ? styles.h4 : undefined,
+        type === 'link' ? styles.link : undefined,
+        type === 'error' ? styles.error : undefined,
+        style,
+      ]}
+      {...rest}
+    />
+  );
+}

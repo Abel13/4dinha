@@ -5,6 +5,7 @@ import { Colors } from '@/constants/Colors';
 import { useMatch } from '@/hooks/useMatch';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
+import { SoundButton } from './SoundButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -69,7 +70,7 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
     );
 
   return (
-    <Pressable onPress={handlePress} style={styles.container}>
+    <SoundButton sound='menu' onPress={handlePress} style={styles.container}>
       <ThemedView style={styles.title}>
         <Image
           source={{
@@ -82,6 +83,6 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
       <ThemedText type='default' darkColor={Colors.dark.success}>
         {getStatus(match?.status)}
       </ThemedText>
-    </Pressable>
+    </SoundButton>
   );
 }

@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   endMatchService,
   fetchMatch,
@@ -28,7 +28,7 @@ export const useMatch = (matchId: string) => {
 
   const startMatch = useCallback(async () => {
     startMatchMutation.mutate(matchId);
-  }, []);
+  }, [matchId, startMatchMutation]);
 
   const endMatchMutation = useMutation({
     mutationFn: endMatchService,
@@ -38,7 +38,7 @@ export const useMatch = (matchId: string) => {
 
   const endMatch = useCallback(async () => {
     endMatchMutation.mutate(matchId);
-  }, []);
+  }, [endMatchMutation, matchId]);
 
   useEffect(() => {
     const channel = supabase
@@ -76,7 +76,7 @@ export const useMatch = (matchId: string) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [matchId]);
+  }, [matchId, router]);
 
   return {
     startMatch,

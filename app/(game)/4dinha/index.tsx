@@ -1,13 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  FlatList,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-} from 'react-native';
+import { FlatList, ImageBackground, Modal, StyleSheet } from 'react-native';
 import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
@@ -18,6 +12,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import { StatusPanel } from '@/components/StatusPanel';
+import { ThemedFlatList } from '@/components/ThemedFlatList';
 
 const styles = StyleSheet.create({
   container: {

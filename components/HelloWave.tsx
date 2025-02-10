@@ -25,7 +25,7 @@ export function HelloWave({ size = 28 }: Props) {
       ),
       4,
     );
-  }, []);
+  }, [rotationAnimation]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotationAnimation.value}deg` }],

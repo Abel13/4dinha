@@ -23,13 +23,11 @@ export const useAudioConfig = () => {
 };
 
 export const useSound = (enabled: boolean) => {
-  const playSound = async (type: 'pass' | 'correct' | 'start') => {
+  const playSound = async (type: 'menu') => {
     if (!enabled) return;
 
     const sounds = {
-      pass: require('../assets/sounds/pass.mp3'),
-      correct: require('../assets/sounds/correct.mp3'),
-      start: require('../assets/sounds/start.wav'),
+      menu: require('@/assets/sounds/menu.mp3'),
     };
 
     const { sound } = await Audio.Sound.createAsync(sounds[type]);

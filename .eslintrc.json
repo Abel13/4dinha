@@ -22,12 +22,13 @@
     "__DEV__": "readonly"
   },
   "rules": {
+    "global-require": "off",
     "no-use-before-define": "error",
     "no-tabs": "error",
     "no-undef": "error",
     "no-console": 1,
     "prettier/prettier": "error",
-    "@typescript-eslint/ban-types": "warn",
+    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-redeclare": "error",
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
@@ -41,7 +42,7 @@
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
     "@typescript-eslint/naming-convention": [
-      "error",
+      "warn",
       {
         "selector": "interface",
         "format": ["PascalCase"],

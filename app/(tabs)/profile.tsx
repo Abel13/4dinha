@@ -10,9 +10,32 @@ import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
 
+const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingTop: 10,
+  },
+  stepContainer: {
+    gap: 8,
+    marginBottom: 8,
+  },
+  reactLogo: {
+    height: 100,
+    width: 100,
+    bottom: 10,
+    left: 10,
+    position: 'absolute',
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+  },
+});
+
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { username } = useUserSessionStore((state) => state);
 
   const theme = useColorScheme() || 'dark';
 
@@ -72,26 +95,3 @@ export default function HomeScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingTop: 10,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 100,
-    width: 100,
-    bottom: 10,
-    left: 10,
-    position: 'absolute',
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
-  },
-});

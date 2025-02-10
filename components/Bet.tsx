@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Animated,
   Easing,
-  TouchableOpacity,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import useBet from '@/hooks/useBet';
@@ -12,6 +12,55 @@ import { Colors } from '@/constants/Colors';
 import { ThemedButton } from './ThemedButton';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
+import { SoundButton } from './SoundButton';
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    alignItems: 'center',
+  },
+  animatedContainer: {
+    alignItems: 'center',
+  },
+  betContainer: {
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    borderBottomStartRadius: 10,
+    width: '50%',
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingHorizontal: 10,
+    height: 150,
+    shadowColor: Colors.dark.background,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+  betControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  controlBar: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    borderBottomStartRadius: 10,
+    borderBottomEndRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    gap: 20,
+    shadowColor: Colors.dark.background,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 5,
+  },
+});
 
 export function Bet({
   betCount,
@@ -38,7 +87,7 @@ export function Bet({
   const slideAnim = useRef(new Animated.Value(0)).current;
   const [hide, setHide] = useState(false);
 
-  const toggleHide = () => {
+  const toggleHide = useCallback(() => {
     setHide(!hide);
     Animated.timing(slideAnim, {
       toValue: !hide ? 1 : 0,
@@ -46,61 +95,35 @@ export function Bet({
       easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start();
-  };
+  }, [hide, slideAnim]);
 
   useEffect(() => {
     if (cardQuantity === 1) toggleHide();
   }, []);
 
   return (
-    <View
-      style={{
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        alignItems: 'center',
-      }}
-    >
+    <View style={styles.container}>
       <Animated.View
-        style={{
-          transform: [
-            {
-              translateY: slideAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, -150],
-              }),
-            },
-          ],
-          opacity: slideAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, 0.9],
-          }),
-          alignItems: 'center',
-        }}
+        style={[
+          styles.animatedContainer,
+          {
+            transform: [
+              {
+                translateY: slideAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, -150],
+                }),
+              },
+            ],
+            opacity: slideAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0.9],
+            }),
+          },
+        ]}
       >
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.9)',
-            borderBottomStartRadius: 10,
-            width: '50%',
-            alignItems: 'center',
-            paddingTop: 10,
-            paddingHorizontal: 10,
-            height: 150,
-            shadowColor: Colors.dark.background,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.4,
-            shadowRadius: 5,
-            elevation: 5,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+        <View style={styles.betContainer}>
+          <View style={styles.betControls}>
             <ThemedButton title='-' onPress={subtract} disabled={bet === 0} />
             <ThemedText>{bet}</ThemedText>
             <ThemedButton title='+' onPress={add} disabled={bet === max} />
@@ -118,36 +141,14 @@ export function Bet({
           />
         </View>
 
-        <ThemedView
-          style={{
-            flexDirection: 'row',
-            alignSelf: 'flex-end',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.9)',
-            borderBottomStartRadius: 10,
-            borderBottomEndRadius: 10,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            gap: 20,
-            shadowColor: Colors.dark.background,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.4,
-            shadowRadius: 5,
-            elevation: 5,
-          }}
-        >
+        <ThemedView style={styles.controlBar}>
           {hide && (
             <ThemedText type='link'>desça o painel para apostar</ThemedText>
           )}
-          <TouchableOpacity
-            onPress={refreshGame}
-            activeOpacity={0.8}
-            style={{}}
-          >
+          <SoundButton sound='menu' onPress={refreshGame}>
             <Feather name='refresh-cw' color={Colors.dark.tint} size={22} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={toggleHide} activeOpacity={0.8} style={{}}>
+          </SoundButton>
+          <SoundButton sound='menu' onPress={toggleHide} activeOpacity={0.8}>
             {loading ? (
               <ActivityIndicator color={Colors.dark.tint} />
             ) : (
@@ -157,7 +158,7 @@ export function Bet({
                 size={28}
               />
             )}
-          </TouchableOpacity>
+          </SoundButton>
         </ThemedView>
       </Animated.View>
     </View>

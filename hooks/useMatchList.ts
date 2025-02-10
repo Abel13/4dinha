@@ -70,14 +70,20 @@ export const useMatchList = () => {
     },
   });
 
-  const enterMatch = useCallback(async (matchId: string) => {
-    enterMatchMutation.mutate({ matchId });
-  }, []);
+  const enterMatch = useCallback(
+    async (matchId: string) => {
+      enterMatchMutation.mutate({ matchId });
+    },
+    [enterMatchMutation],
+  );
 
-  const createMatch = useCallback(async (formData: MatchInsert) => {
-    setCreatingMatch(true);
-    createMatchMutation.mutate(formData);
-  }, []);
+  const createMatch = useCallback(
+    async (formData: MatchInsert) => {
+      setCreatingMatch(true);
+      createMatchMutation.mutate(formData);
+    },
+    [createMatchMutation],
+  );
 
   useEffect(() => {
     const channel = supabase
@@ -110,7 +116,7 @@ export const useMatchList = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [matches]);
+  }, [matches, refetch, refetchMyMatches]);
 
   return {
     createMatch,

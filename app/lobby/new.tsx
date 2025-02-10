@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +13,15 @@ import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useMatchList } from '@/hooks/useMatchList';
 import { Colors } from '@/constants/Colors';
+import { SoundButton } from '@/components/SoundButton';
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 60,
+  },
+});
 
 const schema = yup.object({
   name: yup.string().required('Nome da partida é obrigatório'),
@@ -33,13 +42,13 @@ export default function NewMatchScreen() {
       <ThemedView
         style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
       >
-        <TouchableOpacity onPress={router.back}>
+        <SoundButton sound='menu' onPress={router.back}>
           <Feather
             name='chevron-left'
             color={Colors.dark.tabIconDefault}
             size={28}
           />
-        </TouchableOpacity>
+        </SoundButton>
         <ThemedText type='title'>Nova Partida</ThemedText>
       </ThemedView>
       <ThemedInput name='name' control={control} />
@@ -51,11 +60,3 @@ export default function NewMatchScreen() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    paddingHorizontal: 60,
-  },
-});

@@ -11,6 +11,18 @@ import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
 
+const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 40,
+  },
+});
+
 type ButtonType = 'default' | 'danger' | 'outlined';
 
 export type ThemedButtonProps = ButtonProps & {
@@ -44,7 +56,7 @@ export function ThemedButton({
     } else {
       rotation.value = 0;
     }
-  }, [loading]);
+  }, [loading, rotation]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -95,15 +107,3 @@ export function ThemedButton({
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 40,
-  },
-});

@@ -11,6 +11,7 @@ import { useMatchUsers } from '@/hooks/useMatchUsers';
 import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
 import { Colors } from '@/constants/Colors';
+import { SoundButton } from '@/components/SoundButton';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -60,13 +61,13 @@ export default function LobbyScreen() {
   return (
     <ThemedView style={styles.titleContainer}>
       <ThemedView style={[styles.row, styles.padding]}>
-        <TouchableOpacity onPress={router.back}>
+        <SoundButton sound='menu' onPress={router.back}>
           <Feather
             name='chevron-left'
             color={Colors.dark.tabIconDefault}
             size={28}
           />
-        </TouchableOpacity>
+        </SoundButton>
         <Image
           source={{
             uri: matchPicture?.toString(),

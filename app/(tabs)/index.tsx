@@ -1,10 +1,8 @@
 import {
-  FlatList,
   Image,
   ImageBackground,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
   useColorScheme,
 } from 'react-native';
 
@@ -20,144 +18,10 @@ import { Colors } from '@/constants/Colors';
 import { MatchItem } from '@/components/MatchItem';
 import { useHome } from '@/hooks/useHome';
 import MenuIcon from '@/components/MenuIcon';
-
-export default function LobbyScreen() {
-  const router = useRouter();
-  const theme = useColorScheme() || 'light';
-  const { matches, enterMatch, inProgressMatches } = useMatchList();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
-
-  const { footerMenu, headerMenu } = useHome();
-
-  const handleNewMatch = useCallback(() => {
-    router.push({ pathname: '/lobby/new' });
-  }, []);
-
-  return (
-    <ThemedView style={styles.screen}>
-      <ImageBackground
-        source={require('@/assets/images/background.jpg')}
-        resizeMode='cover'
-        style={styles.background}
-        blurRadius={3}
-      >
-        <ThemedView style={styles.container} darkColor='transparent'>
-          <ThemedView style={styles.header}>
-            <TouchableOpacity
-              style={styles.profile}
-              onPress={() => router.push('/(tabs)/profile')}
-            >
-              <Image
-                source={{ uri: profilePicture }}
-                style={[styles.profile_pic, styles[`${theme}_border`]]}
-              />
-              <ThemedText type='defaultSemiBold' darkColor='#070f2b'>
-                {`Olá, ${username}!`}
-              </ThemedText>
-              <HelloWave size={14} />
-            </TouchableOpacity>
-
-            <ThemedView darkColor='transparent' style={styles.topContainer}>
-              <ThemedView style={styles.rowContainer}>
-                {[
-                  { icon: 'coins', value: '1.520' },
-                  { icon: 'sack-dollar', value: '0' },
-                ].map((item, index) => (
-                  <ThemedView key={index} style={styles.coinContainer}>
-                    <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
-                      <FontAwesome6
-                        name={item.icon}
-                        size={14}
-                        color={Colors[theme].text}
-                      />
-                    </ThemedView>
-                    <ThemedText darkColor='#070f2b' type='h4'>
-                      {item.value}
-                    </ThemedText>
-                  </ThemedView>
-                ))}
-              </ThemedView>
-            </ThemedView>
-
-            <ThemedView style={styles.iconsMenu}>
-              {headerMenu.map((icon, index) => (
-                <Ionicons
-                  key={index}
-                  name={icon as keyof typeof Ionicons.glyphMap}
-                  size={28}
-                  color='#FFF'
-                />
-              ))}
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.center}>
-            <ScrollView horizontal style={styles.scrollContainer}>
-              <ThemedView style={styles.menuContainer}>
-                <TouchableOpacity style={styles.menu} onPress={handleNewMatch}>
-                  <ThemedText type='subtitle'>Criar partida</ThemedText>
-                  <Image
-                    source={require('@/assets/images/logo.png')}
-                    style={styles.logo}
-                  />
-                </TouchableOpacity>
-                {inProgressMatches.length > 0 && (
-                  <TouchableOpacity
-                    style={styles.menu}
-                    onPress={() => {
-                      router.replace({
-                        pathname: '/(game)/4dinha',
-                        params: {
-                          gameId: inProgressMatches[0]?.matches?.id,
-                        },
-                      });
-                    }}
-                  >
-                    <ThemedText
-                      lineBreakMode='tail'
-                      type='subtitle'
-                      numberOfLines={3}
-                    >
-                      Voltar para:{' '}
-                      <ThemedText>
-                        {inProgressMatches[0]?.matches?.name}
-                      </ThemedText>
-                    </ThemedText>
-                  </TouchableOpacity>
-                )}
-              </ThemedView>
-            </ScrollView>
-            <ThemedView style={styles.matchContainer}>
-              <ThemedText type='subtitle'>Novas Partidas</ThemedText>
-              <FlatList
-                data={matches}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <MatchItem
-                    match={item}
-                    enterMatch={() => enterMatch(item.id)}
-                    continueMatch={() => {}}
-                  />
-                )}
-              />
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.footer}>
-            {footerMenu.map((item) => (
-              <MenuIcon
-                key={item.text}
-                icon={item.icon}
-                onPress={() => {}}
-                text={item.text}
-              />
-            ))}
-          </ThemedView>
-        </ThemedView>
-      </ImageBackground>
-    </ThemedView>
-  );
-}
+import { ThemedFlatList } from '@/components/ThemedFlatList';
+import { SoundButton } from '@/components/SoundButton';
+import { Lottie } from '@/components/Lottie';
+import FailToLoadAnimation from '@/assets/lotties/nothing.json';
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
@@ -182,7 +46,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 8,
   },
-  profile_pic: { height: 50, width: 50, borderRadius: 8, borderWidth: 3 },
+  profilePic: { height: 50, width: 50, borderRadius: 8, borderWidth: 3 },
   topContainer: { marginTop: 10 },
   rowContainer: { flexDirection: 'row', gap: 10 },
   coinContainer: {
@@ -235,11 +99,157 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderBottomWidth: 0,
   },
-  footerItem: { alignItems: 'center' },
-  dark_border: {
-    borderColor: Colors.dark.border,
-  },
-  light_border: {
+  darkBorder: {
     borderColor: Colors.dark.border,
   },
 });
+
+export default function LobbyScreen() {
+  const router = useRouter();
+  const theme = useColorScheme() || 'light';
+  const { matches, enterMatch, inProgressMatches } = useMatchList();
+  const { username, profilePicture } = useUserSessionStore((state) => state);
+
+  const { footerMenu, headerMenu } = useHome();
+
+  const handleMenu = () => {
+    // select menu
+  };
+
+  const handleNewMatch = useCallback(() => {
+    router.push({ pathname: '/lobby/new' });
+  }, [router]);
+
+  return (
+    <ThemedView style={styles.screen}>
+      <ImageBackground
+        source={require('@/assets/images/background.jpg')}
+        resizeMode='cover'
+        style={styles.background}
+        blurRadius={3}
+      >
+        <ThemedView style={styles.container} darkColor='transparent'>
+          <ThemedView style={styles.header}>
+            <SoundButton
+              sound='menu'
+              style={styles.profile}
+              onPress={() => router.push('/(tabs)/profile')}
+            >
+              <Image
+                source={{ uri: profilePicture }}
+                style={[styles.profilePic, styles[`${theme}Border`]]}
+              />
+              <ThemedText type='defaultSemiBold' darkColor='#070f2b'>
+                {`Olá, ${username}!`}
+              </ThemedText>
+              <HelloWave size={14} />
+            </SoundButton>
+
+            <ThemedView darkColor='transparent' style={styles.topContainer}>
+              <ThemedView style={styles.rowContainer}>
+                {[
+                  { icon: 'coins', value: '1.520' },
+                  { icon: 'sack-dollar', value: '0' },
+                ].map((item, index) => (
+                  <ThemedView key={index} style={styles.coinContainer}>
+                    <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
+                      <FontAwesome6
+                        name={item.icon}
+                        size={14}
+                        color={Colors[theme].text}
+                      />
+                    </ThemedView>
+                    <ThemedText darkColor='#070f2b' type='h4'>
+                      {item.value}
+                    </ThemedText>
+                  </ThemedView>
+                ))}
+              </ThemedView>
+            </ThemedView>
+
+            <ThemedView style={styles.iconsMenu}>
+              {headerMenu.map((icon) => (
+                <SoundButton
+                  key={icon.name}
+                  sound='menu'
+                  onPress={handleMenu(icon.name)}
+                >
+                  <Ionicons name={icon.icon} size={28} color='#FFF' />
+                </SoundButton>
+              ))}
+            </ThemedView>
+          </ThemedView>
+
+          <ThemedView style={styles.center}>
+            <ScrollView horizontal style={styles.scrollContainer}>
+              <ThemedView style={styles.menuContainer}>
+                <SoundButton
+                  sound='menu'
+                  style={styles.menu}
+                  onPress={handleNewMatch}
+                >
+                  <ThemedText type='subtitle'>Criar partida</ThemedText>
+                  <Image
+                    source={require('@/assets/images/logo.png')}
+                    style={styles.logo}
+                  />
+                </SoundButton>
+                {inProgressMatches.length > 0 && (
+                  <SoundButton
+                    sound='menu'
+                    style={styles.menu}
+                    onPress={() => {
+                      router.replace({
+                        pathname: '/(game)/4dinha',
+                        params: {
+                          gameId: inProgressMatches[0]?.matches?.id,
+                        },
+                      });
+                    }}
+                  >
+                    <ThemedText
+                      lineBreakMode='tail'
+                      type='subtitle'
+                      numberOfLines={3}
+                    >
+                      Voltar para:{' '}
+                      <ThemedText>
+                        {inProgressMatches[0]?.matches?.name}
+                      </ThemedText>
+                    </ThemedText>
+                  </SoundButton>
+                )}
+              </ThemedView>
+            </ScrollView>
+            <ThemedView style={styles.matchContainer}>
+              <ThemedText type='subtitle'>Novas Partidas</ThemedText>
+              <ThemedFlatList
+                data={matches}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <MatchItem
+                    match={item}
+                    enterMatch={() => enterMatch(item.id)}
+                    continueMatch={() => {}}
+                  />
+                )}
+                ListEmptyComponent={<Lottie source={FailToLoadAnimation} />}
+              />
+            </ThemedView>
+          </ThemedView>
+
+          <ThemedView style={styles.footer}>
+            {footerMenu.map((item) => (
+              <MenuIcon
+                key={item.name}
+                icon={item.icon}
+                onPress={() => {}}
+                text={item.name}
+              />
+            ))}
+          </ThemedView>
+        </ThemedView>
+      </ImageBackground>
+    </ThemedView>
+  );
+}

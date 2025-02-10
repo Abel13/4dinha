@@ -7,6 +7,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAudioConfig } from '@/hooks/useAudioConfig';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -18,6 +19,7 @@ export default function RootLayout() {
     BarlowCondensedSemiBold: require('../assets/fonts/BarlowCondensed-SemiBold.ttf'),
     BarlowCondensedBold: require('../assets/fonts/BarlowCondensed-Bold.ttf'),
   });
+  useAudioConfig();
 
   useEffect(() => {
     if (loaded) {

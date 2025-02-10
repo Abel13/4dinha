@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { supabase } from '@/providers/supabase';
 import { fetchMatchUsers, updateStatusService } from '@/services/matchUsers';
 
@@ -20,13 +20,13 @@ export const useMatchUsers = (matchId: string) => {
   });
 
   const updateStatus = useCallback(
-    async (matchId: string, isReady: boolean) => {
+    async (id: string, isReady: boolean) => {
       await updateStatusMutation.mutate({
         _is_ready: isReady,
-        _match_id: matchId,
+        _match_id: id,
       });
     },
-    [],
+    [updateStatusMutation],
   );
 
   useEffect(() => {
