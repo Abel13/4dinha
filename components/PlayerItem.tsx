@@ -1,9 +1,9 @@
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
-import { MatchUser } from '@/types/MatchUser';
 import { Image, StyleSheet } from 'react-native';
+import { type MatchUser } from '@/types/MatchUser';
 import { usePlayer } from '@/hooks/usePlayer';
 import { Colors } from '@/constants/Colors';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +27,7 @@ interface Props {
   matchUser: MatchUser;
 }
 
-export const PlayerItem = ({ matchUser }: Props) => {
+export function PlayerItem({ matchUser }: Props) {
   const { playerName, playerPicture } = usePlayer(matchUser.user_id);
 
   if (playerName === null || playerPicture === null)
@@ -53,4 +53,4 @@ export const PlayerItem = ({ matchUser }: Props) => {
       </ThemedText>
     </ThemedView>
   );
-};
+}

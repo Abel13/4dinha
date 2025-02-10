@@ -1,6 +1,6 @@
-import { supabase } from '@/providers/supabase';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { supabase } from '@/providers/supabase';
 import {
   dealCardsMutation,
   updateGame,
@@ -9,30 +9,33 @@ import {
   getTrumps,
   finishRoundMutation,
 } from '@/services/game';
-import { Bet, GamePlayer } from '@/types';
+import { type Bet, type GamePlayer } from '@/types';
 import { useUserSessionStore } from './useUserSessionStore';
 
 export const useGame = (matchId: string) => {
   const { session, loadSession } = useUserSessionStore();
   const { mutate: mutateDealCards } = useMutation(
-    dealCardsMutation(session?.access_token as string),
+    dealCardsMutation(session?.access_token || ''),
   );
   const { mutate: mutateFinishRound } = useMutation(
-    finishRoundMutation(session?.access_token as string),
+    finishRoundMutation(session?.access_token || ''),
   );
   const { mutate: mutatePlay } = useMutation(
-    playMutation(session?.access_token as string),
+    playMutation(session?.access_token || ''),
   );
   const { mutate: mutateBet } = useMutation(betMutation());
   const [dealing, setDealing] = useState<boolean>(false);
   const [playing, setPlaying] = useState<boolean>(false);
   const [betting, setBetting] = useState<boolean>(false);
+  const [finishing, setFinishing] = useState<boolean>(false);
+
   const [turn, setTurn] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<'indiozinho' | 'end' | null>(
     null,
   );
 
   const [me, setMe] = useState<GamePlayer>();
+  const [currentPlayer, setCurrentPlayer] = useState<GamePlayer>();
   const [indiozinho1, setIndiozinho1] = useState<GamePlayer>();
   const [indiozinho2, setIndiozinho2] = useState<GamePlayer>();
   const [player2, setPlayer2] = useState<GamePlayer>();
@@ -52,41 +55,40 @@ export const useGame = (matchId: string) => {
     error,
     refetch,
   } = useQuery({
-    ...updateGame(matchId as string, session?.access_token as string),
+    ...updateGame(matchId, session?.access_token || ''),
     enabled: matchId !== '',
+    refetchOnWindowFocus: true,
+    refetchInterval: 60000,
   });
 
   useEffect(() => {
     if (error) {
       loadSession();
     }
-  }, [error]);
+  }, [error, loadSession]);
 
   const roundNumber = game?.round?.round_number || -1;
 
   const { data: trumps } = useQuery({
-    ...getTrumps(
-      matchId as string,
-      roundNumber,
-      session?.access_token as string,
-    ),
+    ...getTrumps(matchId, roundNumber, session?.access_token || ''),
     enabled: roundNumber > 0,
   });
 
   const refreshGame = useCallback(() => {
     refetch();
-  }, [game]);
+  }, [refetch]);
 
   const handleFinishRound = useCallback(() => {
+    setFinishing(true);
     mutateFinishRound(matchId, {
       onSuccess: () => {
-        setDealing(false);
+        setFinishing(false);
       },
       onError: () => {
-        setDealing(false);
+        setFinishing(false);
       },
     });
-  }, []);
+  }, [matchId, mutateFinishRound]);
 
   const handleDeal = useCallback(() => {
     setDealing(true);
@@ -98,7 +100,7 @@ export const useGame = (matchId: string) => {
         setDealing(false);
       },
     });
-  }, []);
+  }, [matchId, mutateDealCards]);
 
   const handlePlay = useCallback(
     async (id: string) => {
@@ -114,43 +116,15 @@ export const useGame = (matchId: string) => {
         });
       } else console.log('CALMA CARAIO');
     },
-    [game, me],
+    [me, mutatePlay],
   );
 
-  const getEmoji = useCallback(
-    (
-      status?:
-        | 'dealing'
-        | 'betting'
-        | 'playing'
-        | 'finished'
-        | 'loading'
-        | 'indiozinho',
-    ) => {
-      switch (status) {
-        case 'betting':
-          return '💵';
-        case 'playing':
-          return '🎮';
-        case 'loading':
-          return '⏳';
-        case 'finished':
-          return '🏁';
-        case 'indiozinho':
-          return '🏹';
-        default:
-          return '🎰';
-      }
-    },
-    [],
-  );
+  const getCardQuantity = useCallback((num: number) => {
+    if (num <= 0) return undefined;
 
-  const getCardQuantity = useCallback((roundNumber: number) => {
-    if (roundNumber <= 0) return undefined;
+    const lastDigit = num % 10;
 
-    const lastDigit = roundNumber % 10;
-
-    if (lastDigit == 0) {
+    if (lastDigit === 0) {
       return 2;
     }
     if (lastDigit <= 6) {
@@ -164,7 +138,7 @@ export const useGame = (matchId: string) => {
 
   const sumBets = (itemArray: Bet[]) =>
     itemArray &&
-    itemArray.reduce(function (a, b) {
+    itemArray.reduce((a, b) => {
       return a + b.bet;
     }, 0);
 
@@ -185,25 +159,29 @@ export const useGame = (matchId: string) => {
         },
       );
     },
-    [game, roundNumber, matchId],
+    [mutateBet, matchId, roundNumber],
   );
 
   useEffect(() => {
     if (game.players?.length >= 2) {
       const { players } = game;
-      const me = players.find((player) => player.user_id === session?.user?.id);
+      const user = players.find(
+        (player) => player.user_id === session?.user?.id,
+      );
+      const current = players.find((p) => p?.current);
 
       setMe({
-        ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+        ...user,
+        cards: game.player_cards.filter((p) => p.user_id === user?.user_id),
+        bet: game.bets.find((p) => p.user_id === user?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === user?.user_id)?.wins,
       } as GamePlayer);
 
-      if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
+      if (cardQuantity)
+        setCheckLimit(!!user?.dealer && betCount <= cardQuantity);
 
       const player2 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 1) % 6,
+        (player) => player.table_seat === ((user?.table_seat || 0) + 1) % 6,
       );
       const player3 = players.find(
         (player) => player.table_seat === ((me?.table_seat || 0) + 2) % 6,
@@ -250,9 +228,11 @@ export const useGame = (matchId: string) => {
       } as GamePlayer);
 
       if (game.player_cards) {
-        const turn = Math.max(...game.player_cards.map((r) => r.turn));
-        setTurn(turn);
+        const newTurn = Math.max(...game.player_cards.map((r) => r.turn));
+        setTurn(newTurn);
       }
+
+      setCurrentPlayer(current);
       return;
     }
 
@@ -260,25 +240,23 @@ export const useGame = (matchId: string) => {
     if (game?.players?.length === 2) {
       setCurrentPage('indiozinho');
       const { players } = game;
-      const me = players.find((player) => player.user_id === session?.user?.id);
+      const user = players.find(
+        (player) => player.user_id === session?.user?.id,
+      );
       setMe({
-        ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+        ...user,
+        cards: game.player_cards.filter((p) => p.user_id === user?.user_id),
+        bet: game.bets.find((p) => p.user_id === user?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === user?.user_id)?.wins,
       } as GamePlayer);
 
-      let indiozinho1 = me;
-      if (!indiozinho1) {
-        indiozinho1 = game.players.sort((i) => i.table_seat)[0];
+      let firstIndiozinho = user;
+      if (!firstIndiozinho) {
+        [firstIndiozinho] = game.players.sort((i) => i.table_seat);
       }
 
-      let indiozinho2 = game.players.find(
-        (p) => p.user_id !== indiozinho1.user_id,
-      );
-
       setIndiozinho1({
-        ...indiozinho1,
+        ...firstIndiozinho,
         cards: game.player_cards.filter(
           (p) => p.user_id === indiozinho1?.user_id,
         ),
@@ -288,7 +266,7 @@ export const useGame = (matchId: string) => {
       } as GamePlayer);
 
       setIndiozinho2({
-        ...indiozinho2,
+        ...game.players.find((p) => p.user_id !== indiozinho1.user_id),
         cards: game.player_cards.filter(
           (p) => p.user_id === indiozinho2?.user_id,
         ),
@@ -304,12 +282,19 @@ export const useGame = (matchId: string) => {
 
     // VENCEDOR
     if (game?.players?.length <= 1) {
-      const winner = game.players?.find((p) => p.lives > 0);
-      setWinner(winner);
+      setWinner(game.players?.find((p) => p.lives > 0));
       setCurrentPage('end');
-      return;
     }
-  }, [game]);
+  }, [
+    betCount,
+    cardQuantity,
+    game,
+    indiozinho1?.user_id,
+    indiozinho2?.user_id,
+    me?.dealer,
+    me?.table_seat,
+    session?.user?.id,
+  ]);
 
   useEffect(() => {
     const channel = supabase
@@ -331,10 +316,11 @@ export const useGame = (matchId: string) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [game]);
+  }, [game, matchId, refreshGame]);
 
   return {
     me,
+    currentPlayer,
     player2,
     player3,
     player4,
@@ -361,11 +347,11 @@ export const useGame = (matchId: string) => {
     checkLimit,
     currentPage,
     winner,
+    finishing,
     handleDeal,
     handlePlay,
     handleBet,
     handleFinishRound,
     refreshGame,
-    getEmoji,
   };
 };

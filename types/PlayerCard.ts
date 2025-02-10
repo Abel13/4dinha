@@ -1,4 +1,4 @@
-import { Database } from './Database';
+import { type Database } from './Database';
 
 export type PlayerCard = Database['public']['Tables']['player_cards']['Row'];
 export type PlayerCardOnGame =

@@ -1,4 +1,4 @@
-import { Database } from './Database';
+import { type Database } from './Database';
 
 export type MatchUser = Database['public']['Tables']['match_users']['Row'];
 export type MatchUserInsert =

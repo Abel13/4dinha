@@ -1,9 +1,9 @@
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
-import { useGame } from '@/hooks/useGame';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, Image, StyleSheet } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { useGame } from '@/hooks/useGame';
 import { Colors } from '@/constants/Colors';
 import { usePlayer } from '@/hooks/usePlayer';
 import { ThemedButton } from '@/components/ThemedButton';
@@ -38,7 +38,7 @@ export default function End() {
       </ThemedView>
     );
 
-  if (!playerName || !playerPicture)
+  if (!playerName || !playerPicture || !match)
     return <ActivityIndicator size={100} color={Colors.dark.info} />;
 
   return (
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: '50%',
-    padding: 20,
+    paddingHorizontal: 60,
+    paddingVertical: 20,
     backgroundColor: Colors.dark.background,
   },
   title: {

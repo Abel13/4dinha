@@ -1,6 +1,6 @@
-import { BetInsert, Deck, Game } from '@/types';
-import { api } from './api';
+import { type BetInsert, type Deck, type Game } from '@/types';
 import { supabase } from '@/providers/supabase';
+import { api } from './api';
 
 export const gameKey = (gameId: string) => {
   return ['game', gameId];
@@ -105,15 +105,11 @@ export const playMutation = (token: string) => {
  */
 export const betMutation = () => {
   return {
-    mutationFn: async ({
-      bet,
-      match_id,
-      round_number,
-    }: BetInsert): Promise<void> => {
+    mutationFn: async (payload: BetInsert): Promise<void> => {
       const { error } = await supabase.from('bets').insert({
-        match_id,
-        round_number,
-        bet,
+        match_id: payload.match_id,
+        round_number: payload.round_number,
+        bet: payload.bet,
       });
 
       if (error) {
@@ -131,20 +127,16 @@ export const getTrumps = (
   return {
     queryKey: trumpKey(gameId, roundNumber),
     queryFn: async (): Promise<Deck[]> => {
-      try {
-        const response = await api.get('api/trumps', {
-          params: {
-            matchID: gameId,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await api.get('api/trumps', {
+        params: {
+          matchID: gameId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      return response.data;
     },
     initialData: [],
   };

@@ -2,25 +2,25 @@ import { useEffect } from 'react';
 import { Image, StyleSheet } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVibration } from '@/hooks/useVibration';
 import { GamePlayer } from '@/types';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 import { Card } from './Card';
 
 const styles = StyleSheet.create({
   seat: {
     flex: 1,
-    minWidth: '45%',
-    margin: 5,
     borderWidth: 1,
     borderColor: Colors.dark.tint,
     borderRadius: 10,
     padding: 5,
+    backgroundColor: Colors.dark.background,
   },
   empty: {
-    borderColor: Colors.dark.tabIconDefault,
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
   },
   current: {
     borderColor: Colors.dark.success,
@@ -48,15 +48,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.tint,
   },
   userContainer: {
-    flex: 0.5,
-    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    top: -17,
+    top: -23,
     zIndex: 3,
     backgroundColor: Colors.dark.background,
     paddingHorizontal: 8,
+    paddingTop: 5,
+    borderRadius: 10,
     alignSelf: 'center',
   },
   profileImage: {
@@ -94,13 +94,13 @@ interface TableSeatProps {
   handlePlay?: (id?: string) => void;
 }
 
-export const TableSeat = ({
+export function TableSeat({
   player,
   number,
   playing,
   currentTurn,
   handlePlay,
-}: TableSeatProps) => {
+}: TableSeatProps) {
   const { playerName, playerPicture } = usePlayer(player?.user_id as string);
   const isMyTurn = (player?.current && number === 1) || false;
   const { vibrate } = useVibration();
@@ -112,15 +112,7 @@ export const TableSeat = ({
   }, [isMyTurn, vibrate]);
 
   if (!player?.user_id)
-    return (
-      <ThemedView style={[styles.seat, styles.empty]}>
-        <ThemedView style={styles.row}>
-          <ThemedText style={styles.number}>{number}</ThemedText>
-        </ThemedView>
-        <ThemedView style={styles.row} />
-        <ThemedView style={styles.row} />
-      </ThemedView>
-    );
+    return <ThemedView style={[styles.seat, styles.empty]} />;
 
   return (
     <ThemedView style={[styles.seat, player.current && styles.current]}>
@@ -129,7 +121,7 @@ export const TableSeat = ({
           {playerPicture && (
             <Image
               source={{
-                uri: playerPicture as string,
+                uri: playerPicture,
               }}
               style={styles.profileImage}
             />
@@ -139,7 +131,9 @@ export const TableSeat = ({
           </ThemedText>
         </ThemedView>
         <ThemedText type='h4'>
-          {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${Number.isNaN(Number(player.bet)) ? '-' : player.bet}`}
+          {`🎲 ${Number.isNaN(Number(player.wins)) ? '-' : player.wins}/${
+            Number.isNaN(Number(player.bet)) ? '-' : player.bet
+          }`}
         </ThemedText>
       </ThemedView>
       <ThemedView
@@ -220,4 +214,4 @@ export const TableSeat = ({
       </ThemedView>
     </ThemedView>
   );
-};
+}

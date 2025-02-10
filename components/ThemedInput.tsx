@@ -1,11 +1,22 @@
 import React, { forwardRef } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 
+import { Control, useController } from 'react-hook-form';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Colors } from '@/constants/Colors';
-import { Control, useController } from 'react-hook-form';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
+
+const styles = StyleSheet.create({
+  default: {
+    fontSize: 16,
+    padding: 10,
+    fontFamily: 'BarlowCondensed',
+    borderBottomWidth: 1,
+    borderRadius: 8,
+    borderColor: Colors.dark.tint,
+  },
+});
 
 export type ThemedInputProps = TextInputProps & {
   lightColor?: string;
@@ -21,7 +32,6 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(
   (
     {
       style,
-      lightColor,
       darkColor,
       control,
       name,
@@ -62,14 +72,3 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(
     );
   },
 );
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    padding: 10,
-    fontFamily: 'BarlowCondensed',
-    borderBottomWidth: 1,
-    borderRadius: 8,
-    borderColor: Colors.dark.tint,
-  },
-});

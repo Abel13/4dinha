@@ -1,18 +1,27 @@
-import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedInput } from '@/components/ThemedInput';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { format } from 'date-fns';
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedInput } from '@/components/ThemedInput';
+import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useMatchList } from '@/hooks/useMatchList';
-import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import { router } from 'expo-router';
+import { SoundButton } from '@/components/SoundButton';
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 60,
+  },
+});
 
 const schema = yup.object({
   name: yup.string().required('Nome da partida é obrigatório'),
@@ -33,13 +42,13 @@ export default function NewMatchScreen() {
       <ThemedView
         style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}
       >
-        <TouchableOpacity onPress={router.back}>
+        <SoundButton sound='menu' onPress={router.back}>
           <Feather
             name='chevron-left'
             color={Colors.dark.tabIconDefault}
-            size={24}
+            size={28}
           />
-        </TouchableOpacity>
+        </SoundButton>
         <ThemedText type='title'>Nova Partida</ThemedText>
       </ThemedView>
       <ThemedInput name='name' control={control} />
@@ -51,12 +60,3 @@ export default function NewMatchScreen() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flex: 1,
-    paddingTop: 100,
-    padding: 10,
-    gap: 10,
-  },
-});

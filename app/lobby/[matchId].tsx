@@ -1,22 +1,23 @@
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { router, useLocalSearchParams } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedFlatList } from '@/components/ThemedFlatList';
-import { router, useLocalSearchParams } from 'expo-router';
 import { useMatchUsers } from '@/hooks/useMatchUsers';
 import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
-import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
+import { SoundButton } from '@/components/SoundButton';
 
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
-    paddingTop: 100,
-    paddingBottom: 50,
+    paddingHorizontal: 60,
+    paddingBottom: 20,
     gap: 10,
   },
   matchPicture: {
@@ -60,13 +61,13 @@ export default function LobbyScreen() {
   return (
     <ThemedView style={styles.titleContainer}>
       <ThemedView style={[styles.row, styles.padding]}>
-        <TouchableOpacity onPress={router.back}>
+        <SoundButton sound='menu' onPress={router.back}>
           <Feather
             name='chevron-left'
             color={Colors.dark.tabIconDefault}
-            size={24}
+            size={28}
           />
-        </TouchableOpacity>
+        </SoundButton>
         <Image
           source={{
             uri: matchPicture?.toString(),

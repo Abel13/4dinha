@@ -1,21 +1,24 @@
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
-import { Match } from '@/types/Match';
 import { Image, Pressable, StyleSheet } from 'react-native';
+import { useCallback } from 'react';
+import { type Match } from '@/types/Match';
 import { Colors } from '@/constants/Colors';
 import { useMatch } from '@/hooks/useMatch';
-import { useCallback } from 'react';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
+import { SoundButton } from './SoundButton';
 
 const styles = StyleSheet.create({
   container: {
+    maxWidth: 400,
     padding: 10,
     borderColor: Colors.dark.border,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 4,
     marginVertical: 5,
+    backgroundColor: 'transparent',
   },
   matchPicture: {
     width: 30,
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 5,
+    backgroundColor: 'transparent',
   },
 });
 
@@ -38,7 +42,7 @@ interface Props {
   continueMatch: () => void;
 }
 
-export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
+export function MatchItem({ match, enterMatch, continueMatch }: Props) {
   const { matchPicture } = useMatch(match.id);
 
   const getStatus = useCallback((status: string | null) => {
@@ -66,7 +70,7 @@ export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
     );
 
   return (
-    <Pressable onPress={handlePress} style={styles.container}>
+    <SoundButton sound='menu' onPress={handlePress} style={styles.container}>
       <ThemedView style={styles.title}>
         <Image
           source={{
@@ -79,6 +83,6 @@ export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
       <ThemedText type='default' darkColor={Colors.dark.success}>
         {getStatus(match?.status)}
       </ThemedText>
-    </Pressable>
+    </SoundButton>
   );
-};
+}
