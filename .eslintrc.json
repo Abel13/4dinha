@@ -31,7 +31,6 @@
     "@typescript-eslint/no-redeclare": "error",
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
-    "@typescript-eslint/explicit-function-return-type": "error",
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/restrict-template-expressions": "error",
     "@typescript-eslint/no-floating-promises": "off",
@@ -87,7 +86,6 @@
     "react/function-component-definition": [
       "error",
       {
-        "namedComponents": "arrow-function",
         "unnamedComponents": "arrow-function"
       }
     ],
