@@ -24,7 +24,7 @@ import { Lottie } from '@/components/Lottie';
 import FailToLoadAnimation from '@/assets/lotties/nothing.json';
 
 const styles = StyleSheet.create({
-  screen: { flex: 1 },
+  screen: { flex: 1, backgroundColor: '#000' },
   container: { flex: 1, justifyContent: 'space-between' },
   background: { flex: 1, alignItems: 'flex-start' },
   header: {
@@ -81,11 +81,13 @@ const styles = StyleSheet.create({
   },
   logo: { width: 100, height: 100 },
   matchContainer: {
+    width: 300,
+    borderWidth: 2,
+    borderColor: '#9290c3',
     backgroundColor: '#1b1a55DD',
     padding: 10,
-    paddingRight: 60,
-    borderTopStartRadius: 10,
-    borderBottomStartRadius: 10,
+    marginRight: 60,
+    borderRadius: 10,
   },
   footer: {
     alignSelf: 'center',
@@ -234,6 +236,9 @@ export default function LobbyScreen() {
                   />
                 )}
                 ListEmptyComponent={<Lottie source={FailToLoadAnimation} />}
+                ItemSeparatorComponent={() => (
+                  <ThemedView style={{ height: 5 }} />
+                )}
               />
             </ThemedView>
           </ThemedView>
