@@ -1,6 +1,5 @@
-import { TouchableOpacity, StyleSheet, ButtonProps } from 'react-native';
+import { TouchableOpacity, StyleSheet, type ButtonProps } from 'react-native';
 
-import { Colors } from '@/constants/Colors';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -9,7 +8,20 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 import { ThemedText } from './ThemedText';
+
+const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 40,
+  },
+});
 
 type ButtonType = 'default' | 'danger' | 'outlined';
 
@@ -29,6 +41,7 @@ export function ThemedButton({
   loading = false,
   title,
   disabled = false,
+  color,
   ...rest
 }: ThemedButtonProps) {
   const rotation = useSharedValue(0);
@@ -43,7 +56,7 @@ export function ThemedButton({
     } else {
       rotation.value = 0;
     }
-  }, [loading]);
+  }, [loading, rotation]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -52,18 +65,6 @@ export function ThemedButton({
       },
     ],
   }));
-
-  if (loading)
-    return (
-      <Animated.View
-        style={[
-          animatedStyle,
-          { justifyContent: 'center', alignItems: 'center' },
-        ]}
-      >
-        <Feather name='loader' color={Colors.dark.tint} size={24} />
-      </Animated.View>
-    );
 
   const buttonStyles = [
     styles.button,
@@ -74,6 +75,18 @@ export function ThemedButton({
     disabled && { opacity: 0.5 },
   ];
 
+  if (loading)
+    return (
+      <Animated.View
+        style={[
+          animatedStyle,
+          { justifyContent: 'center', alignItems: 'center' },
+        ]}
+      >
+        <Feather name='loader' color={color || TypeColors[type]} size={24} />
+      </Animated.View>
+    );
+
   return (
     <TouchableOpacity
       style={buttonStyles}
@@ -83,22 +96,14 @@ export function ThemedButton({
     >
       <ThemedText
         style={{
-          color: !disabled ? TypeColors[type] : Colors.dark.disabledButton,
+          color: !disabled
+            ? color || TypeColors[type]
+            : Colors.dark.disabledButton,
         }}
+        type='subtitle'
       >
         {title}
       </ThemedText>
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 40,
-  },
-});

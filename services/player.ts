@@ -1,5 +1,5 @@
 import { supabase } from '@/providers/supabase';
-import { Player } from '@/types/Player';
+import { type Player } from '@/types/Player';
 
 export const playerKey = (playerId: string) => {
   return ['player', playerId];

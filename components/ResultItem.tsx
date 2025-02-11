@@ -1,11 +1,11 @@
+import { Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
+import { usePlayer } from '@/hooks/usePlayer';
+import { type GameResult } from '@/types';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
-import { usePlayer } from '@/hooks/usePlayer';
-import { GameResult } from '@/types';
-import { Image } from 'react-native';
 
-export const ResultItem = ({ result }: { result: GameResult }) => {
+export function ResultItem({ result }: { result: GameResult }) {
   const { playerName, playerPicture } = usePlayer(result.user_id);
   let lives = result.lives - Math.abs(result.bets - result.wins);
   if (lives < 0) lives = 0;
@@ -31,7 +31,7 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
         {playerPicture && (
           <Image
             source={{
-              uri: playerPicture as string,
+              uri: playerPicture,
             }}
             style={{
               width: 35,
@@ -61,4 +61,4 @@ export const ResultItem = ({ result }: { result: GameResult }) => {
       </ThemedView>
     </ThemedView>
   );
-};
+}

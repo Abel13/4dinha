@@ -1,6 +1,6 @@
-import { getPlayer } from '@/services/player';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { getPlayer } from '@/services/player';
 
 export const usePlayer = (playerId: string) => {
   const [playerName, setPlayerName] = useState<string | null>('');

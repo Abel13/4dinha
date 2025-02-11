@@ -1,3 +1,7 @@
+import { Feather } from '@expo/vector-icons';
+import { useLocalSearchParams } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { Button, Modal, StyleSheet } from 'react-native';
 import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
@@ -7,11 +11,6 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
-import { Feather } from '@expo/vector-icons';
-import { useKeepAwake } from 'expo-keep-awake';
-import { useLocalSearchParams } from 'expo-router';
-import { useCallback, useState } from 'react';
-import { Button, Image, Modal, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -119,7 +118,7 @@ export default function Indiozinho() {
     <ThemedView style={styles.container}>
       <Modal
         visible={isModalVisible}
-        transparent={true}
+        transparent
         animationType='slide'
         onRequestClose={closeModal}
       >
@@ -166,7 +165,7 @@ export default function Indiozinho() {
 
       <Modal
         visible={roundStatus === 'finished'}
-        transparent={true}
+        transparent
         animationType='slide'
       >
         <ThemedView style={styles.modalContainer}>
@@ -212,7 +211,7 @@ export default function Indiozinho() {
             !isLoading
           )
         }
-        transparent={true}
+        transparent
         animationType='slide'
       >
         <ThemedView style={styles.modalContainer}>
@@ -268,7 +267,7 @@ export default function Indiozinho() {
             <Card
               suit={trump?.suit}
               symbol={trump?.symbol}
-              status={'on hand'}
+              status='on hand'
               onPress={onTrumpPress}
             />
           </ThemedView>

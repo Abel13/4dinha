@@ -1,7 +1,7 @@
 import { getLocales } from 'expo-localization';
-import { I18n, TranslateOptions } from 'i18n-js';
+import { I18n, type TranslateOptions } from 'i18n-js';
 import errors from '../i18n/errors.json';
-import { SupportedLocale } from '../types';
+import { type SupportedLocale } from '../types';
 
 export const useTranslation = () => {
   const i18n = new I18n(errors, {

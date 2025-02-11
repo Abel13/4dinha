@@ -1,74 +1,8 @@
-import React from 'react';
+import type React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { HandStatus, Suit, Symbol } from '@/types/Card';
+import { type HandStatus, type Suit, type Symbol } from '@/types/Card';
 import { Colors } from '@/constants/Colors';
-
-interface CardProps {
-  id?: string;
-  status: HandStatus;
-  suit?: Suit;
-  symbol?: Symbol;
-  playing?: boolean;
-  size?: 'small' | 'big';
-  onPress?: (id?: string) => void;
-}
-
-export const Card: React.FC<CardProps> = ({
-  id,
-  suit,
-  symbol,
-  playing,
-  status,
-  size = 'small',
-  onPress,
-}) => {
-  const visible = symbol && suit;
-
-  if (playing || status !== 'on hand')
-    return (
-      <View style={[styles.card, styles[size], !visible && styles.cardBack]}>
-        {visible ? (
-          <View style={styles.cardContent}>
-            <Text style={[styles[`symbol_${size}`], styles[suit]]}>
-              {symbol}
-            </Text>
-            <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
-          </View>
-        ) : (
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={styles[`logo_${size}`]}
-          />
-        )}
-      </View>
-    );
-
-  return (
-    <TouchableOpacity
-      style={[
-        styles.card,
-        styles[size],
-        !visible && styles.cardBack,
-        visible && styles.notPlayed,
-      ]}
-      onPress={() => {
-        if (onPress) onPress(id || '');
-      }}
-    >
-      {visible ? (
-        <View style={styles.cardContent}>
-          <Text style={[styles[`symbol_${size}`], styles[suit]]}>{symbol}</Text>
-          <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
-        </View>
-      ) : (
-        <Image
-          source={require('../assets/images/logo.png')}
-          style={styles[`logo_${size}`]}
-        />
-      )}
-    </TouchableOpacity>
-  );
-};
+import { ReactNode } from 'react';
 
 const styles = StyleSheet.create({
   small: {
@@ -140,3 +74,70 @@ const styles = StyleSheet.create({
     color: '#000',
   },
 });
+
+interface CardProps {
+  id?: string;
+  status: HandStatus;
+  suit?: Suit;
+  symbol?: Symbol;
+  playing?: boolean;
+  size?: 'small' | 'big';
+  onPress?: (id?: string) => void;
+}
+
+export function Card({
+  id,
+  suit,
+  symbol,
+  playing,
+  status,
+  size = 'small',
+  onPress,
+}: CardProps): ReactNode {
+  const visible = symbol && suit;
+
+  if (playing || status !== 'on hand')
+    return (
+      <View style={[styles.card, styles[size], !visible && styles.cardBack]}>
+        {visible ? (
+          <View style={styles.cardContent}>
+            <Text style={[styles[`symbol_${size}`], styles[suit]]}>
+              {symbol}
+            </Text>
+            <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
+          </View>
+        ) : (
+          <Image
+            source={require('../assets/images/logo.png')}
+            style={styles[`logo_${size}`]}
+          />
+        )}
+      </View>
+    );
+
+  return (
+    <TouchableOpacity
+      style={[
+        styles.card,
+        styles[size],
+        !visible && styles.cardBack,
+        visible && styles.notPlayed,
+      ]}
+      onPress={() => {
+        if (onPress) onPress(id || '');
+      }}
+    >
+      {visible ? (
+        <View style={styles.cardContent}>
+          <Text style={[styles[`symbol_${size}`], styles[suit]]}>{symbol}</Text>
+          <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
+        </View>
+      ) : (
+        <Image
+          source={require('../assets/images/logo.png')}
+          style={styles[`logo_${size}`]}
+        />
+      )}
+    </TouchableOpacity>
+  );
+}

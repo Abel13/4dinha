@@ -1,7 +1,8 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, ScrollView, useColorScheme } from 'react-native';
 
+import { Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedButton } from '@/components/ThemedButton';
@@ -9,23 +10,46 @@ import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
 
+const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingTop: 10,
+  },
+  stepContainer: {
+    gap: 8,
+    marginBottom: 8,
+  },
+  reactLogo: {
+    height: 100,
+    width: 100,
+    bottom: 10,
+    left: 10,
+    position: 'absolute',
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+  },
+});
+
 export default function HomeScreen() {
   const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { username } = useUserSessionStore((state) => state);
+
+  const theme = useColorScheme() || 'dark';
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ dark: '#1D6A47' }}
-      headerImage={
-        <Image
-          source={{
-            uri: profilePicture,
-          }}
-          style={styles.reactLogo}
-        />
-      }
+    <ScrollView
+      style={{ backgroundColor: 'transparent', paddingHorizontal: 60 }}
     >
       <ThemedView style={styles.titleContainer}>
+        <Feather
+          name='chevron-left'
+          color={Colors[theme].icon}
+          size={28}
+          onPress={router.back}
+        />
         <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
         <HelloWave />
       </ThemedView>
@@ -68,28 +92,6 @@ export default function HomeScreen() {
           <ThemedText type='defaultSemiBold'>app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 100,
-    width: 100,
-    bottom: 10,
-    left: 10,
-    position: 'absolute',
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
-  },
-});
