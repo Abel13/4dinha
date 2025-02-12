@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import { useCallback } from 'react';
 import { type Match } from '@/types/Match';
 import { Colors } from '@/constants/Colors';
@@ -9,30 +9,21 @@ import { SoundButton } from './SoundButton';
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: 400,
-    padding: 10,
-    borderColor: Colors.dark.border,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flex: 1,
+    width: '100%',
+    alignItems: 'flex-start',
     borderRadius: 4,
-    marginVertical: 5,
-    backgroundColor: 'transparent',
+    backgroundColor: '#9290c3',
+    padding: 5,
   },
   matchPicture: {
     width: 30,
     height: 30,
     borderRadius: 4,
-    marginRight: 10,
   },
   title: {
     gap: 5,
-    width: '85%',
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 5,
-    backgroundColor: 'transparent',
   },
 });
 
@@ -65,7 +56,7 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
   if (!matchPicture)
     return (
       <ThemedView style={styles.container}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText darkColor={Colors.light.text}>Carregando...</ThemedText>
       </ThemedView>
     );
 
@@ -78,9 +69,9 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText>{match.name}</ThemedText>
+        <ThemedText darkColor={Colors.light.text}>{match.name}</ThemedText>
       </ThemedView>
-      <ThemedText type='default' darkColor={Colors.dark.success}>
+      <ThemedText type='default' darkColor={Colors.light.success}>
         {getStatus(match?.status)}
       </ThemedText>
     </SoundButton>

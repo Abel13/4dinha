@@ -12,7 +12,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import { StatusPanel } from '@/components/StatusPanel';
-import { ThemedFlatList } from '@/components/ThemedFlatList';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Table() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isModalVisible, setModalVisible] = useState(false);
 

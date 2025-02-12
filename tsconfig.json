@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
-    "typeRoots": ["./types"],
+    "types": ["jest"],
     "strict": true,
     "paths": {
       "@/*": ["./*"]

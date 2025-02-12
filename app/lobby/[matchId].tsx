@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ import { useMatchUsers } from '@/hooks/useMatchUsers';
 import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
 import { Colors } from '@/constants/Colors';
+import { useKeepAwake } from 'expo-keep-awake';
 import { SoundButton } from '@/components/SoundButton';
 
 const styles = StyleSheet.create({
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
 });
 
 export default function LobbyScreen() {
+  useKeepAwake();
   const { matchId } = useLocalSearchParams();
   const { session } = useUserSessionStore((state) => state);
   const { match, matchPicture, startMatch } = useMatch(matchId as string);
