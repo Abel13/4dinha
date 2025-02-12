@@ -11,6 +11,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const styles = StyleSheet.create({
   container: {
