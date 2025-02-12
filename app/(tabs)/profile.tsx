@@ -1,9 +1,8 @@
 import {
-  Image,
   StyleSheet,
-  Platform,
-  Touchable,
   TouchableOpacity,
+  ScrollView,
+  useColorScheme,
 } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';

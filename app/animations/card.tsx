@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
-import { Card } from '../../components/animated/CardBack';
 import PagerView from 'react-native-pager-view';
+import { Card } from '../../components/animated/CardBack';
 
 export default function WinningCardScreen() {
   const SCALE = 0.3;
@@ -77,7 +77,7 @@ export default function WinningCardScreen() {
 
                   <Text
                     style={{ fontSize: 150 * SCALE, textAlign: 'center' }}
-                  ></Text>
+                  />
                   <View
                     style={{
                       alignSelf: 'flex-end',
