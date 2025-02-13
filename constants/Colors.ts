@@ -33,6 +33,7 @@ export const Colors = {
     white: '#fff',
     purple: '#1b1a55DD',
     purpleLight: '#9290c3',
+    purpleGray: '#4c4b6e',
     purpleTransparent: '#070f2b88',
   },
   light: {
@@ -67,6 +68,7 @@ export const Colors = {
     white: '#fff',
     purple: '#1b1a55DD',
     purpleLight: '#9290c3',
+    purpleGray: '#4c4b6e',
     purpleTransparent: '#070f2b88',
   },
 };
