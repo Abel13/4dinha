@@ -2,10 +2,10 @@ import { Image, StyleSheet } from 'react-native';
 import { useCallback } from 'react';
 import { type Match } from '@/types/Match';
 import { Colors } from '@/constants/Colors';
-import { useMatch } from '@/hooks/useMatch';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 import { SoundButton } from './SoundButton';
+import { useDiceBear } from '@/hooks/useDiceBear';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,7 +34,7 @@ interface Props {
 }
 
 export function MatchItem({ match, enterMatch, continueMatch }: Props) {
-  const { matchPicture } = useMatch(match.id);
+  const matchPicture = useDiceBear()({ avatar: 'icons', seed: match.id });
 
   const getStatus = useCallback((status: string | null) => {
     switch (status) {
@@ -53,7 +53,7 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
     if (match.status === 'started') continueMatch();
   };
 
-  if (!matchPicture)
+  if (!match)
     return (
       <ThemedView style={styles.container}>
         <ThemedText darkColor={Colors.light.text}>Carregando...</ThemedText>

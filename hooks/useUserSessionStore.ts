@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/providers/supabase';
+import { useDiceBear } from './useDiceBear';
 
 interface ISessionStore {
   session: Session | null;
@@ -26,7 +27,11 @@ export const useUserSessionStore = create<ISessionStore>()(
           session?.user.email.indexOf('@'),
         );
 
-        const profilePicture = `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${session?.user.email}&scale=90`;
+        const profilePicture = useDiceBear()({
+          version: 7,
+          avatar: 'bottts-neutral',
+          seed: session?.user.email,
+        });
         set({ session, username, profilePicture });
       },
       setSession: (session) => {
