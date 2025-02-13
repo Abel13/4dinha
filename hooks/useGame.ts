@@ -181,19 +181,24 @@ export const useGame = (matchId: string) => {
         setCheckLimit(!!user?.dealer && betCount <= cardQuantity);
 
       const player2 = players.find(
-        (player) => player.table_seat === ((user?.table_seat || 0) + 1) % 6,
+        (player) =>
+          player.table_seat === (((me?.table_seat || 0) + 1 - 1) % 6) + 1,
       );
       const player3 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 2) % 6,
+        (player) =>
+          player.table_seat === (((me?.table_seat || 0) + 2 - 1) % 6) + 1,
       );
       const player4 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 3) % 6,
+        (player) =>
+          player.table_seat === (((me?.table_seat || 0) + 3 - 1) % 6) + 1,
       );
       const player5 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 4) % 6,
+        (player) =>
+          player.table_seat === (((me?.table_seat || 0) + 4 - 1) % 6) + 1,
       );
       const player6 = players.find(
-        (player) => player.table_seat === ((me?.table_seat || 0) + 5) % 6,
+        (player) =>
+          player.table_seat === (((me?.table_seat || 0) + 5 - 1) % 6) + 1,
       );
 
       setPlayer2({
