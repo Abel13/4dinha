@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { ThemedView } from './ThemedView';
+import { ThemedView } from '../ThemedView';
 import { TablePlayer } from './TablePlayer';
 import { TableCards } from './TableCards';
 

@@ -1,7 +1,7 @@
 import { StyleSheet, Image, ViewStyle } from 'react-native';
 
-import { ThemedText } from './ThemedText';
-import { ThemedView } from './ThemedView';
+import { ThemedText } from '../ThemedText';
+import { ThemedView } from '../ThemedView';
 
 import { Colors } from '@/constants/Colors';
 

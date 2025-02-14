@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-import { Card } from './Card';
-import { ThemedView } from './ThemedView';
+import { ThemedView } from '../ThemedView';
+import { Card } from '../Card';
 
 import { Colors } from '@/constants/Colors';
 import { useGamePositions } from '@/hooks/useTableSeat';
 
 import type { TableSeatProps } from './TableSeat';
 import { PlayerCardOnGame } from '@/types';
+
 interface TableCardsProps {
   cards: PlayerCardOnGame;
   number: number;
