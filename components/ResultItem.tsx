@@ -40,7 +40,9 @@ export function ResultItem({ result }: { result: GameResult }) {
             }}
           />
         )}
-        <ThemedText type='subtitle'>{playerName}</ThemedText>
+        <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+          {playerName}
+        </ThemedText>
       </ThemedView>
       <ThemedView
         style={{
@@ -50,7 +52,10 @@ export function ResultItem({ result }: { result: GameResult }) {
           gap: 20,
         }}
       >
-        <ThemedText type='title'>{`${result.bets}/${result.wins}`}</ThemedText>
+        <ThemedText
+          type='title'
+          lightColor={Colors.dark.text}
+        >{`${result.bets}/${result.wins}`}</ThemedText>
         <ThemedText>
           {`${Array.from(Array(lives)).fill('❤️').join('')}${Array.from(
             Array(5 - (lives || 0)),

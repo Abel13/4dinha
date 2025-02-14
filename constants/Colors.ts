@@ -10,6 +10,9 @@ export const Colors = {
     background: '#151718',
     border: '#A2A3AA',
     transparent: 'transparent',
+    cardRed: '#FF4C4C',
+    cardBack: '#994050',
+    trumpsModalBackground: '#003B',
 
     // component colors
     icon: '#9290c3',
@@ -45,6 +48,9 @@ export const Colors = {
     background: '#EBE9EA',
     border: '#6E6D66',
     transparent: 'transparent',
+    cardRed: '#FF4C4C',
+    cardBack: '#994050',
+    trumpsModalBackground: '#003B',
 
     // component colors
     icon: '#9290c3',
