@@ -55,7 +55,7 @@ export function ResultItem({ result }: { result: GameResult }) {
         <ThemedText
           type='title'
           lightColor={Colors.dark.text}
-        >{`${result.bets}/${result.wins}`}</ThemedText>
+        >{`${result.wins}/${result.bets}`}</ThemedText>
         <ThemedText>
           {`${Array.from(Array(lives)).fill('❤️').join('')}${Array.from(
             Array(5 - (lives || 0)),
