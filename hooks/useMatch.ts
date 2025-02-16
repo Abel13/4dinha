@@ -7,9 +7,11 @@ import {
   startMatchService,
 } from '@/services/match';
 import { supabase } from '@/providers/supabase';
+import { useDiceBear } from './useDiceBear';
 
 export const useMatch = (matchId: string) => {
   const router = useRouter();
+  const getAvatar = useDiceBear();
 
   const { data: match } = useQuery({
     ...fetchMatch(matchId || ''),
@@ -17,7 +19,10 @@ export const useMatch = (matchId: string) => {
   });
 
   const matchPicture = match
-    ? `https://api.dicebear.com/9.x/icons/png?seed=${match?.id}&scale=90`
+    ? getAvatar({
+        avatar: 'icons',
+        seed: matchId,
+      })
     : null;
 
   const startMatchMutation = useMutation({
