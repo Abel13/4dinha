@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Dimensions, ViewStyle } from 'react-native';
 
+import { scale, verticalScale } from '@/utils/scalingUtils';
+
 const { width, height } = Dimensions.get('window');
 const BASE_SIZE = Math.min(width, height);
 
@@ -23,7 +25,7 @@ export const useGamePositions = () => {
   const calculateCardLeft = useMemo(
     () =>
       (number: number, index: number): number =>
-        number === 1 ? index * 40 : index * 10,
+        number === 1 ? index * verticalScale(120) : index * verticalScale(5),
     [],
   );
 
@@ -31,12 +33,12 @@ export const useGamePositions = () => {
     () =>
       (seat: number): { [key: string]: string | number } => {
         const positions = {
-          1: { bottom: '110%', left: BASE_SIZE * 0.4 },
-          2: { bottom: '30%', left: '55%' },
-          3: { top: '93%', left: '90%' },
-          4: { top: '93%', left: '40%' },
-          5: { top: '93%', right: '90%' },
-          6: { bottom: '30%', right: '55%' },
+          1: { bottom: scale(50), left: verticalScale(315) },
+          2: { top: scale(0), left: verticalScale(360) },
+          3: { top: scale(38), left: verticalScale(360) },
+          4: { top: scale(38), left: verticalScale(150) },
+          5: { top: scale(38), right: verticalScale(350) },
+          6: { top: scale(0), right: verticalScale(370) },
         };
 
         return positions[seat as keyof typeof positions] || {};
@@ -48,12 +50,30 @@ export const useGamePositions = () => {
     () =>
       (seat: number, angle: number): { transform: ViewStyle['transform'] } => {
         const positions = {
-          1: { translateY: -BASE_SIZE * 0.001, translateX: BASE_SIZE * 0.3 },
-          2: { translateY: -BASE_SIZE * 0.01, translateX: BASE_SIZE * 0.2 },
-          3: { translateY: BASE_SIZE * 0.032, translateX: BASE_SIZE * 0.19 },
-          4: { translateY: BASE_SIZE * 0.023, translateX: BASE_SIZE * 0.19 },
-          5: { translateY: BASE_SIZE * 0.032, translateX: BASE_SIZE * 0.18 },
-          6: { translateY: -BASE_SIZE * 0.01, translateX: BASE_SIZE * 0.625 },
+          1: {
+            translateY: scale(-10),
+            translateX: verticalScale(4),
+          },
+          2: {
+            translateY: scale(-8),
+            translateX: verticalScale(-180),
+          },
+          3: {
+            translateY: scale(5),
+            translateX: verticalScale(0),
+          },
+          4: {
+            translateY: scale(5),
+            translateX: verticalScale(0),
+          },
+          5: {
+            translateY: scale(5),
+            translateX: verticalScale(0),
+          },
+          6: {
+            translateY: scale(-8),
+            translateX: verticalScale(200),
+          },
         };
 
         const position = positions[seat as keyof typeof positions] || {
@@ -74,17 +94,18 @@ export const useGamePositions = () => {
 
   const getPlayerPosition = useMemo(
     () =>
-      (seat: number): { [key: string]: string } => {
-        const positions = {
-          1: { bottom: '25%', right: '-80' },
-          2: { bottom: '-6%', left: '-7%' },
-          3: { top: '-10%', left: '35%' },
-          4: { top: '-12%', left: '35%' },
-          5: { top: '-10%', right: '1%' },
-          6: { bottom: '-6%', right: '-14%' },
-        };
+      (seat: number): { [key: string]: string | number } => {
+        const positions: { [key: number]: { [key: string]: string | number } } =
+          {
+            1: { bottom: scale(10), right: verticalScale(0) },
+            2: { top: scale(-3), left: verticalScale(-80) },
+            3: { top: scale(-5), left: verticalScale(150) },
+            4: { top: scale(-5), left: verticalScale(150) },
+            5: { top: scale(-5), left: verticalScale(150) },
+            6: { top: scale(-3), right: verticalScale(-120) },
+          };
 
-        return positions[seat as keyof typeof positions] || {};
+        return positions[seat] || {};
       },
     [],
   );

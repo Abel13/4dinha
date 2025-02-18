@@ -103,6 +103,7 @@ function CardsOnHand({
         .map((card, index) => {
           const angle = calculateCardAngle(cards.length, index, number);
           const cardPosition = getOnHandCardPosition(number, angle);
+
           return (
             <ThemedView
               key={card.id}
@@ -122,6 +123,7 @@ function CardsOnHand({
                 status={card.status}
                 playing={playing}
                 onPress={handlePlay}
+                size={number === 1 ? 'big' : 'small'}
               />
             </ThemedView>
           );
@@ -137,6 +139,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignSelf: 'center',
   },
   tableCardsContainer: {
     flex: 1,

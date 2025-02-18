@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
     height: 50,
   },
   big: {
-    width: 62,
-    height: 80,
+    width: 50,
+    height: 68,
   },
   card: {
     borderRadius: 4,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     fontSize: 17,
   },
-  suit_big: { textAlign: 'right', fontSize: 40 },
+  suit_big: { textAlign: 'right', fontSize: 22 },
   logo_small: {
     width: 35,
     height: 35,

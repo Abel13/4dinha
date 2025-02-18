@@ -22,6 +22,7 @@ import { StatusPanel } from '@/components/StatusPanel';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import type { Suit, Symbol } from '@/types';
+import { height, scale, verticalScale, width } from '@/utils/scalingUtils';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
 
@@ -428,7 +429,8 @@ function GameInfo({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
+    width: width,
+    height: height,
   },
   background: {
     flex: 1,
@@ -449,12 +451,8 @@ const styles = StyleSheet.create({
   },
   trump: {
     flex: 1,
-    alignSelf: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 10,
-    marginBottom: 10,
+    marginBottom: scale(7),
   },
   modalContainer: {
     flex: 1,
@@ -535,10 +533,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     gap: 1,
-    width: 120,
+    width: scale(55),
     position: 'absolute',
-    top: 5,
-    left: 10,
+    top: scale(5),
+    left: verticalScale(30),
   },
   topRowContainer: {
     paddingHorizontal: 70,
@@ -570,6 +568,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     height: 110,
+    marginRight: verticalScale(10),
   },
   refreshButton: {
     height: 110,
