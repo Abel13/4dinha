@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   livesCount: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
     color: Colors.dark.white,
     zIndex: 1,
     lineHeight: 20,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   dealerText: {
     position: 'absolute',
-    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
     color: Colors.dark.black,
     textAlign: 'center',
     textAlignVertical: 'center',

@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    width: 60,
+    width: 70,
     alignContent: 'center',
   },
 });

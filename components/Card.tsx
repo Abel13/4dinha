@@ -118,12 +118,12 @@ const styles = StyleSheet.create({
     flex: 0.8,
     textAlign: 'left',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
   },
   symbol_big: {
     textAlign: 'left',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
   },
   suit_small: {
     textAlign: 'right',

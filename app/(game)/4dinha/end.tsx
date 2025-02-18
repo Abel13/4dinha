@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
     textAlign: 'center',
     marginBottom: 20,
     color: Colors.dark.text,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   winnerName: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'BarlowCondensedBold',
     color: Colors.dark.text,
     marginBottom: 10,
   },

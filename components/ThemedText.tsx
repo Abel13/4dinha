@@ -12,23 +12,19 @@ const styles = StyleSheet.create({
   defaultSemiBold: {
     fontSize: 16,
     lineHeight: 15,
-    fontWeight: '600',
     fontFamily: 'BarlowCondensedSemiBold',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
     lineHeight: 32,
     fontFamily: 'BarlowCondensedBold',
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     fontFamily: 'BarlowCondensedBold',
   },
   h4: {
     fontSize: 16,
-    fontWeight: 'bold',
     fontFamily: 'BarlowCondensedBold',
   },
   paragraph: {
@@ -39,11 +35,13 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     fontSize: 16,
     color: Colors.dark.link,
+    fontFamily: 'BarlowCondensed',
   },
   error: {
     lineHeight: 12,
     fontSize: 12,
     color: Colors.dark.danger,
+    fontFamily: 'BarlowCondensed',
   },
 });
 
