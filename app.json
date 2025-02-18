@@ -1,6 +1,6 @@
 {
   "expo": {
-    "owner": "abelb13",
+    "owner": "b13soft",
     "name": "4dinha",
     "slug": "4dinha",
     "version": "1.0.0",
@@ -47,6 +47,12 @@
       "eas": {
         "projectId": "9d5a4b4c-abcd-4bc5-b859-3a48433a6ff5"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9d5a4b4c-abcd-4bc5-b859-3a48433a6ff5"
     }
   }
 }
