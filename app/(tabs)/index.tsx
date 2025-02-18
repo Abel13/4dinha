@@ -6,7 +6,7 @@ import {
   useColorScheme,
 } from 'react-native';
 
-import { useRouter } from 'expo-router';
+import { RelativePathString, useRouter } from 'expo-router';
 import { useCallback } from 'react';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
@@ -114,10 +114,6 @@ export default function LobbyScreen() {
 
   const { footerMenu, headerMenu } = useHome();
 
-  const handleMenu = () => {
-    // select menu
-  };
-
   const handleNewMatch = useCallback(() => {
     router.push({ pathname: '/lobby/new' });
   }, [router]);
@@ -174,7 +170,7 @@ export default function LobbyScreen() {
                 <SoundButton
                   key={icon.name}
                   sound='menu'
-                  onPress={handleMenu(icon.name)}
+                  onPress={() => router.push(icon.route as RelativePathString)}
                 >
                   <Ionicons name={icon.icon} size={28} color='#FFF' />
                 </SoundButton>

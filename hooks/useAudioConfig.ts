@@ -22,15 +22,24 @@ export const useAudioConfig = () => {
   }, []);
 };
 
-export const useSound = (enabled: boolean) => {
-  const playSound = async (type: 'menu') => {
+export type SoundEffects = 'menu';
+
+interface Props {
+  enabled?: boolean;
+  volume?: number;
+}
+
+export const useSound = ({ enabled, volume = 1 }: Props) => {
+  const playSound = async (type: SoundEffects) => {
     if (!enabled) return;
 
     const sounds = {
-      menu: require('@/assets/sounds/menu.mp3'),
+      menu: require('@/assets/sounds/touch1.mp3'),
     };
 
-    const { sound } = await Audio.Sound.createAsync(sounds[type]);
+    const { sound } = await Audio.Sound.createAsync(sounds[type], {
+      volume,
+    });
     await sound.playAsync();
   };
 
