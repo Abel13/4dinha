@@ -229,12 +229,13 @@ export default function Table() {
               roundStatus={roundStatus}
             />
 
-            <ThemedView style={styles.refreshButton}>
+            <ThemedView style={styles.refreshButtonContainer}>
               <ThemedButton
                 title='↻'
                 loading={isFetching || isLoading}
                 color='white'
                 onPress={refreshGame}
+                style={styles.refreshButton}
               />
             </ThemedView>
           </ThemedView>
@@ -436,7 +437,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 25,
     gap: 30,
-    paddingBottom: 5,
   },
   track: {
     flex: 1,
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     gap: 10,
     width: '70%',
-    paddingRight: 10,
+    paddingRight: verticalScale(75),
   },
   dealButton: {
     justifyContent: 'center',
@@ -568,9 +568,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     height: 110,
-    marginRight: verticalScale(10),
   },
-  refreshButton: {
+  refreshButtonContainer: {
     height: 110,
     borderRadius: 10,
     borderColor: Colors.dark.tint,
@@ -578,7 +577,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    width: 70,
+    width: 50,
     alignContent: 'center',
+    padding: 0,
+  },
+  refreshButton: {
+    paddingHorizontal: 0,
   },
 });

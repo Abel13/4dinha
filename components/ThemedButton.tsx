@@ -1,4 +1,9 @@
-import { TouchableOpacity, StyleSheet, type ButtonProps } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  type ButtonProps,
+  ViewStyle,
+} from 'react-native';
 
 import Animated, {
   useAnimatedStyle,
@@ -28,6 +33,7 @@ type ButtonType = 'default' | 'danger' | 'outlined';
 export type ThemedButtonProps = ButtonProps & {
   type?: ButtonType;
   loading?: boolean;
+  style?: ViewStyle;
 };
 
 const TypeColors = {
@@ -42,6 +48,7 @@ export function ThemedButton({
   title,
   disabled = false,
   color,
+  style,
   ...rest
 }: ThemedButtonProps) {
   const rotation = useSharedValue(0);
@@ -73,6 +80,7 @@ export function ThemedButton({
       borderColor: Colors.dark.tint,
     },
     disabled && { opacity: 0.5 },
+    style,
   ];
 
   if (loading)
