@@ -1,15 +1,36 @@
 import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
-import { ThemedView } from '../ThemedView';
-import { TablePlayer } from './TablePlayer';
-import { TableCards } from './TableCards';
-
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVibration } from '@/hooks/useVibration';
 import { useGamePositions } from '@/hooks/useTableSeat';
 
 import type { GamePlayer } from '@/types';
+
+import { ThemedView } from '../ThemedView';
+import { TablePlayer } from './TablePlayer';
+import { TableCards } from './TableCards';
+
+const styles = StyleSheet.create({
+  seat: {
+    flex: 1,
+  },
+  empty: {
+    borderColor: 'transparent',
+  },
+  row: {
+    flex: 1,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 1,
+  },
+  playerPosition: {
+    position: 'absolute',
+    zIndex: 20,
+    width: 120,
+  },
+});
 
 export interface TableSeatProps {
   player?: GamePlayer;
@@ -65,24 +86,3 @@ export function TableSeat({
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  seat: {
-    flex: 1,
-  },
-  empty: {
-    borderColor: 'transparent',
-  },
-  row: {
-    flex: 1,
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 1,
-  },
-  playerPosition: {
-    position: 'absolute',
-    zIndex: 20,
-    width: 120,
-  },
-});

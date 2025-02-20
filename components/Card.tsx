@@ -1,10 +1,10 @@
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
-
 import { type HandStatus, type Suit, type Symbol } from '@/types/Card';
 import { Colors } from '@/constants/Colors';
+
+import { ThemedView } from './ThemedView';
+import { ThemedText } from './ThemedText';
 
 interface CardProps {
   id?: string;
@@ -14,72 +14,6 @@ interface CardProps {
   playing?: boolean;
   size?: 'small' | 'big';
   onPress?: (id?: string) => void;
-}
-
-export function Card({
-  id,
-  suit,
-  symbol,
-  playing,
-  status,
-  size = 'small',
-  onPress,
-}: CardProps) {
-  const visible = symbol && suit;
-
-  if (playing || status !== 'on hand')
-    return (
-      <ThemedView
-        style={[styles.card, styles[size], !visible && styles.cardBack]}
-      >
-        {visible ? (
-          <ThemedView style={styles.cardContent}>
-            <ThemedText
-              type='paragraph'
-              style={[styles[`symbol_${size}`], styles[suit]]}
-            >
-              {symbol}
-            </ThemedText>
-            <ThemedText type='paragraph' style={[styles[`suit_${size}`]]}>
-              {suit}
-            </ThemedText>
-          </ThemedView>
-        ) : (
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={styles[`logo_${size}`]}
-          />
-        )}
-      </ThemedView>
-    );
-
-  return (
-    <TouchableOpacity
-      style={[styles.card, styles[size], !visible && styles.cardBack]}
-      onPress={() => {
-        if (onPress) onPress(id || '');
-      }}
-    >
-      {visible ? (
-        <ThemedView style={styles.cardContent}>
-          <ThemedText
-            type='paragraph'
-            style={[styles[`symbol_${size}`], styles[suit]]}
-          >
-            {symbol}
-          </ThemedText>
-          <ThemedText type='paragraph' style={[styles[`suit_${size}`]]}>
-            {suit}
-          </ThemedText>
-        </ThemedView>
-      ) : (
-        <Image
-          source={require('../assets/images/logo.png')}
-          style={styles[`logo_${size}`]}
-        />
-      )}
-    </TouchableOpacity>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -153,3 +87,69 @@ const styles = StyleSheet.create({
     color: Colors.dark.black,
   },
 });
+
+export function Card({
+  id,
+  suit,
+  symbol,
+  playing,
+  status,
+  size = 'small',
+  onPress,
+}: CardProps) {
+  const visible = symbol && suit;
+
+  if (playing || status !== 'on hand')
+    return (
+      <ThemedView
+        style={[styles.card, styles[size], !visible && styles.cardBack]}
+      >
+        {visible ? (
+          <ThemedView style={styles.cardContent}>
+            <ThemedText
+              type='paragraph'
+              style={[styles[`symbol_${size}`], styles[suit]]}
+            >
+              {symbol}
+            </ThemedText>
+            <ThemedText type='paragraph' style={[styles[`suit_${size}`]]}>
+              {suit}
+            </ThemedText>
+          </ThemedView>
+        ) : (
+          <Image
+            source={require('../assets/images/logo.png')}
+            style={styles[`logo_${size}`]}
+          />
+        )}
+      </ThemedView>
+    );
+
+  return (
+    <TouchableOpacity
+      style={[styles.card, styles[size], !visible && styles.cardBack]}
+      onPress={() => {
+        if (onPress) onPress(id || '');
+      }}
+    >
+      {visible ? (
+        <ThemedView style={styles.cardContent}>
+          <ThemedText
+            type='paragraph'
+            style={[styles[`symbol_${size}`], styles[suit]]}
+          >
+            {symbol}
+          </ThemedText>
+          <ThemedText type='paragraph' style={[styles[`suit_${size}`]]}>
+            {suit}
+          </ThemedText>
+        </ThemedView>
+      ) : (
+        <Image
+          source={require('../assets/images/logo.png')}
+          style={styles[`logo_${size}`]}
+        />
+      )}
+    </TouchableOpacity>
+  );
+}

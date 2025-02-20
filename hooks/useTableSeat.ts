@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
-import { Dimensions, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 
 import { scale, verticalScale } from '@/utils/scalingUtils';
-
-const { width, height } = Dimensions.get('window');
-const BASE_SIZE = Math.min(width, height);
 
 export const useGamePositions = () => {
   const formatBet = (wins: number, bet: number): string =>
@@ -46,7 +43,7 @@ export const useGamePositions = () => {
 
         return positions[seat as keyof typeof positions] || {};
       },
-    [BASE_SIZE],
+    [],
   );
 
   const getOnHandCardPosition = useMemo(
@@ -92,7 +89,7 @@ export const useGamePositions = () => {
           ],
         };
       },
-    [BASE_SIZE],
+    [],
   );
 
   const getPlayerPosition = useMemo(

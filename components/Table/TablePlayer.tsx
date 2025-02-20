@@ -1,11 +1,11 @@
 import { StyleSheet, Image, ViewStyle } from 'react-native';
 
+import { Colors } from '@/constants/Colors';
+
 import { ThemedText } from '../ThemedText';
 import { ThemedView } from '../ThemedView';
 
-import { Colors } from '@/constants/Colors';
-
-interface TablePlayer {
+interface ITablePlayer {
   number: number;
   playerPicture?: string | null;
   lives: number;
@@ -15,103 +15,13 @@ interface TablePlayer {
 }
 
 interface TablePlayerProps {
-  player: TablePlayer;
+  player: ITablePlayer;
 }
 
 interface PlayerInfoProps {
-  player: TablePlayer;
+  player: ITablePlayer;
   isVertical: boolean;
 }
-
-export function TablePlayer({ player }: TablePlayerProps) {
-  const isVerticalPlayer = player.number === 2 || player.number === 6;
-
-  return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.playerInfoContainer}>
-        <PlayerInfo player={player} isVertical={isVerticalPlayer} />
-      </ThemedView>
-    </ThemedView>
-  );
-}
-
-function PlayerInfo({ player, isVertical }: PlayerInfoProps) {
-  return (
-    <ThemedView style={getFlexStyle(isVertical)}>
-      <ThemedView>
-        {player.playerPicture && (
-          <Image source={{ uri: player.playerPicture }} style={styles.image} />
-        )}
-
-        <ThemedView style={styles.livesIndicator}>
-          <ThemedText style={styles.heartEmoji} type='paragraph'>
-            ❤️
-          </ThemedText>
-          <ThemedText style={styles.livesCount} type='paragraph'>
-            {player.lives}
-          </ThemedText>
-        </ThemedView>
-      </ThemedView>
-
-      <ThemedView style={getPlayerDetailsStyle(isVertical)}>
-        {player.name && (
-          <ThemedText
-            style={[
-              styles.name,
-              { width: isVertical ? '100%' : 75, maxWidth: 95 },
-            ]}
-            numberOfLines={1}
-          >
-            {player.name}
-          </ThemedText>
-        )}
-        <ThemedView style={getScoreAndDealerStyle(isVertical)}>
-          <ThemedView style={styles.betContainer}>
-            <ThemedText style={styles.bet}>{player.bet}</ThemedText>
-          </ThemedView>
-          {player.dealer && (
-            <ThemedView style={styles.dealerEmojiContainer}>
-              <ThemedText style={styles.dealerEmoji} type='paragraph'>
-                ⚪
-              </ThemedText>
-              <ThemedText style={styles.dealerText} type='paragraph'>
-                D
-              </ThemedText>
-            </ThemedView>
-          )}
-        </ThemedView>
-      </ThemedView>
-    </ThemedView>
-  );
-}
-
-const getFlexStyle = (isVertical: boolean): ViewStyle => ({
-  flexDirection: isVertical ? 'column' : 'row',
-  alignItems: isVertical ? 'center' : 'flex-start',
-});
-
-const getPlayerDetailsStyle = (isVertical: boolean): ViewStyle => ({
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginLeft: isVertical ? 0 : 5,
-  bottom: isVertical ? 18 : 0,
-});
-
-const getScoreAndDealerStyle = (isVertical: boolean): ViewStyle => ({
-  ...(isVertical
-    ? {
-        alignSelf: 'center',
-        alignItems: 'center',
-        width: '100%',
-        justifyContent: 'center',
-      }
-    : {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: 80,
-        justifyContent: 'space-between',
-      }),
-});
 
 const styles = StyleSheet.create({
   container: {
@@ -187,3 +97,93 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 });
+
+const getFlexStyle = (isVertical: boolean): ViewStyle => ({
+  flexDirection: isVertical ? 'column' : 'row',
+  alignItems: isVertical ? 'center' : 'flex-start',
+});
+
+const getPlayerDetailsStyle = (isVertical: boolean): ViewStyle => ({
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginLeft: isVertical ? 0 : 5,
+  bottom: isVertical ? 18 : 0,
+});
+
+const getScoreAndDealerStyle = (isVertical: boolean): ViewStyle => ({
+  ...(isVertical
+    ? {
+        alignSelf: 'center',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'center',
+      }
+    : {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: 80,
+        justifyContent: 'space-between',
+      }),
+});
+
+function PlayerInfo({ player, isVertical }: PlayerInfoProps) {
+  return (
+    <ThemedView style={getFlexStyle(isVertical)}>
+      <ThemedView>
+        {player.playerPicture && (
+          <Image source={{ uri: player.playerPicture }} style={styles.image} />
+        )}
+
+        <ThemedView style={styles.livesIndicator}>
+          <ThemedText style={styles.heartEmoji} type='paragraph'>
+            ❤️
+          </ThemedText>
+          <ThemedText style={styles.livesCount} type='paragraph'>
+            {player.lives}
+          </ThemedText>
+        </ThemedView>
+      </ThemedView>
+
+      <ThemedView style={getPlayerDetailsStyle(isVertical)}>
+        {player.name && (
+          <ThemedText
+            style={[
+              styles.name,
+              { width: isVertical ? '100%' : 75, maxWidth: 95 },
+            ]}
+            numberOfLines={1}
+          >
+            {player.name}
+          </ThemedText>
+        )}
+        <ThemedView style={getScoreAndDealerStyle(isVertical)}>
+          <ThemedView style={styles.betContainer}>
+            <ThemedText style={styles.bet}>{player.bet}</ThemedText>
+          </ThemedView>
+          {player.dealer && (
+            <ThemedView style={styles.dealerEmojiContainer}>
+              <ThemedText style={styles.dealerEmoji} type='paragraph'>
+                ⚪
+              </ThemedText>
+              <ThemedText style={styles.dealerText} type='paragraph'>
+                D
+              </ThemedText>
+            </ThemedView>
+          )}
+        </ThemedView>
+      </ThemedView>
+    </ThemedView>
+  );
+}
+
+export function TablePlayer({ player }: TablePlayerProps) {
+  const isVerticalPlayer = player.number === 2 || player.number === 6;
+
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedView style={styles.playerInfoContainer}>
+        <PlayerInfo player={player} isVertical={isVerticalPlayer} />
+      </ThemedView>
+    </ThemedView>
+  );
+}

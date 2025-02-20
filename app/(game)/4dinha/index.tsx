@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import {
-  Dimensions,
-  FlatList,
-  ImageBackground,
-  Modal,
-  StyleSheet,
-} from 'react-native';
+import { FlatList, ImageBackground, Modal, StyleSheet } from 'react-native';
 import { useKeepAwake } from 'expo-keep-awake';
 
 import { Bet } from '@/components/Bet';
@@ -24,7 +18,165 @@ import { useGame } from '@/hooks/useGame';
 import type { Suit, Symbol } from '@/types';
 import { height, scale, verticalScale, width } from '@/utils/scalingUtils';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width,
+    height,
+  },
+  background: {
+    flex: 1,
+    paddingTop: 25,
+    gap: 30,
+  },
+  track: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 60,
+    gap: 20,
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  trump: {
+    flex: 1,
+    justifyContent: 'center',
+    marginBottom: scale(7),
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: Colors.dark.blackTransparent03,
+    position: 'absolute',
+    width,
+    height,
+  },
+  modalContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  centeredContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  trumpsModalContent: {
+    width: '40%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    paddingBottom: 20,
+    backgroundColor: Colors.dark.trumpsModalBackground,
+    borderColor: Colors.dark.tint,
+    borderWidth: 1,
+    borderRadius: 10,
+    gap: 20,
+  },
+  trumpsModalHeader: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  trumpsCardContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-evenly',
+  },
+  roundFinishedModalContent: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: Colors.dark.background,
+  },
+  roundFinishedModalInner: {
+    width: '50%',
+  },
+  roundFinishedHeaderTitle: {
+    margin: 10,
+  },
+  roundFinishedHeaderAction: {
+    margin: 20,
+  },
+  trumpsOverlay: {
+    top: '40%',
+    backgroundColor: Colors.dark.black,
+    padding: 10,
+    borderRadius: 10,
+    gap: 15,
+    zIndex: 1000,
+    shadowColor: Colors.dark.black,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+    elevation: 8,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  trumpsCardRow: {
+    flexDirection: 'row',
+    gap: 5,
+  },
+  gameInfoContainer: {
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    backgroundColor: Colors.dark.background,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    gap: 1,
+    width: scale(55),
+    position: 'absolute',
+    top: scale(5),
+    left: verticalScale(30),
+  },
+  topRowContainer: {
+    paddingHorizontal: 70,
+  },
+  bottomSection: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    gap: 10,
+    width: '70%',
+    paddingRight: verticalScale(75),
+  },
+  dealButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30%',
+    height: '100%',
+    backgroundColor: Colors.dark.tint,
+    borderRadius: 10,
+  },
+  playerSeat: {
+    maxWidth: '35%',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    height: 110,
+  },
+  refreshButtonContainer: {
+    height: 110,
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
+    borderColor: Colors.dark.tint,
+    backgroundColor: Colors.dark.tint,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    width: 50,
+    alignContent: 'center',
+    padding: 0,
+  },
+  refreshButton: {
+    paddingHorizontal: 0,
+  },
+});
 
 interface Trump {
   symbol: Symbol;
@@ -70,179 +222,6 @@ interface GameInfoProps {
   cardQuantity: number | undefined;
   betCount: number;
   isDealer: boolean | undefined;
-}
-
-export default function Table() {
-  useKeepAwake();
-  const { gameId } = useLocalSearchParams();
-  const [isTrumpsModalVisible, setTrumpsModalVisible] = useState(false);
-
-  const {
-    dealing,
-    me,
-    player2,
-    player3,
-    player4,
-    player5,
-    player6,
-    trump,
-    isFetching,
-    isLoading,
-    roundStatus,
-    betCount,
-    turn,
-    cardQuantity,
-    roundNumber,
-    checkLimit,
-    playing,
-    trumps,
-    results,
-    currentPage,
-    betting,
-    finishing,
-    currentPlayer,
-    handleDeal,
-    handlePlay,
-    handleBet,
-    handleFinishRound,
-    refreshGame,
-  } = useGame(gameId as string);
-
-  const closeTrumpsModal = useCallback(() => setTrumpsModalVisible(false), []);
-  const openTrumpsModal = useCallback(() => setTrumpsModalVisible(true), []);
-
-  useEffect(() => {
-    if (currentPage) {
-      router.replace({
-        pathname: `/(game)/4dinha/${currentPage}`,
-        params: { gameId },
-      });
-    }
-  }, [currentPage]);
-
-  return (
-    <ThemedView style={styles.container}>
-      <TrumpsModal
-        isVisible={isTrumpsModalVisible}
-        onClose={closeTrumpsModal}
-        trumps={trumps}
-      />
-
-      <RoundFinishedModal
-        isVisible={roundStatus === 'finished'}
-        roundNumber={roundNumber}
-        results={results}
-        isDealer={me?.dealer}
-        onFinishRound={handleFinishRound}
-        finishing={finishing}
-      />
-
-      <BettingModal
-        isVisible={
-          !!(
-            roundStatus === 'betting' &&
-            me?.current &&
-            !isFetching &&
-            !isLoading
-          )
-        }
-        betCount={betCount}
-        betting={betting}
-        cardQuantity={cardQuantity}
-        checkLimit={checkLimit}
-        handleBet={handleBet}
-        refreshGame={refreshGame}
-        loading={isFetching || isLoading}
-        trumps={trumps}
-      />
-      <ImageBackground
-        source={require('@/assets/images/background.jpg')}
-        resizeMode='stretch'
-        style={styles.background}
-      >
-        {/* TOPO */}
-        <GameInfo
-          roundNumber={roundNumber}
-          cardQuantity={cardQuantity}
-          betCount={betCount}
-          isDealer={me?.dealer}
-        />
-
-        <ThemedView style={[styles.container, styles.topRowContainer]}>
-          <ThemedView style={[styles.track, styles.row]}>
-            <TableSeat number={3} player={player3} currentTurn={turn} />
-            <TableSeat number={4} player={player4} currentTurn={turn} />
-            <TableSeat number={5} player={player5} currentTurn={turn} />
-          </ThemedView>
-        </ThemedView>
-
-        {/* MEIO */}
-        <ThemedView style={styles.container}>
-          <ThemedView style={styles.track}>
-            <ThemedView style={styles.row}>
-              <TableSeat number={2} player={player2} currentTurn={turn} />
-              <ThemedView>
-                <ThemedView style={styles.trump}>
-                  <Card
-                    suit={trump?.suit}
-                    symbol={trump?.symbol}
-                    status='on hand'
-                    onPress={openTrumpsModal}
-                  />
-                </ThemedView>
-              </ThemedView>
-              <TableSeat number={6} player={player6} currentTurn={turn} />
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-
-        {/* ME */}
-        <ThemedView style={styles.bottomSection}>
-          {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
-            <ThemedView style={styles.dealButton}>
-              <ThemedButton
-                title='dar cartas'
-                loading={dealing}
-                color='white'
-                onPress={handleDeal}
-              />
-            </ThemedView>
-          ) : (
-            <ThemedView style={styles.playerSeat}>
-              <TableSeat
-                number={1}
-                player={me}
-                handlePlay={async (id) => {
-                  await handlePlay(id!);
-                }}
-                playing={playing}
-                currentTurn={turn}
-              />
-            </ThemedView>
-          )}
-
-          <ThemedView style={styles.statusContainer}>
-            <StatusPanel
-              currentPlayer={currentPlayer}
-              loading={isLoading || isFetching}
-              me={me!}
-              roundStatus={roundStatus}
-            />
-
-            <ThemedView style={styles.refreshButtonContainer}>
-              <ThemedButton
-                title='↻'
-                loading={isFetching || isLoading}
-                color='white'
-                onPress={refreshGame}
-                style={styles.refreshButton}
-              />
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </ImageBackground>
-    </ThemedView>
-  );
 }
 
 function TrumpsModal({ isVisible, onClose, trumps }: TrumpsModalProps) {
@@ -427,162 +406,175 @@ function GameInfo({
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: width,
-    height: height,
-  },
-  background: {
-    flex: 1,
-    paddingTop: 25,
-    gap: 30,
-  },
-  track: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 60,
-    gap: 20,
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  trump: {
-    flex: 1,
-    justifyContent: 'center',
-    marginBottom: scale(7),
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: Colors.dark.blackTransparent03,
-    position: 'absolute',
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT,
-  },
-  modalContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  centeredContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  trumpsModalContent: {
-    width: '40%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    paddingBottom: 20,
-    backgroundColor: Colors.dark.trumpsModalBackground,
-    borderColor: Colors.dark.tint,
-    borderWidth: 1,
-    borderRadius: 10,
-    gap: 20,
-  },
-  trumpsModalHeader: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  trumpsCardContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-evenly',
-  },
-  roundFinishedModalContent: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: Colors.dark.background,
-  },
-  roundFinishedModalInner: {
-    width: '50%',
-  },
-  roundFinishedHeaderTitle: {
-    margin: 10,
-  },
-  roundFinishedHeaderAction: {
-    margin: 20,
-  },
-  trumpsOverlay: {
-    top: '40%',
-    backgroundColor: Colors.dark.black,
-    padding: 10,
-    borderRadius: 10,
-    gap: 15,
-    zIndex: 1000,
-    shadowColor: Colors.dark.black,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.6,
-    shadowRadius: 5,
-    elevation: 8,
-    alignSelf: 'center',
-    justifyContent: 'center',
-  },
-  trumpsCardRow: {
-    flexDirection: 'row',
-    gap: 5,
-  },
-  gameInfoContainer: {
-    borderWidth: 1,
-    borderColor: Colors.dark.border,
-    backgroundColor: Colors.dark.background,
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: 5,
-    gap: 1,
-    width: scale(55),
-    position: 'absolute',
-    top: scale(5),
-    left: verticalScale(30),
-  },
-  topRowContainer: {
-    paddingHorizontal: 70,
-  },
-  bottomSection: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    alignSelf: 'flex-end',
-    gap: 10,
-    width: '70%',
-    paddingRight: verticalScale(75),
-  },
-  dealButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '30%',
-    height: '100%',
-    backgroundColor: Colors.dark.tint,
-    borderRadius: 10,
-  },
-  playerSeat: {
-    maxWidth: '35%',
-  },
-  statusContainer: {
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    height: 110,
-  },
-  refreshButtonContainer: {
-    height: 110,
-    borderTopStartRadius: 10,
-    borderTopEndRadius: 10,
-    borderColor: Colors.dark.tint,
-    backgroundColor: Colors.dark.tint,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    width: 50,
-    alignContent: 'center',
-    padding: 0,
-  },
-  refreshButton: {
-    paddingHorizontal: 0,
-  },
-});
+export default function Table() {
+  useKeepAwake();
+  const { gameId } = useLocalSearchParams();
+  const [isTrumpsModalVisible, setTrumpsModalVisible] = useState(false);
+
+  const {
+    dealing,
+    me,
+    player2,
+    player3,
+    player4,
+    player5,
+    player6,
+    trump,
+    isFetching,
+    isLoading,
+    roundStatus,
+    betCount,
+    turn,
+    cardQuantity,
+    roundNumber,
+    checkLimit,
+    playing,
+    trumps,
+    results,
+    currentPage,
+    betting,
+    finishing,
+    currentPlayer,
+    handleDeal,
+    handlePlay,
+    handleBet,
+    handleFinishRound,
+    refreshGame,
+  } = useGame(gameId as string);
+
+  const closeTrumpsModal = useCallback(() => setTrumpsModalVisible(false), []);
+  const openTrumpsModal = useCallback(() => setTrumpsModalVisible(true), []);
+
+  useEffect(() => {
+    if (currentPage) {
+      router.replace({
+        pathname: `/(game)/4dinha/${currentPage}`,
+        params: { gameId },
+      });
+    }
+  }, [currentPage]);
+
+  return (
+    <ThemedView style={styles.container}>
+      <TrumpsModal
+        isVisible={isTrumpsModalVisible}
+        onClose={closeTrumpsModal}
+        trumps={trumps}
+      />
+
+      <RoundFinishedModal
+        isVisible={roundStatus === 'finished'}
+        roundNumber={roundNumber}
+        results={results}
+        isDealer={me?.dealer}
+        onFinishRound={handleFinishRound}
+        finishing={finishing}
+      />
+
+      <BettingModal
+        isVisible={
+          !!(
+            roundStatus === 'betting' &&
+            me?.current &&
+            !isFetching &&
+            !isLoading
+          )
+        }
+        betCount={betCount}
+        betting={betting}
+        cardQuantity={cardQuantity}
+        checkLimit={checkLimit}
+        handleBet={handleBet}
+        refreshGame={refreshGame}
+        loading={isFetching || isLoading}
+        trumps={trumps}
+      />
+      <ImageBackground
+        source={require('@/assets/images/background.jpg')}
+        resizeMode='stretch'
+        style={styles.background}
+      >
+        {/* TOPO */}
+        <GameInfo
+          roundNumber={roundNumber}
+          cardQuantity={cardQuantity}
+          betCount={betCount}
+          isDealer={me?.dealer}
+        />
+
+        <ThemedView style={[styles.container, styles.topRowContainer]}>
+          <ThemedView style={[styles.track, styles.row]}>
+            <TableSeat number={3} player={player3} currentTurn={turn} />
+            <TableSeat number={4} player={player4} currentTurn={turn} />
+            <TableSeat number={5} player={player5} currentTurn={turn} />
+          </ThemedView>
+        </ThemedView>
+
+        {/* MEIO */}
+        <ThemedView style={styles.container}>
+          <ThemedView style={styles.track}>
+            <ThemedView style={styles.row}>
+              <TableSeat number={2} player={player2} currentTurn={turn} />
+              <ThemedView>
+                <ThemedView style={styles.trump}>
+                  <Card
+                    suit={trump?.suit}
+                    symbol={trump?.symbol}
+                    status='on hand'
+                    onPress={openTrumpsModal}
+                  />
+                </ThemedView>
+              </ThemedView>
+              <TableSeat number={6} player={player6} currentTurn={turn} />
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+
+        {/* ME */}
+        <ThemedView style={styles.bottomSection}>
+          {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
+            <ThemedView style={styles.dealButton}>
+              <ThemedButton
+                title='dar cartas'
+                loading={dealing}
+                color='white'
+                onPress={handleDeal}
+              />
+            </ThemedView>
+          ) : (
+            <ThemedView style={styles.playerSeat}>
+              <TableSeat
+                number={1}
+                player={me}
+                handlePlay={async (id) => {
+                  await handlePlay(id!);
+                }}
+                playing={playing}
+                currentTurn={turn}
+              />
+            </ThemedView>
+          )}
+
+          <ThemedView style={styles.statusContainer}>
+            <StatusPanel
+              currentPlayer={currentPlayer}
+              loading={isLoading || isFetching}
+              me={me!}
+              roundStatus={roundStatus}
+            />
+
+            <ThemedView style={styles.refreshButtonContainer}>
+              <ThemedButton
+                title='↻'
+                loading={isFetching || isLoading}
+                color='white'
+                onPress={refreshGame}
+                style={styles.refreshButton}
+              />
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </ImageBackground>
+    </ThemedView>
+  );
+}
