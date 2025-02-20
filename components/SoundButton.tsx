@@ -7,7 +7,7 @@ import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 import { TouchableOpacityProps } from 'react-native-gesture-handler';
 
 interface Props extends TouchableOpacityProps {
-  sound: SoundEffects;
+  sound: keyof typeof SoundEffects;
 }
 
 export function SoundButton({ children, sound, onPress, ...rest }: Props) {

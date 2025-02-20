@@ -23,15 +23,14 @@ export const useAudioConfig = () => {
   }, []);
 };
 
-const sounds = {
+export const SoundEffects = {
   menu: require('@/assets/sounds/touch1.mp3'),
   ambient: require('@/assets/sounds/ambient.mp3'),
+  collapse: require('@/assets/sounds/collapse.mp3'),
 };
 
-export type SoundEffects = 'menu' | 'ambient';
-
 interface PlayProps {
-  type: SoundEffects;
+  type: keyof typeof SoundEffects;
   volume?: number;
   looping?: boolean;
 }
@@ -63,7 +62,7 @@ export const useSound = () => {
   }: PlayProps) => {
     if (!soundEnabled) return;
 
-    const { sound } = await Audio.Sound.createAsync(sounds[type], {
+    const { sound } = await Audio.Sound.createAsync(SoundEffects[type], {
       volume,
     });
 

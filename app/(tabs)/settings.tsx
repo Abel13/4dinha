@@ -1,4 +1,5 @@
 import { Collapsible } from '@/components/Collapsible';
+import { SoundButton } from '@/components/SoundButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
@@ -6,7 +7,7 @@ import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { Feather } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, Switch, useColorScheme } from 'react-native';
+import { ScrollView, StyleSheet, Switch } from 'react-native';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -52,12 +53,9 @@ export default function Settings() {
       <ThemedView style={styles.content}>
         <ThemedView style={styles.titleContainer}>
           <ThemedText type='h4'>Configurações</ThemedText>
-          <Feather
-            name='x-circle'
-            color={Colors.dark.text}
-            size={24}
-            onPress={router.back}
-          />
+          <SoundButton sound='menu' onPress={router.back}>
+            <Feather name='x-circle' color={Colors.dark.text} size={24} />
+          </SoundButton>
         </ThemedView>
         <ScrollView style={styles.settings}>
           <Collapsible title='Audio' key='audio'>

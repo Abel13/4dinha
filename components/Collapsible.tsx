@@ -6,6 +6,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useSound } from '@/hooks/useAudioConfig';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
 
 const styles = StyleSheet.create({
   heading: {
@@ -26,11 +28,17 @@ export function Collapsible({
   const [isOpen, setIsOpen] = useState(false);
   const theme = useColorScheme() ?? 'light';
 
+  const { getVolume } = useSettingsStore((state) => state);
+  const { playSoundAsync } = useSound();
+
   return (
     <ThemedView>
       <TouchableOpacity
         style={styles.heading}
-        onPress={() => setIsOpen((value) => !value)}
+        onPress={() => {
+          setIsOpen((value) => !value);
+          playSoundAsync({ type: 'collapse', volume: getVolume('ui') });
+        }}
         activeOpacity={0.8}
       >
         <MaterialIcons
