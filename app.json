@@ -13,11 +13,21 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.abelb13.4dinha",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UISupportsGameController": true
       }
     },
     "android": {
       "package": "com.abelb13.x4dinha",
+      "intentFilters": [
+        {
+          "action": "android.intent.action.MAIN",
+          "category": [
+            "android.intent.category.LAUNCHER",
+            "android.intent.category.GAME"
+          ]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000"
