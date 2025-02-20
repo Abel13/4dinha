@@ -35,6 +35,15 @@ export default function TabLayout() {
           title: 'Perfil',
         }}
       />
+      <Stack.Screen
+        name='settings'
+        options={{
+          animationDuration: 700,
+          animation: 'slide_from_bottom',
+          presentation: 'transparentModal',
+          title: 'Configurações',
+        }}
+      />
     </Stack>
   );
 }

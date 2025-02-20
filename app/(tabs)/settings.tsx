@@ -1,3 +1,4 @@
+import { Collapsible } from '@/components/Collapsible';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
@@ -5,95 +6,129 @@ import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { Feather } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, useColorScheme } from 'react-native';
+import { ScrollView, StyleSheet, Switch, useColorScheme } from 'react-native';
 
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 8,
-    paddingTop: 10,
-    marginBottom: 20,
+    padding: 10,
+    backgroundColor: Colors.dark.background,
   },
   container: {
-    paddingHorizontal: 60,
-    paddingVertical: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.dark.backgroundTransparent,
   },
-  setting: {},
+  content: {
+    width: '50%',
+    height: '80%',
+    borderRadius: 10,
+    backgroundColor: Colors.dark.info,
+    overflow: 'hidden',
+  },
+  setting: { marginBottom: 10 },
+  settings: { padding: 10, paddingRight: 40 },
   label: {},
   slider: {},
 });
 
 export default function Settings() {
-  const theme = useColorScheme() || 'light';
-  const { setVolume, generalVolume, uiVolume, effectsVolume, musicVolume } =
-    useSettingsStore((store) => store);
+  const {
+    toggleSound,
+    setVolume,
+    soundEnabled,
+    generalVolume,
+    uiVolume,
+    effectsVolume,
+    musicVolume,
+  } = useSettingsStore((store) => store);
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.titleContainer}>
-        <Feather
-          name='chevron-left'
-          color={Colors[theme].icon}
-          size={28}
-          onPress={router.back}
-        />
-        <ThemedText type='title'>Configurações</ThemedText>
+      <ThemedView style={styles.content}>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type='h4'>Configurações</ThemedText>
+          <Feather
+            name='x-circle'
+            color={Colors.dark.text}
+            size={24}
+            onPress={router.back}
+          />
+        </ThemedView>
+        <ScrollView style={styles.settings}>
+          <Collapsible title='Audio' key='audio'>
+            <ThemedView style={styles.setting}>
+              <ThemedText style={styles.label}>Sons</ThemedText>
+              <Switch
+                style={styles.slider}
+                value={soundEnabled}
+                onValueChange={toggleSound}
+              />
+            </ThemedView>
+            {soundEnabled && (
+              <ThemedView>
+                <ThemedView style={styles.setting}>
+                  <ThemedText style={styles.label}>
+                    Volume principal: {(generalVolume * 100).toFixed(0)}
+                  </ThemedText>
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={1}
+                    step={0.05}
+                    value={generalVolume}
+                    onValueChange={(value) => setVolume(value, 'general')}
+                  />
+                </ThemedView>
+                <ThemedView style={styles.setting}>
+                  <ThemedText style={styles.label}>
+                    Volume da interface: {(uiVolume * 100).toFixed(0)}
+                  </ThemedText>
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={1}
+                    step={0.05}
+                    value={uiVolume}
+                    onValueChange={(value) => setVolume(value, 'ui')}
+                  />
+                </ThemedView>
+                <ThemedView style={styles.setting}>
+                  <ThemedText style={styles.label}>
+                    Volume da música: {(musicVolume * 100).toFixed(0)}
+                  </ThemedText>
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={1}
+                    step={0.05}
+                    value={musicVolume}
+                    onValueChange={(value) => setVolume(value, 'music')}
+                  />
+                </ThemedView>
+                <ThemedView style={styles.setting}>
+                  <ThemedText style={styles.label}>
+                    Volume dos efeitos: {(effectsVolume * 100).toFixed(0)}
+                  </ThemedText>
+                  <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={1}
+                    step={0.05}
+                    value={effectsVolume}
+                    onValueChange={(value) => setVolume(value, 'effects')}
+                  />
+                </ThemedView>
+              </ThemedView>
+            )}
+          </Collapsible>
+          <ThemedView style={{ height: 60 }} />
+        </ScrollView>
       </ThemedView>
-      <ScrollView>
-        <ThemedView style={styles.setting}>
-          <ThemedText style={styles.label}>
-            Volume principal: {(generalVolume * 100).toFixed(0)}
-          </ThemedText>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={1}
-            step={0.05}
-            value={generalVolume}
-            onValueChange={(value) => setVolume(value, 'general')}
-          />
-        </ThemedView>
-        <ThemedView style={styles.setting}>
-          <ThemedText style={styles.label}>
-            Volume da interface: {(uiVolume * 100).toFixed(0)}
-          </ThemedText>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={1}
-            step={0.05}
-            value={uiVolume}
-            onValueChange={(value) => setVolume(value, 'ui')}
-          />
-        </ThemedView>
-        <ThemedView style={styles.setting}>
-          <ThemedText style={styles.label}>
-            Volume da música: {(musicVolume * 100).toFixed(0)}
-          </ThemedText>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={1}
-            step={0.05}
-            value={musicVolume}
-            onValueChange={(value) => setVolume(value, 'music')}
-          />
-        </ThemedView>
-        <ThemedView style={styles.setting}>
-          <ThemedText style={styles.label}>
-            Volume dos efeitos: {(effectsVolume * 100).toFixed(0)}
-          </ThemedText>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={1}
-            step={0.05}
-            value={effectsVolume}
-            onValueChange={(value) => setVolume(value, 'effects')}
-          />
-        </ThemedView>
-      </ScrollView>
     </ThemedView>
   );
 }

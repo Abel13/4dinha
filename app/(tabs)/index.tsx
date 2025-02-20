@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 import { RelativePathString, useRouter } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useId } from 'react';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -22,6 +22,8 @@ import { ThemedFlatList } from '@/components/ThemedFlatList';
 import { SoundButton } from '@/components/SoundButton';
 import { Lottie } from '@/components/Lottie';
 import FailToLoadAnimation from '@/assets/lotties/nothing.json';
+import { useSound } from '@/hooks/useAudioConfig';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#000' },
@@ -109,6 +111,10 @@ const styles = StyleSheet.create({
 export default function LobbyScreen() {
   const router = useRouter();
   const theme = useColorScheme() || 'light';
+  const { getVolume, musicVolume, generalVolume } = useSettingsStore(
+    (store) => store,
+  );
+  const { playSoundAsync, setVolumeAsync } = useSound();
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
 
@@ -117,6 +123,18 @@ export default function LobbyScreen() {
   const handleNewMatch = useCallback(() => {
     router.push({ pathname: '/lobby/new' });
   }, [router]);
+
+  useEffect(() => {
+    setVolumeAsync(getVolume('music'));
+  }, [generalVolume, musicVolume]);
+
+  useEffect(() => {
+    playSoundAsync({
+      type: 'ambient',
+      looping: true,
+      volume: getVolume('music'),
+    });
+  }, []);
 
   return (
     <ThemedView style={styles.screen}>
@@ -146,10 +164,10 @@ export default function LobbyScreen() {
             <ThemedView darkColor='transparent' style={styles.topContainer}>
               <ThemedView style={styles.rowContainer}>
                 {[
-                  { icon: 'coins', value: '1.520' },
+                  { icon: 'coins', value: '0' },
                   { icon: 'sack-dollar', value: '0' },
-                ].map((item, index) => (
-                  <ThemedView key={index} style={styles.coinContainer}>
+                ].map((item) => (
+                  <ThemedView key={item.icon} style={styles.coinContainer}>
                     <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
                       <FontAwesome6
                         name={item.icon}

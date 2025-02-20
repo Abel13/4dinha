@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
+import { useSettingsStore } from './useSettingsStore';
 
 export const useAudioConfig = () => {
   useEffect(() => {
@@ -22,26 +23,58 @@ export const useAudioConfig = () => {
   }, []);
 };
 
-export type SoundEffects = 'menu';
+const sounds = {
+  menu: require('@/assets/sounds/touch1.mp3'),
+  ambient: require('@/assets/sounds/ambient.mp3'),
+};
 
-interface Props {
-  enabled?: boolean;
+export type SoundEffects = 'menu' | 'ambient';
+
+interface PlayProps {
+  type: SoundEffects;
   volume?: number;
+  looping?: boolean;
 }
 
-export const useSound = ({ enabled, volume = 1 }: Props) => {
-  const playSound = async (type: SoundEffects) => {
-    if (!enabled) return;
+export const useSound = () => {
+  const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
+  const { soundEnabled } = useSettingsStore((store) => store);
 
-    const sounds = {
-      menu: require('@/assets/sounds/touch1.mp3'),
-    };
+  useEffect(() => {
+    if (currentSound) currentSound.setIsMutedAsync(!soundEnabled);
+  }, [soundEnabled]);
+
+  const setVolumeAsync = (volume: number) => {
+    if (!currentSound) return;
+    if (volume <= 1 || volume >= 0) {
+      currentSound.setVolumeAsync(volume);
+    }
+  };
+
+  const stopSoundAsync = () => {
+    if (!currentSound) return;
+    currentSound.stopAsync();
+  };
+
+  const playSoundAsync = async ({
+    type,
+    volume = 1,
+    looping = false,
+  }: PlayProps) => {
+    if (!soundEnabled) return;
 
     const { sound } = await Audio.Sound.createAsync(sounds[type], {
       volume,
     });
+
     await sound.playAsync();
+    await sound.setIsLoopingAsync(looping);
+    setCurrentSound(sound);
   };
 
-  return playSound;
+  return {
+    playSoundAsync,
+    setVolumeAsync,
+    stopSoundAsync,
+  };
 };

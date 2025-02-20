@@ -12,20 +12,20 @@ interface SettingsState {
   effectsVolume: number;
   vibrationEnabled: boolean;
   toggleSound: () => void;
+  toggleVibration: () => void;
   getVolume: (type: VolumeType) => number;
   setVolume: (newVolume: number, type: VolumeType) => void;
-  toggleVibration: () => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set, get) => ({
       soundEnabled: true,
+      vibrationEnabled: true,
       effectsVolume: 1,
       generalVolume: 1,
       musicVolume: 1,
       uiVolume: 1,
-      vibrationEnabled: true,
       toggleSound: () =>
         set((state) => ({
           soundEnabled: !state.soundEnabled,
@@ -46,10 +46,6 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'settings-storage',
-      partialize: (state) => ({
-        soundEnabled: state.soundEnabled,
-        vibrationEnabled: state.vibrationEnabled,
-      }),
       storage: createJSONStorage(() => AsyncStorage),
     },
   ),
