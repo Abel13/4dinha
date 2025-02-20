@@ -11,6 +11,51 @@ import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { useMatch } from '@/hooks/useMatch';
 import { useKeepAwake } from 'expo-keep-awake';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 60,
+    paddingVertical: 20,
+    backgroundColor: Colors.dark.background,
+  },
+  title: {
+    fontSize: 28,
+    fontFamily: 'BarlowCondensedBold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: Colors.dark.text,
+  },
+  message: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: Colors.dark.text,
+  },
+  card: {
+    width: '80%',
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: Colors.dark.info,
+    shadowColor: Colors.dark.info,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    gap: 10,
+    alignItems: 'center',
+  },
+  winnerName: {
+    fontSize: 24,
+    fontFamily: 'BarlowCondensedBold',
+    color: Colors.dark.text,
+    marginBottom: 10,
+  },
+  stats: {
+    color: Colors.dark.icon,
+  },
+});
+
 export default function End() {
   useKeepAwake();
   const { gameId } = useLocalSearchParams();
@@ -78,48 +123,3 @@ export default function End() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 60,
-    paddingVertical: 20,
-    backgroundColor: Colors.dark.background,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    color: Colors.dark.text,
-  },
-  message: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.dark.text,
-  },
-  card: {
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: Colors.dark.info,
-    shadowColor: Colors.dark.info,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-    gap: 10,
-    alignItems: 'center',
-  },
-  winnerName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: Colors.dark.text,
-    marginBottom: 10,
-  },
-  stats: {
-    color: Colors.dark.icon,
-  },
-});

@@ -56,7 +56,9 @@ export default function LobbyScreen() {
   if (!me)
     return (
       <ThemedView style={[styles.titleContainer, styles.padding]}>
-        <ThemedText type='subtitle'>{match?.name}</ThemedText>
+        <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+          {match?.name}
+        </ThemedText>
       </ThemedView>
     );
 
@@ -76,14 +78,22 @@ export default function LobbyScreen() {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText type='subtitle' style={{ width: '90%' }}>
+        <ThemedText
+          type='subtitle'
+          style={{ width: '90%' }}
+          lightColor={Colors.dark.text}
+        >
           {match?.name}
         </ThemedText>
       </ThemedView>
       <ThemedView />
       <PlayerItem matchUser={me} />
       <ThemedView />
-      <ThemedText style={styles.paddingHorizontal} type='subtitle'>
+      <ThemedText
+        style={styles.paddingHorizontal}
+        type='subtitle'
+        lightColor={Colors.dark.text}
+      >
         Jogadores
       </ThemedText>
       <ThemedFlatList

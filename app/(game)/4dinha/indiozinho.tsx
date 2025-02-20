@@ -5,7 +5,7 @@ import { Button, Modal, StyleSheet } from 'react-native';
 import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
-import { TableSeat } from '@/components/TableSeat';
+import { TableSeat } from '@/components/Table/TableSeat';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';

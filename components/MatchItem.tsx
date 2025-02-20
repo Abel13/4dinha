@@ -2,10 +2,10 @@ import { Image, StyleSheet } from 'react-native';
 import { useCallback } from 'react';
 import { type Match } from '@/types/Match';
 import { Colors } from '@/constants/Colors';
+import { useDiceBear } from '@/hooks/useDiceBear';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 import { SoundButton } from './SoundButton';
-import { useDiceBear } from '@/hooks/useDiceBear';
 
 const styles = StyleSheet.create({
   container: {

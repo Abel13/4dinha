@@ -10,6 +10,7 @@ import { ThemedInput } from '@/components/ThemedInput';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from '@/hooks/useTranslation';
+import { Colors } from '@/constants/Colors';
 
 const schema = yup.object({
   email: yup.string().required('Inform seu e-mail').email('E-mail inválido!'),
@@ -34,9 +35,11 @@ export default function LoginScreen() {
         source={require('@/assets/images/logo.png')}
         style={{ alignSelf: 'center', width: 40, height: 40 }}
       />
-      <ThemedText type='title'>LOGIN</ThemedText>
+      <ThemedText type='title' lightColor={Colors.dark.text}>
+        LOGIN
+      </ThemedText>
       <ThemedView>
-        <ThemedText>e-mail</ThemedText>
+        <ThemedText lightColor={Colors.dark.text}>e-mail</ThemedText>
         <ThemedInput
           name='email'
           inputMode='email'
@@ -48,10 +51,11 @@ export default function LoginScreen() {
           error={errors.email?.message}
           returnKeyType='next'
           onSubmitEditing={() => inputPasswordRef.current?.focus()}
+          lightColor={Colors.dark.text}
         />
       </ThemedView>
       <ThemedView>
-        <ThemedText>senha</ThemedText>
+        <ThemedText lightColor={Colors.dark.text}>senha</ThemedText>
         <ThemedInput
           ref={inputPasswordRef}
           name='password'
@@ -61,6 +65,7 @@ export default function LoginScreen() {
           error={errors.password?.message}
           returnKeyType='done'
           onSubmitEditing={handleSubmit(onAuth)}
+          lightColor={Colors.dark.text}
         />
       </ThemedView>
       <ThemedText type='error'>{t(authError as any)}</ThemedText>
