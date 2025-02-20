@@ -571,7 +571,8 @@ const styles = StyleSheet.create({
   },
   refreshButtonContainer: {
     height: 110,
-    borderRadius: 10,
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
     borderColor: Colors.dark.tint,
     backgroundColor: Colors.dark.tint,
     justifyContent: 'center',
