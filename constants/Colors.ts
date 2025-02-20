@@ -11,6 +11,9 @@ export const Colors = {
     backgroundTransparent: '#151718aa',
     border: '#A2A3AA',
     transparent: 'transparent',
+    cardRed: '#FF4C4C',
+    cardBack: '#994050',
+    trumpsModalBackground: '#003B',
 
     // component colors
     icon: '#9290c3',
@@ -27,7 +30,15 @@ export const Colors = {
 
     // colors
     black: '#000',
+    blackTransparent03: 'rgba(0, 0, 0, 0.3)',
+    blackTransparent07: 'rgba(0, 0, 0, 0.7)',
+    blackTransparent09: 'rgba(0, 0, 0, 0.9)',
+    blueTransparent: 'rgba(10, 60, 120, 0.4)',
     white: '#fff',
+    purple: '#1b1a55DD',
+    purpleLight: '#9290c3',
+    purpleGray: '#4c4b6e',
+    purpleTransparent: '#070f2b88',
   },
   light: {
     // default colors
@@ -38,6 +49,9 @@ export const Colors = {
     background: '#EBE9EA',
     border: '#6E6D66',
     transparent: 'transparent',
+    cardRed: '#FF4C4C',
+    cardBack: '#994050',
+    trumpsModalBackground: '#003B',
 
     // component colors
     icon: '#9290c3',
@@ -54,6 +68,14 @@ export const Colors = {
 
     // colors
     black: '#000',
+    blackTransparent03: 'rgba(0, 0, 0, 0.3)',
+    blackTransparent07: 'rgba(0, 0, 0, 0.7)',
+    blackTransparent09: 'rgba(0, 0, 0, 0.9)',
+    blueTransparent: 'rgba(10, 60, 120, 0.4)',
     white: '#fff',
+    purple: '#1b1a55DD',
+    purpleLight: '#9290c3',
+    purpleGray: '#4c4b6e',
+    purpleTransparent: '#070f2b88',
   },
 };

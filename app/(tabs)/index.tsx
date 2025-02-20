@@ -26,7 +26,7 @@ import { useSound } from '@/hooks/useAudioConfig';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#000' },
+  screen: { flex: 1, backgroundColor: Colors.dark.black },
   container: { flex: 1, justifyContent: 'space-between' },
   background: { flex: 1, alignItems: 'flex-start' },
   header: {
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     gap: 10,
     borderBottomStartRadius: 10,
     borderBottomEndRadius: 10,
-    backgroundColor: '#9290c3',
-    shadowColor: '#9290c3',
+    backgroundColor: Colors.dark.purpleLight,
+    shadowColor: Colors.dark.purpleLight,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.4,
     shadowRadius: 3,
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     paddingRight: 10,
-    backgroundColor: '#9290c3',
+    backgroundColor: Colors.dark.purpleLight,
     borderRadius: 50,
   },
   iconWrapper: {
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#9290c3',
+    borderColor: Colors.dark.purpleLight,
   },
   iconsMenu: { flexDirection: 'row', gap: 20, marginTop: 10 },
   center: { flex: 1, flexDirection: 'row', marginVertical: 10 },
@@ -76,20 +76,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#9290c3',
-    backgroundColor: '#1b1a55DD',
+    borderColor: Colors.dark.purpleLight,
+    backgroundColor: Colors.dark.purple,
     borderRadius: 10,
     padding: 10,
   },
+  matchesMenu: {
+    width: 125,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    backgroundColor: Colors.dark.purpleGray,
+    borderColor: Colors.dark.purple,
+    borderRadius: 10,
+    padding: 10,
+    height: 75,
+    margin: 3,
+  },
+  matchesContainer: {
+    maxWidth: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Colors.dark.purpleLight,
+    backgroundColor: Colors.dark.purple,
+    borderRadius: 10,
+    padding: 10,
+    alignContent: 'center',
+  },
   logo: { width: 100, height: 100 },
   matchContainer: {
-    width: 300,
-    borderWidth: 2,
-    borderColor: '#9290c3',
-    backgroundColor: '#1b1a55DD',
+    backgroundColor: Colors.dark.purple,
     padding: 10,
-    marginRight: 60,
-    borderRadius: 10,
+    paddingRight: 60,
+    borderTopStartRadius: 10,
+    borderBottomStartRadius: 10,
   },
   footer: {
     alignSelf: 'center',
@@ -98,8 +119,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderTopStartRadius: 10,
     borderTopEndRadius: 10,
-    backgroundColor: '#070f2b88',
-    borderColor: '#9290c3',
+    backgroundColor: Colors.dark.purpleTransparent,
+    borderColor: Colors.dark.purpleLight,
     borderWidth: 1,
     borderBottomWidth: 0,
   },
@@ -204,41 +225,61 @@ export default function LobbyScreen() {
                   style={styles.menu}
                   onPress={handleNewMatch}
                 >
-                  <ThemedText type='subtitle'>Criar partida</ThemedText>
+                  <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+                    Criar partida
+                  </ThemedText>
                   <Image
                     source={require('@/assets/images/logo.png')}
                     style={styles.logo}
                   />
                 </SoundButton>
-                {inProgressMatches.length > 0 && (
-                  <SoundButton
-                    sound='menu'
-                    style={styles.menu}
-                    onPress={() => {
-                      router.replace({
-                        pathname: '/(game)/4dinha',
-                        params: {
-                          gameId: inProgressMatches[0]?.matches?.id,
-                        },
-                      });
+                <ThemedView style={styles.matchesContainer}>
+                  <ThemedText
+                    lineBreakMode='tail'
+                    type='subtitle'
+                    numberOfLines={3}
+                    lightColor={Colors.dark.text}
+                    style={{
+                      textAlign: 'left',
+                      alignSelf: 'flex-start',
                     }}
                   >
-                    <ThemedText
-                      lineBreakMode='tail'
-                      type='subtitle'
-                      numberOfLines={3}
-                    >
-                      Voltar para:{' '}
-                      <ThemedText>
-                        {inProgressMatches[0]?.matches?.name}
-                      </ThemedText>
-                    </ThemedText>
-                  </SoundButton>
-                )}
+                    Voltar para
+                  </ThemedText>
+
+                  <ThemedFlatList
+                    data={inProgressMatches}
+                    keyExtractor={(item) => item.matches.id.toString()}
+                    numColumns={2}
+                    renderItem={({ item }) => (
+                      <SoundButton
+                        sound='menu'
+                        style={styles.matchesMenu}
+                        onPress={() => {
+                          router.push({
+                            pathname: '/(game)/4dinha',
+                            params: {
+                              gameId: item.matches.id,
+                            },
+                          });
+                        }}
+                      >
+                        <ThemedText
+                          style={{ fontSize: 13 }}
+                          lightColor={Colors.dark.text}
+                        >
+                          {item.matches.name}
+                        </ThemedText>
+                      </SoundButton>
+                    )}
+                  />
+                </ThemedView>
               </ThemedView>
             </ScrollView>
             <ThemedView style={styles.matchContainer}>
-              <ThemedText type='subtitle'>Novas Partidas</ThemedText>
+              <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+                Novas Partidas
+              </ThemedText>
               <ThemedFlatList
                 data={matches}
                 keyExtractor={(item) => item.id}

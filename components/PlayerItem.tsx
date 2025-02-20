@@ -33,7 +33,7 @@ export function PlayerItem({ matchUser }: Props) {
   if (playerName === null || playerPicture === null)
     return (
       <ThemedView style={styles.container}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText lightColor={Colors.dark.text}>Carregando...</ThemedText>
       </ThemedView>
     );
 
@@ -46,9 +46,14 @@ export function PlayerItem({ matchUser }: Props) {
           }}
           style={styles.profileImage}
         />
-        <ThemedText type='default'>{playerName}</ThemedText>
+        <ThemedText type='default' lightColor={Colors.dark.text}>
+          {playerName}
+        </ThemedText>
       </ThemedView>
-      <ThemedText darkColor={Colors.dark.success}>
+      <ThemedText
+        darkColor={Colors.dark.success}
+        lightColor={Colors.dark.success}
+      >
         {matchUser.ready ? 'PRONTO' : ''}
       </ThemedText>
     </ThemedView>

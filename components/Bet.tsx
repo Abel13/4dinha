@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   betContainer: {
-    backgroundColor: 'rgba(0,0,0,0.9)',
+    backgroundColor: Colors.dark.blackTransparent09,
     borderBottomStartRadius: 10,
     width: '50%',
     alignItems: 'center',
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.9)',
+    backgroundColor: Colors.dark.blackTransparent09,
     borderBottomStartRadius: 10,
     borderBottomEndRadius: 10,
     paddingHorizontal: 10,
@@ -125,7 +125,7 @@ export function Bet({
         <View style={styles.betContainer}>
           <View style={styles.betControls}>
             <ThemedButton title='-' onPress={subtract} disabled={bet === 0} />
-            <ThemedText>{bet}</ThemedText>
+            <ThemedText lightColor={Colors.dark.text}>{bet}</ThemedText>
             <ThemedButton title='+' onPress={add} disabled={bet === max} />
           </View>
           <ThemedText type='error'>

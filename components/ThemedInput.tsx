@@ -38,11 +38,12 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(
       rules,
       type = 'default',
       error,
+      lightColor,
       ...rest
     },
     ref,
   ) => {
-    const color = useThemeColor({ dark: darkColor }, 'text');
+    const color = useThemeColor({ dark: darkColor, light: lightColor }, 'text');
     const {
       field: { value, onChange },
     } = useController({

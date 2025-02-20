@@ -12,45 +12,49 @@ const styles = StyleSheet.create({
   defaultSemiBold: {
     fontSize: 16,
     lineHeight: 15,
-    fontWeight: '600',
     fontFamily: 'BarlowCondensedSemiBold',
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
     lineHeight: 32,
     fontFamily: 'BarlowCondensedBold',
   },
   subtitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     fontFamily: 'BarlowCondensedBold',
   },
   h4: {
     fontSize: 16,
-    fontWeight: 'bold',
     fontFamily: 'BarlowCondensedBold',
+  },
+  paragraph: {
+    fontSize: 14,
+    fontFamily: 'BarlowCondensed',
   },
   link: {
     lineHeight: 30,
     fontSize: 16,
     color: Colors.dark.link,
+    fontFamily: 'BarlowCondensed',
   },
   error: {
     lineHeight: 12,
     fontSize: 12,
     color: Colors.dark.danger,
+    fontFamily: 'BarlowCondensed',
   },
 });
 
 export type ThemedTextProps = TextProps & {
   darkColor?: string;
+  lightColor?: string;
   type?:
     | 'default'
     | 'title'
     | 'defaultSemiBold'
     | 'subtitle'
     | 'h4'
+    | 'paragraph'
     | 'link'
     | 'error';
 };
@@ -58,10 +62,11 @@ export type ThemedTextProps = TextProps & {
 export function ThemedText({
   style,
   darkColor,
+  lightColor,
   type = 'default',
   ...rest
 }: ThemedTextProps) {
-  const color = useThemeColor({ dark: darkColor }, 'text');
+  const color = useThemeColor({ dark: darkColor, light: lightColor }, 'text');
 
   return (
     <Text
@@ -72,6 +77,7 @@ export function ThemedText({
         type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
         type === 'subtitle' ? styles.subtitle : undefined,
         type === 'h4' ? styles.h4 : undefined,
+        type === 'paragraph' ? styles.paragraph : undefined,
         type === 'link' ? styles.link : undefined,
         type === 'error' ? styles.error : undefined,
         style,
