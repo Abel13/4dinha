@@ -5,6 +5,8 @@ import { useSettingsStore } from './useSettingsStore';
 const SoundEffects = {
   ambient: require('@/assets/sounds/ambient.mp3'),
   card: require('@/assets/sounds/card.wav'),
+  changePlayer: require('@/assets/sounds/change-player.wav'),
+  currentPlayer: require('@/assets/sounds/current-player.wav'),
   collapse: require('@/assets/sounds/collapse.wav'),
   menu: require('@/assets/sounds/touch.wav'),
   negativeTouch: require('@/assets/sounds/negative-touch.wav'),

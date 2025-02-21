@@ -34,7 +34,7 @@ export function StatusPanel({
   me,
   roundStatus,
 }: Props) {
-  const { playerName } = usePlayer(currentPlayer?.user_id!);
+  const { playerName } = usePlayer(currentPlayer?.user_id as string);
 
   const getEmoji = useCallback(
     (

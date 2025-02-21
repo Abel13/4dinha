@@ -175,6 +175,16 @@ export const useGame = (matchId: string) => {
   );
 
   useEffect(() => {
+    if (currentPlayer) {
+      if (currentPlayer.id === me?.id) {
+        playSoundAsync({ type: 'currentPlayer', volume: getVolume('effects') });
+        return;
+      }
+      playSoundAsync({ type: 'changePlayer', volume: getVolume('effects') });
+    }
+  }, [currentPlayer]);
+
+  useEffect(() => {
     if (game.players?.length >= 2) {
       const { players } = game;
       const user = players.find(
