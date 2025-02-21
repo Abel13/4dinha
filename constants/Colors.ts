@@ -1,4 +1,4 @@
-const tintColorDark = '#9290c3';
+const tintColorDark = '#409efa';
 
 export const Colors = {
   dark: {
@@ -8,7 +8,6 @@ export const Colors = {
     // style colors
     text: '#ECEDEE',
     background: '#151718',
-    backgroundTransparent: '#151718aa',
     border: '#A2A3AA',
     transparent: 'transparent',
     cardRed: '#FF4C4C',
@@ -26,7 +25,7 @@ export const Colors = {
     // status colors
     danger: '#ef5350',
     success: '#34a424',
-    info: '#1b1a55',
+    info: '#1a4e89',
 
     // colors
     black: '#000',

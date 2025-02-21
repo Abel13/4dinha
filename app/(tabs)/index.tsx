@@ -135,15 +135,16 @@ export default function LobbyScreen() {
   const { getVolume, musicVolume, generalVolume } = useSettingsStore(
     (store) => store,
   );
-  const { playSoundAsync, setVolumeAsync } = useSound();
+  const { playSoundAsync, setVolumeAsync, stopSoundAsync } = useSound();
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
 
   const { footerMenu, headerMenu } = useHome();
 
   const handleNewMatch = useCallback(() => {
+    stopSoundAsync();
     router.push({ pathname: '/lobby/new' });
-  }, [router]);
+  }, [router, stopSoundAsync]);
 
   useEffect(() => {
     setVolumeAsync(getVolume('music'));
@@ -256,6 +257,7 @@ export default function LobbyScreen() {
                         sound='menu'
                         style={styles.matchesMenu}
                         onPress={() => {
+                          stopSoundAsync();
                           router.push({
                             pathname: '/(game)/4dinha',
                             params: {
@@ -286,7 +288,10 @@ export default function LobbyScreen() {
                 renderItem={({ item }) => (
                   <MatchItem
                     match={item}
-                    enterMatch={() => enterMatch(item.id)}
+                    enterMatch={() => {
+                      enterMatch(item.id);
+                      stopSoundAsync();
+                    }}
                     continueMatch={() => {}}
                   />
                 )}
