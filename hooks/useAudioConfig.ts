@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 import { useSettingsStore } from './useSettingsStore';
 
-const SoundEffects = {
+export const SoundEffects = {
   ambient: require('@/assets/sounds/ambient.mp3'),
   card: require('@/assets/sounds/card.wav'),
   changePlayer: require('@/assets/sounds/change-player.wav'),
