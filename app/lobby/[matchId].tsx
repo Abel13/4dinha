@@ -13,6 +13,9 @@ import { useMatch } from '@/hooks/useMatch';
 import { Colors } from '@/constants/Colors';
 import { useKeepAwake } from 'expo-keep-awake';
 import { SoundButton } from '@/components/SoundButton';
+import { useEffect } from 'react';
+import { useSound } from '@/hooks/useAudioConfig';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -46,12 +49,18 @@ export default function LobbyScreen() {
   useKeepAwake();
   const { matchId } = useLocalSearchParams();
   const { session } = useUserSessionStore((state) => state);
+  const { getVolume } = useSettingsStore((store) => store);
+  const { playSoundAsync } = useSound();
   const { match, matchPicture, startMatch } = useMatch(matchId as string);
   const { players, loadingLobby, updateStatus } = useMatchUsers(
     matchId as string,
   );
 
   const me = players.find((p) => p.user_id === session?.user.id);
+
+  useEffect(() => {
+    playSoundAsync({ type: 'changePlayer', volume: getVolume('effects') });
+  }, [players.length]);
 
   if (!me)
     return (
