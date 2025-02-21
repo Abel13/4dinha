@@ -71,6 +71,7 @@ export function TableSeat({
             playerPicture,
             lives: player.lives,
             dealer: player.dealer,
+            current: player.current,
             number,
           }}
         />

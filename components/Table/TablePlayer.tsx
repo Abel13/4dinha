@@ -12,6 +12,7 @@ interface ITablePlayer {
   name: string | null;
   bet: string;
   dealer: boolean;
+  current: boolean;
 }
 
 interface TablePlayerProps {
@@ -36,6 +37,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+  },
+  current: {
+    borderWidth: 2,
+    borderColor: Colors.dark.success,
   },
   livesIndicator: {
     left: -5,
@@ -131,7 +136,10 @@ function PlayerInfo({ player, isVertical }: PlayerInfoProps) {
     <ThemedView style={getFlexStyle(isVertical)}>
       <ThemedView>
         {player.playerPicture && (
-          <Image source={{ uri: player.playerPicture }} style={styles.image} />
+          <Image
+            source={{ uri: player.playerPicture }}
+            style={[styles.image, player.current && styles.current]}
+          />
         )}
 
         <ThemedView style={styles.livesIndicator}>

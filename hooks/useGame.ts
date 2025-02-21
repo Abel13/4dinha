@@ -5,9 +5,9 @@ import {
   dealCardsMutation,
   updateGame,
   betMutation,
-  playMutation,
   getTrumps,
   finishRoundMutation,
+  usePlayMutation,
 } from '@/services/game';
 import { type Bet, type GamePlayer } from '@/types';
 import { NotificationFeedbackType } from 'expo-haptics';
@@ -25,7 +25,7 @@ export const useGame = (matchId: string) => {
     finishRoundMutation(session?.access_token || ''),
   );
   const { mutate: mutatePlay } = useMutation(
-    playMutation(session?.access_token || ''),
+    usePlayMutation(session?.access_token || ''),
   );
   const { mutate: mutateBet } = useMutation(betMutation());
   const [dealing, setDealing] = useState<boolean>(false);
@@ -113,9 +113,10 @@ export const useGame = (matchId: string) => {
     async (id: string) => {
       if (me?.current) {
         setPlaying(true);
+        playSoundAsync({ type: 'card', volume: getVolume('effects') });
+
         mutatePlay(id, {
           onSuccess: () => {
-            playSoundAsync({ type: 'card', volume: getVolume('effects') });
             notification(NotificationFeedbackType.Success);
             setPlaying(false);
           },

@@ -147,6 +147,7 @@ export function Bet({
             title='APOSTAR'
             onPress={() => handleBet(bet)}
             loading={betting}
+            disabled={loading}
           />
         </View>
 
