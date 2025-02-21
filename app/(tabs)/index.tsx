@@ -3,11 +3,17 @@ import {
   ImageBackground,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   useColorScheme,
 } from 'react-native';
 
-import { RelativePathString, useRouter } from 'expo-router';
-import { useCallback, useEffect, useId } from 'react';
+import {
+  RelativePathString,
+  useFocusEffect,
+  usePathname,
+  useRouter,
+} from 'expo-router';
+import { useCallback, useEffect } from 'react';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -24,6 +30,7 @@ import { Lottie } from '@/components/Lottie';
 import FailToLoadAnimation from '@/assets/lotties/nothing.json';
 import { useSound } from '@/hooks/useAudioConfig';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
+import { useAuth } from '@/hooks/useAuth';
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.dark.black },
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
 
 export default function LobbyScreen() {
   const router = useRouter();
+  const pathname = usePathname();
   const theme = useColorScheme() || 'light';
   const { getVolume, musicVolume, generalVolume } = useSettingsStore(
     (store) => store,
@@ -138,25 +146,34 @@ export default function LobbyScreen() {
   const { playSoundAsync, setVolumeAsync, stopSoundAsync } = useSound();
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { signOut } = useAuth();
 
   const { footerMenu, headerMenu } = useHome();
 
   const handleNewMatch = useCallback(() => {
-    stopSoundAsync();
     router.push({ pathname: '/lobby/new' });
-  }, [router, stopSoundAsync]);
+  }, [router]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        stopSoundAsync();
+      };
+    }, [stopSoundAsync]),
+  );
 
   useEffect(() => {
     setVolumeAsync(getVolume('music'));
   }, [generalVolume, musicVolume]);
 
   useEffect(() => {
-    playSoundAsync({
-      type: 'ambient',
-      looping: true,
-      volume: getVolume('music'),
-    });
-  }, []);
+    if (pathname === '/')
+      playSoundAsync({
+        type: 'ambient',
+        looping: true,
+        volume: getVolume('music'),
+      });
+  }, [pathname]);
 
   return (
     <ThemedView style={styles.screen}>
@@ -171,7 +188,9 @@ export default function LobbyScreen() {
             <SoundButton
               sound='menu'
               style={styles.profile}
-              onPress={() => router.push('/(tabs)/profile')}
+              onPress={() => {
+                router.push('/(tabs)/profile');
+              }}
             >
               <Image
                 source={{ uri: profilePicture }}
@@ -215,6 +234,9 @@ export default function LobbyScreen() {
                   <Ionicons name={icon.icon} size={28} color='#FFF' />
                 </SoundButton>
               ))}
+              <TouchableOpacity onPress={signOut}>
+                <Ionicons name='exit-outline' size={28} color='#FFF' />
+              </TouchableOpacity>
             </ThemedView>
           </ThemedView>
 
@@ -257,7 +279,6 @@ export default function LobbyScreen() {
                         sound='menu'
                         style={styles.matchesMenu}
                         onPress={() => {
-                          stopSoundAsync();
                           router.push({
                             pathname: '/(game)/4dinha',
                             params: {
@@ -290,7 +311,6 @@ export default function LobbyScreen() {
                     match={item}
                     enterMatch={() => {
                       enterMatch(item.id);
-                      stopSoundAsync();
                     }}
                     continueMatch={() => {}}
                   />
