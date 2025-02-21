@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
 import { useSettingsStore } from './useSettingsStore';
 
+const SoundEffects = {
+  ambient: require('@/assets/sounds/ambient.mp3'),
+  card: require('@/assets/sounds/card.wav'),
+  collapse: require('@/assets/sounds/collapse.wav'),
+  menu: require('@/assets/sounds/touch.wav'),
+  negativeTouch: require('@/assets/sounds/negative-touch.wav'),
+};
+
 export const useAudioConfig = () => {
   useEffect(() => {
     const configureAudio = async () => {
@@ -21,12 +29,6 @@ export const useAudioConfig = () => {
     };
     configureAudio();
   }, []);
-};
-
-export const SoundEffects = {
-  menu: require('@/assets/sounds/touch1.mp3'),
-  ambient: require('@/assets/sounds/ambient.mp3'),
-  collapse: require('@/assets/sounds/collapse.mp3'),
 };
 
 interface PlayProps {

@@ -472,14 +472,7 @@ export default function Table() {
       />
 
       <BettingModal
-        isVisible={
-          !!(
-            roundStatus === 'betting' &&
-            me?.current &&
-            !isFetching &&
-            !isLoading
-          )
-        }
+        isVisible={!!(roundStatus === 'betting' && me?.current)}
         betCount={betCount}
         betting={betting}
         cardQuantity={cardQuantity}

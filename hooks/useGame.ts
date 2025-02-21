@@ -10,7 +10,11 @@ import {
   finishRoundMutation,
 } from '@/services/game';
 import { type Bet, type GamePlayer } from '@/types';
+import { NotificationFeedbackType } from 'expo-haptics';
 import { useUserSessionStore } from './useUserSessionStore';
+import { useSound } from './useAudioConfig';
+import { useSettingsStore } from './useSettingsStore';
+import { useHaptics } from './useHaptics';
 
 export const useGame = (matchId: string) => {
   const { session, loadSession } = useUserSessionStore();
@@ -47,6 +51,9 @@ export const useGame = (matchId: string) => {
   const [winner, setWinner] = useState<GamePlayer>();
 
   const [checkLimit, setCheckLimit] = useState(false);
+  const { getVolume } = useSettingsStore((store) => store);
+  const { playSoundAsync } = useSound();
+  const { notification } = useHaptics();
 
   const {
     data: game,
@@ -108,15 +115,20 @@ export const useGame = (matchId: string) => {
         setPlaying(true);
         mutatePlay(id, {
           onSuccess: () => {
+            playSoundAsync({ type: 'card', volume: getVolume('effects') });
+            notification(NotificationFeedbackType.Success);
             setPlaying(false);
           },
           onError: () => {
             setPlaying(false);
           },
         });
-      } else console.log('CALMA CARAIO');
+      } else {
+        playSoundAsync({ type: 'negativeTouch', volume: getVolume('effects') });
+        notification(NotificationFeedbackType.Error);
+      }
     },
-    [me, mutatePlay],
+    [getVolume, me, mutatePlay, notification, playSoundAsync],
   );
 
   const getCardQuantity = useCallback((num: number) => {

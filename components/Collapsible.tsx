@@ -8,6 +8,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSound } from '@/hooks/useAudioConfig';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
+import { useHaptics } from '@/hooks/useHaptics';
 
 const styles = StyleSheet.create({
   heading: {
@@ -30,12 +31,14 @@ export function Collapsible({
 
   const { getVolume } = useSettingsStore((state) => state);
   const { playSoundAsync } = useSound();
+  const { selection } = useHaptics();
 
   return (
     <ThemedView>
       <TouchableOpacity
         style={styles.heading}
         onPress={() => {
+          selection();
           setIsOpen((value) => !value);
           playSoundAsync({ type: 'collapse', volume: getVolume('ui') });
         }}
