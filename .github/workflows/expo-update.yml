@@ -18,7 +18,7 @@ jobs:
           cache: npm
 
       - name: 🏗 Setup EAS
-        uses: mishkeTz/expo-github-actions@v8
+        uses: expo/expo-github-actions@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
