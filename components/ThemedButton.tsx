@@ -3,6 +3,7 @@ import {
   StyleSheet,
   type ButtonProps,
   ViewStyle,
+  GestureResponderEvent,
 } from 'react-native';
 
 import Animated, {
@@ -11,9 +12,13 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
+import { SoundEffects, useSound } from '@/hooks/useAudioConfig';
+import { useSettingsStore } from '@/hooks/useSettingsStore';
+import { useHaptics } from '@/hooks/useHaptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
 import { ThemedText } from './ThemedText';
 
 const styles = StyleSheet.create({
@@ -34,6 +39,7 @@ export type ThemedButtonProps = ButtonProps & {
   type?: ButtonType;
   loading?: boolean;
   style?: ViewStyle;
+  sound?: keyof typeof SoundEffects;
 };
 
 const TypeColors = {
@@ -46,12 +52,33 @@ export function ThemedButton({
   type = 'default',
   loading = false,
   title,
+  sound,
   disabled = false,
   color,
   style,
+  onPress,
   ...rest
 }: ThemedButtonProps) {
   const rotation = useSharedValue(0);
+  const { getVolume } = useSettingsStore((state) => state);
+  const { playSoundAsync } = useSound();
+  const { impact } = useHaptics();
+
+  const handlePress = useCallback(
+    (event: GestureResponderEvent) => {
+      if (onPress) {
+        if (sound)
+          playSoundAsync({
+            type: sound,
+            volume: getVolume('ui'),
+          });
+
+        onPress(event);
+        impact(ImpactFeedbackStyle.Soft);
+      }
+    },
+    [getVolume, impact, onPress, playSoundAsync, sound],
+  );
 
   useEffect(() => {
     if (loading) {
@@ -100,6 +127,7 @@ export function ThemedButton({
       style={buttonStyles}
       disabled={disabled}
       activeOpacity={0.5}
+      onPress={handlePress}
       {...rest}
     >
       <ThemedText
