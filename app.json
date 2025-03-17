@@ -14,7 +14,8 @@
       "bundleIdentifier": "com.abelb13.4dinha",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
-        "UISupportsGameController": true
+        "UISupportsGameController": true,
+        "UIViewControllerBasedStatusBarAppearance": true
       }
     },
     "android": {
