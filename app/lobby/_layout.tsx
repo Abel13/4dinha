@@ -5,6 +5,9 @@ export default function LobbyLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
+        animationMatchesGesture: true,
+        navigationBarHidden: true,
+        statusBarHidden: true,
       }}
     >
       <Stack.Screen name='[matchId]' />

@@ -19,6 +19,7 @@ export default function TabLayout() {
         headerShown: false,
         animationMatchesGesture: true,
         navigationBarHidden: true,
+        statusBarHidden: true,
       }}
     >
       <Stack.Screen
