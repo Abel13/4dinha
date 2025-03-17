@@ -44,6 +44,24 @@ export default function TabLayout() {
           title: 'Configurações',
         }}
       />
+      <Stack.Screen
+        name='chat'
+        options={{
+          animationDuration: 700,
+          animation: 'slide_from_bottom',
+          presentation: 'transparentModal',
+          title: 'Configurações',
+        }}
+      />
+      <Stack.Screen
+        name='leaderboard'
+        options={{
+          animationDuration: 700,
+          animation: 'slide_from_bottom',
+          presentation: 'transparentModal',
+          title: 'Configurações',
+        }}
+      />
     </Stack>
   );
 }

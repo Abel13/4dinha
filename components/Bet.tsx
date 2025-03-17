@@ -11,12 +11,10 @@ import { Feather } from '@expo/vector-icons';
 import useBet from '@/hooks/useBet';
 import { Colors } from '@/constants/Colors';
 import { useSound } from '@/hooks/useAudioConfig';
-import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { useHaptics } from '@/hooks/useHaptics';
 import { ThemedButton } from './ThemedButton';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
-import { SoundButton } from './SoundButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -90,13 +88,12 @@ export function Bet({
   );
   const slideAnim = useRef(new Animated.Value(0)).current;
   const [hide, setHide] = useState(false);
-  const { getVolume } = useSettingsStore((store) => store);
-  const { playSoundAsync } = useSound();
+  const { playSoundAsync } = useSound('collapse');
   const { selection } = useHaptics();
 
   const toggleHide = useCallback(() => {
     setHide(!hide);
-    playSoundAsync({ type: 'collapse', volume: getVolume('ui') });
+    playSoundAsync();
     selection();
     Animated.timing(slideAnim, {
       toValue: !hide ? 1 : 0,
@@ -104,7 +101,7 @@ export function Bet({
       easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start();
-  }, [getVolume, hide, playSoundAsync, selection, slideAnim]);
+  }, [hide, playSoundAsync, selection, slideAnim]);
 
   useEffect(() => {
     if (cardQuantity === 1) toggleHide();

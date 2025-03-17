@@ -29,7 +29,6 @@ import { SoundButton } from '@/components/SoundButton';
 import { Lottie } from '@/components/Lottie';
 import FailToLoadAnimation from '@/assets/lotties/nothing.json';
 import { useSound } from '@/hooks/useAudioConfig';
-import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { useAuth } from '@/hooks/useAuth';
 
 const styles = StyleSheet.create({
@@ -140,10 +139,7 @@ export default function LobbyScreen() {
   const router = useRouter();
   const pathname = usePathname();
   const theme = useColorScheme() || 'light';
-  const { getVolume, musicVolume, generalVolume } = useSettingsStore(
-    (store) => store,
-  );
-  const { playSoundAsync, setVolumeAsync, stopSoundAsync } = useSound();
+  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
   const { signOut } = useAuth();
@@ -163,15 +159,9 @@ export default function LobbyScreen() {
   );
 
   useEffect(() => {
-    setVolumeAsync(getVolume('music'));
-  }, [generalVolume, musicVolume]);
-
-  useEffect(() => {
     if (pathname === '/')
       playSoundAsync({
-        type: 'ambient',
         looping: true,
-        volume: getVolume('music'),
       });
   }, [pathname]);
 

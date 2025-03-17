@@ -1,15 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
-import { useSettingsStore } from './useSettingsStore';
+import { useSettingsStore, VolumeType } from './useSettingsStore';
 
 export const SoundEffects = {
-  ambient: require('@/assets/sounds/ambient.mp3'),
-  card: require('@/assets/sounds/card.wav'),
-  changePlayer: require('@/assets/sounds/change-player.wav'),
-  currentPlayer: require('@/assets/sounds/current-player.wav'),
-  collapse: require('@/assets/sounds/collapse.wav'),
-  menu: require('@/assets/sounds/touch.wav'),
-  negativeTouch: require('@/assets/sounds/negative-touch.wav'),
+  ambient: {
+    type: 'music',
+    uri: require('@/assets/sounds/ambient.mp3'),
+  },
+  card: {
+    type: 'effects',
+    uri: require('@/assets/sounds/card.wav'),
+  },
+  changePlayer: {
+    type: 'effects',
+    uri: require('@/assets/sounds/change-player.wav'),
+  },
+  currentPlayer: {
+    type: 'effects',
+    uri: require('@/assets/sounds/current-player.wav'),
+  },
+  negativeTouch: {
+    type: 'effects',
+    uri: require('@/assets/sounds/negative-touch.wav'),
+  },
+  collapse: {
+    type: 'ui',
+    uri: require('@/assets/sounds/collapse.wav'),
+  },
+  menu: {
+    type: 'ui',
+    uri: require('@/assets/sounds/touch.wav'),
+  },
 };
 
 export const useAudioConfig = () => {
@@ -34,50 +55,62 @@ export const useAudioConfig = () => {
 };
 
 interface PlayProps {
-  type: keyof typeof SoundEffects;
-  volume?: number;
-  looping?: boolean;
+  looping: boolean;
 }
 
-export const useSound = () => {
-  const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-  const { soundEnabled } = useSettingsStore((store) => store);
+export const useSound = (soundEffect: keyof typeof SoundEffects) => {
+  const currentSoundRef = useRef<Audio.Sound | null>(null);
 
-  useEffect(() => {
-    if (currentSound) currentSound.setIsMutedAsync(!soundEnabled);
-  }, [soundEnabled]);
+  const {
+    soundEnabled,
+    effectsVolume,
+    generalVolume,
+    musicVolume,
+    uiVolume,
+    getVolume,
+  } = useSettingsStore((store) => store);
 
   const setVolumeAsync = (volume: number) => {
-    if (!currentSound) return;
+    if (!currentSoundRef.current) return;
     if (volume <= 1 || volume >= 0) {
-      currentSound.setVolumeAsync(volume);
+      currentSoundRef.current.setVolumeAsync(volume);
     }
   };
 
   const stopSoundAsync = () => {
-    if (!currentSound) return;
-    currentSound.stopAsync();
+    if (!currentSoundRef.current) return;
+    currentSoundRef.current.stopAsync();
   };
 
-  const playSoundAsync = async ({
-    type,
-    volume = 1,
-    looping = false,
-  }: PlayProps) => {
+  const playSoundAsync = async (props?: PlayProps) => {
+    const looping = !!props?.looping;
     if (!soundEnabled) return;
 
-    const { sound } = await Audio.Sound.createAsync(SoundEffects[type], {
-      volume,
-    });
+    const { sound } = await Audio.Sound.createAsync(
+      SoundEffects[soundEffect].uri,
+      {
+        volume: getVolume(SoundEffects[soundEffect].type as VolumeType),
+      },
+    );
 
     await sound.playAsync();
     await sound.setIsLoopingAsync(looping);
-    setCurrentSound(sound);
+
+    // Atualiza a referência em vez de usar useState
+    currentSoundRef.current = sound;
   };
+
+  useEffect(() => {
+    if (currentSoundRef.current)
+      currentSoundRef.current.setIsMutedAsync(!soundEnabled);
+  }, [soundEnabled]);
+
+  useEffect(() => {
+    setVolumeAsync(getVolume(SoundEffects[soundEffect].type as VolumeType));
+  }, [generalVolume, musicVolume, uiVolume, effectsVolume]);
 
   return {
     playSoundAsync,
-    setVolumeAsync,
     stopSoundAsync,
   };
 };

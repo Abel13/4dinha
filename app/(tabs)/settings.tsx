@@ -3,10 +3,12 @@ import { SoundButton } from '@/components/SoundButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
+import { useSound } from '@/hooks/useAudioConfig';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { Feather } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { router } from 'expo-router';
+import { useEffect } from 'react';
 import { ScrollView, StyleSheet, Switch } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -22,7 +24,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.dark.backgroundTransparent,
+    backgroundColor: Colors.dark.blackTransparent07,
   },
   content: {
     width: '50%',
@@ -47,6 +49,17 @@ export default function Settings() {
     effectsVolume,
     musicVolume,
   } = useSettingsStore((store) => store);
+  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
+
+  useEffect(() => {
+    playSoundAsync({
+      looping: true,
+    });
+
+    return () => {
+      stopSoundAsync();
+    };
+  }, []);
 
   return (
     <ThemedView style={styles.container}>
@@ -58,7 +71,7 @@ export default function Settings() {
           </SoundButton>
         </ThemedView>
         <ScrollView style={styles.settings}>
-          <Collapsible title='Audio' key='audio'>
+          <Collapsible title='Audio' key='audio' startOpen>
             <ThemedView style={styles.setting}>
               <ThemedText style={styles.label}>Sons</ThemedText>
               <Switch

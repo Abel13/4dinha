@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
-type VolumeType = 'general' | 'ui' | 'effects' | 'music';
+export type VolumeType = 'general' | 'ui' | 'effects' | 'music';
 
 interface SettingsState {
   soundEnabled: boolean;

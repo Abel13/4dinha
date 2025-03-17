@@ -3,6 +3,8 @@ import { Ionicons } from '@expo/vector-icons';
 interface Routes {
   settings: '(tabs)/settings';
   profile: '(tabs)/profile';
+  chat: '(tabs)/chat';
+  leaderboard: '(tabs)/leaderboard';
 }
 
 interface MenuItem {
@@ -20,8 +22,8 @@ export const useHome = () => {
   ];
 
   const headerMenu: MenuItem[] = [
-    { icon: 'chatbox-ellipses-outline', name: 'chat', route: 'settings' },
-    { icon: 'trophy-outline', name: 'history', route: 'settings' },
+    { icon: 'chatbox-ellipses-outline', name: 'chat', route: 'chat' },
+    { icon: 'trophy-outline', name: 'history', route: 'leaderboard' },
     { icon: 'settings-outline', name: 'settings', route: 'settings' },
   ];
 

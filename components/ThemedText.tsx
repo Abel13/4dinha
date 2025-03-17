@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     color: Colors.dark.danger,
     fontFamily: 'BarlowCondensed',
   },
+  outdoor: {
+    fontSize: 80,
+    fontFamily: 'BarlowCondensed',
+  },
 });
 
 export type ThemedTextProps = TextProps & {
@@ -56,7 +60,8 @@ export type ThemedTextProps = TextProps & {
     | 'h4'
     | 'paragraph'
     | 'link'
-    | 'error';
+    | 'error'
+    | 'outdoor';
 };
 
 export function ThemedText({
@@ -80,6 +85,7 @@ export function ThemedText({
         type === 'paragraph' ? styles.paragraph : undefined,
         type === 'link' ? styles.link : undefined,
         type === 'error' ? styles.error : undefined,
+        type === 'outdoor' ? styles.outdoor : undefined,
         style,
       ]}
       {...rest}

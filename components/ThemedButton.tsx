@@ -16,7 +16,6 @@ import { useCallback, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { SoundEffects, useSound } from '@/hooks/useAudioConfig';
-import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { useHaptics } from '@/hooks/useHaptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { ThemedText } from './ThemedText';
@@ -52,7 +51,7 @@ export function ThemedButton({
   type = 'default',
   loading = false,
   title,
-  sound,
+  sound = 'menu',
   disabled = false,
   color,
   style,
@@ -60,24 +59,19 @@ export function ThemedButton({
   ...rest
 }: ThemedButtonProps) {
   const rotation = useSharedValue(0);
-  const { getVolume } = useSettingsStore((state) => state);
-  const { playSoundAsync } = useSound();
+  const { playSoundAsync } = useSound(sound);
   const { impact } = useHaptics();
 
   const handlePress = useCallback(
     (event: GestureResponderEvent) => {
       if (onPress) {
-        if (sound)
-          playSoundAsync({
-            type: sound,
-            volume: getVolume('ui'),
-          });
+        if (sound) playSoundAsync();
 
         onPress(event);
         impact(ImpactFeedbackStyle.Soft);
       }
     },
-    [getVolume, impact, onPress, playSoundAsync, sound],
+    [impact, onPress, playSoundAsync, sound],
   );
 
   useEffect(() => {

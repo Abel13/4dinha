@@ -7,7 +7,6 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSound } from '@/hooks/useAudioConfig';
-import { useSettingsStore } from '@/hooks/useSettingsStore';
 import { useHaptics } from '@/hooks/useHaptics';
 
 const styles = StyleSheet.create({
@@ -25,12 +24,12 @@ const styles = StyleSheet.create({
 export function Collapsible({
   children,
   title,
-}: PropsWithChildren & { title: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+  startOpen = false,
+}: PropsWithChildren & { title: string; startOpen?: boolean }) {
+  const [isOpen, setIsOpen] = useState(startOpen);
   const theme = useColorScheme() ?? 'light';
 
-  const { getVolume } = useSettingsStore((state) => state);
-  const { playSoundAsync } = useSound();
+  const { playSoundAsync } = useSound('collapse');
   const { selection } = useHaptics();
 
   return (
@@ -40,7 +39,7 @@ export function Collapsible({
         onPress={() => {
           selection();
           setIsOpen((value) => !value);
-          playSoundAsync({ type: 'collapse', volume: getVolume('ui') });
+          playSoundAsync();
         }}
         activeOpacity={0.8}
       >

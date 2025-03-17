@@ -29,6 +29,7 @@
     "no-tabs": "error",
     "no-undef": "error",
     "no-console": 1,
+    "no-plusplus": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-redeclare": "error",

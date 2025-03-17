@@ -13,7 +13,6 @@ import { type Bet, type GamePlayer } from '@/types';
 import { NotificationFeedbackType } from 'expo-haptics';
 import { useUserSessionStore } from './useUserSessionStore';
 import { useSound } from './useAudioConfig';
-import { useSettingsStore } from './useSettingsStore';
 import { useHaptics } from './useHaptics';
 
 export const useGame = (matchId: string) => {
@@ -51,8 +50,11 @@ export const useGame = (matchId: string) => {
   const [winner, setWinner] = useState<GamePlayer>();
 
   const [checkLimit, setCheckLimit] = useState(false);
-  const { getVolume } = useSettingsStore((store) => store);
-  const { playSoundAsync } = useSound();
+  const { playSoundAsync: playCardSound } = useSound('card');
+  const { playSoundAsync: playNegativeTouch } = useSound('negativeTouch');
+  const { playSoundAsync: playCurrentPlayer } = useSound('currentPlayer');
+  const { playSoundAsync: playChangePlayer } = useSound('changePlayer');
+
   const { notification } = useHaptics();
 
   const {
@@ -113,7 +115,7 @@ export const useGame = (matchId: string) => {
     async (id: string) => {
       if (me?.current) {
         setPlaying(true);
-        playSoundAsync({ type: 'card', volume: getVolume('effects') });
+        playCardSound();
 
         mutatePlay(id, {
           onSuccess: () => {
@@ -125,11 +127,11 @@ export const useGame = (matchId: string) => {
           },
         });
       } else {
-        playSoundAsync({ type: 'negativeTouch', volume: getVolume('effects') });
+        playNegativeTouch();
         notification(NotificationFeedbackType.Error);
       }
     },
-    [getVolume, me, mutatePlay, notification, playSoundAsync],
+    [me, mutatePlay, notification, playCardSound, playNegativeTouch],
   );
 
   const getCardQuantity = useCallback((num: number) => {
@@ -178,10 +180,10 @@ export const useGame = (matchId: string) => {
   useEffect(() => {
     if (currentPlayer) {
       if (currentPlayer.id === me?.id) {
-        playSoundAsync({ type: 'currentPlayer', volume: getVolume('effects') });
+        playCurrentPlayer();
         return;
       }
-      playSoundAsync({ type: 'changePlayer', volume: getVolume('effects') });
+      playChangePlayer();
     }
   }, [currentPlayer]);
 
@@ -203,56 +205,71 @@ export const useGame = (matchId: string) => {
       if (cardQuantity)
         setCheckLimit(!!user?.dealer && betCount <= cardQuantity);
 
-      const player2 = players.find(
+      const newPlayer2 = players.find(
         (player) =>
           player.table_seat === (((me?.table_seat || 0) + 1 - 1) % 6) + 1,
       );
-      const player3 = players.find(
+      const newPlayer3 = players.find(
         (player) =>
           player.table_seat === (((me?.table_seat || 0) + 2 - 1) % 6) + 1,
       );
-      const player4 = players.find(
+      const newPlayer4 = players.find(
         (player) =>
           player.table_seat === (((me?.table_seat || 0) + 3 - 1) % 6) + 1,
       );
-      const player5 = players.find(
+      const newPlayer5 = players.find(
         (player) =>
           player.table_seat === (((me?.table_seat || 0) + 4 - 1) % 6) + 1,
       );
-      const player6 = players.find(
+      const newPlayer6 = players.find(
         (player) =>
           player.table_seat === (((me?.table_seat || 0) + 5 - 1) % 6) + 1,
       );
 
       setPlayer2({
-        ...player2,
-        cards: game.player_cards.filter((p) => p.user_id === player2?.user_id),
-        bet: game.bets.find((p) => p.user_id === player2?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player2?.user_id)?.wins,
+        ...newPlayer2,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === newPlayer2?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === newPlayer2?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === newPlayer2?.user_id)
+          ?.wins,
       } as GamePlayer);
       setPlayer3({
-        ...player3,
-        cards: game.player_cards.filter((p) => p.user_id === player3?.user_id),
-        bet: game.bets.find((p) => p.user_id === player3?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player3?.user_id)?.wins,
+        ...newPlayer3,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === newPlayer3?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === newPlayer3?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === newPlayer3?.user_id)
+          ?.wins,
       } as GamePlayer);
       setPlayer4({
-        ...player4,
-        cards: game.player_cards.filter((p) => p.user_id === player4?.user_id),
-        bet: game.bets.find((p) => p.user_id === player4?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player4?.user_id)?.wins,
+        ...newPlayer4,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === newPlayer4?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === newPlayer4?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === newPlayer4?.user_id)
+          ?.wins,
       } as GamePlayer);
       setPlayer5({
-        ...player5,
-        cards: game.player_cards.filter((p) => p.user_id === player5?.user_id),
-        bet: game.bets.find((p) => p.user_id === player5?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player5?.user_id)?.wins,
+        ...newPlayer5,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === newPlayer5?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === newPlayer5?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === newPlayer5?.user_id)
+          ?.wins,
       } as GamePlayer);
       setPlayer6({
-        ...player6,
-        cards: game.player_cards.filter((p) => p.user_id === player6?.user_id),
-        bet: game.bets.find((p) => p.user_id === player6?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === player6?.user_id)?.wins,
+        ...newPlayer6,
+        cards: game.player_cards.filter(
+          (p) => p.user_id === newPlayer6?.user_id,
+        ),
+        bet: game.bets.find((p) => p.user_id === newPlayer6?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === newPlayer6?.user_id)
+          ?.wins,
       } as GamePlayer);
 
       if (game.player_cards) {
@@ -294,7 +311,7 @@ export const useGame = (matchId: string) => {
       } as GamePlayer);
 
       setIndiozinho2({
-        ...game.players.find((p) => p.user_id !== indiozinho1.user_id),
+        ...game.players.find((p) => p.user_id !== indiozinho1?.user_id),
         cards: game.player_cards.filter(
           (p) => p.user_id === indiozinho2?.user_id,
         ),
