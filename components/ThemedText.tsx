@@ -6,17 +6,14 @@ import { Colors } from '@/constants/Colors';
 const styles = StyleSheet.create({
   default: {
     fontSize: 16,
-    lineHeight: 24,
     fontFamily: 'BarlowCondensed',
   },
   defaultSemiBold: {
     fontSize: 16,
-    lineHeight: 15,
     fontFamily: 'BarlowCondensedSemiBold',
   },
   title: {
     fontSize: 32,
-    lineHeight: 32,
     fontFamily: 'BarlowCondensedBold',
   },
   subtitle: {
@@ -32,13 +29,11 @@ const styles = StyleSheet.create({
     fontFamily: 'BarlowCondensed',
   },
   link: {
-    lineHeight: 30,
     fontSize: 16,
     color: Colors.dark.link,
     fontFamily: 'BarlowCondensed',
   },
   error: {
-    lineHeight: 12,
     fontSize: 12,
     color: Colors.dark.danger,
     fontFamily: 'BarlowCondensed',
