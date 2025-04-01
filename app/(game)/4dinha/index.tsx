@@ -341,6 +341,7 @@ function BettingModal({
       transparent
       animationType='fade'
       supportedOrientations={['landscape']}
+      statusBarTranslucent
     >
       <ThemedView style={styles.modalContainer}>
         <ThemedView style={styles.modalContent}>
