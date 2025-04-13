@@ -6,8 +6,6 @@ import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
-import { Colors } from '@/constants/Colors';
-import { ConstructionMaterials } from '@/components/MaterialName';
 
 const styles = StyleSheet.create({
   titleContainer: {
