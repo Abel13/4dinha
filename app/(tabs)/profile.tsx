@@ -6,12 +6,15 @@ import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
+import { Colors } from '@/constants/Colors';
 
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginLeft: 60,
+    marginTop: 20,
   },
   stepContainer: {
     gap: 8,
@@ -44,7 +47,6 @@ export default function HomeScreen() {
       />
       <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
       <HelloWave />
-      <ConstructionMaterials />
     </ThemedView>
   );
 }
