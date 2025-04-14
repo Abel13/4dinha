@@ -17,6 +17,7 @@ import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import type { Suit, Symbol } from '@/types';
 import { height, scale, verticalScale, width } from '@/utils/scalingUtils';
+import { ThemedFlatList } from '@/components/ThemedFlatList';
 
 const styles = StyleSheet.create({
   container: {
@@ -89,13 +90,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
   },
   roundFinishedModalInner: {
-    width: '50%',
+    // width: '50%',
   },
   roundFinishedHeaderTitle: {
     margin: 10,
   },
   roundFinishedHeaderAction: {
-    margin: 20,
+    // flex: 1,
+    marginBottom: 20,
   },
   trumpsOverlay: {
     top: '40%',
@@ -280,42 +282,40 @@ function RoundFinishedModal({
       <ThemedView
         style={[styles.modalContainer, styles.roundFinishedModalContent]}
       >
+        <ThemedView
+          darkColor={Colors.dark.background}
+          lightColor={Colors.dark.background}
+        >
+          <ThemedView style={styles.roundFinishedHeaderTitle}>
+            <ThemedText
+              type='title'
+              lightColor={Colors.dark.text}
+            >{`Fim da rodada ${roundNumber}`}</ThemedText>
+          </ThemedView>
+
+          <ThemedView style={styles.roundFinishedHeaderAction}>
+            {isDealer ? (
+              <ThemedButton
+                title='Concluir Rodada'
+                color={Colors.dark.success}
+                onPress={onFinishRound}
+                disabled={finishing}
+              />
+            ) : (
+              <ThemedText lightColor={Colors.dark.text}>
+                Aguarde o início da próxima rodada...
+              </ThemedText>
+            )}
+          </ThemedView>
+        </ThemedView>
         <ThemedView style={styles.roundFinishedModalInner}>
-          <FlatList
+          <ThemedFlatList
             keyExtractor={(i) => i.user_id}
-            data={results}
+            data={results?.sort((a, b) => a.user_id.localeCompare(b.user_id))}
             stickyHeaderIndices={[0]}
+            horizontal
             renderItem={({ item }) => (
               <ResultItem result={item} key={item.user_id} />
-            )}
-            ItemSeparatorComponent={() => <ThemedView style={{ height: 10 }} />}
-            ListFooterComponent={() => <ThemedView style={{ height: 100 }} />}
-            ListHeaderComponent={() => (
-              <ThemedView
-                darkColor={Colors.dark.background}
-                lightColor={Colors.dark.background}
-              >
-                <ThemedView style={styles.roundFinishedHeaderTitle}>
-                  <ThemedText
-                    type='title'
-                    lightColor={Colors.dark.text}
-                  >{`Fim da rodada ${roundNumber}`}</ThemedText>
-                </ThemedView>
-                <ThemedView style={styles.roundFinishedHeaderAction}>
-                  {isDealer ? (
-                    <ThemedButton
-                      title='Concluir Rodada'
-                      color={Colors.dark.success}
-                      onPress={onFinishRound}
-                      disabled={finishing}
-                    />
-                  ) : (
-                    <ThemedText lightColor={Colors.dark.text}>
-                      Aguarde o início da próxima rodada...
-                    </ThemedText>
-                  )}
-                </ThemedView>
-              </ThemedView>
             )}
           />
         </ThemedView>
@@ -341,6 +341,7 @@ function BettingModal({
       transparent
       animationType='fade'
       supportedOrientations={['landscape']}
+      statusBarTranslucent
     >
       <ThemedView style={styles.modalContainer}>
         <ThemedView style={styles.modalContent}>
@@ -472,14 +473,7 @@ export default function Table() {
       />
 
       <BettingModal
-        isVisible={
-          !!(
-            roundStatus === 'betting' &&
-            me?.current &&
-            !isFetching &&
-            !isLoading
-          )
-        }
+        isVisible={!!(roundStatus === 'betting' && me?.current)}
         betCount={betCount}
         betting={betting}
         cardQuantity={cardQuantity}

@@ -3,15 +3,18 @@ import { useCallback } from 'react';
 import { type Match } from '@/types/Match';
 import { Colors } from '@/constants/Colors';
 import { useDiceBear } from '@/hooks/useDiceBear';
+import { Feather } from '@expo/vector-icons';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 import { SoundButton } from './SoundButton';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'flex-start',
+    width: 150,
+    minHeight: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     borderRadius: 4,
     backgroundColor: '#9290c3',
     padding: 5,
@@ -22,8 +25,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   title: {
+    flex: 1,
     gap: 5,
     flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
@@ -36,16 +41,19 @@ interface Props {
 export function MatchItem({ match, enterMatch, continueMatch }: Props) {
   const matchPicture = useDiceBear()({ avatar: 'icons', seed: match.id });
 
-  const getStatus = useCallback((status: string | null) => {
-    switch (status) {
-      case 'created':
-        return 'LOBBY';
-      case 'started':
-        return 'INICIADA';
-      default:
-        return '';
-    }
-  }, []);
+  const getStatus = useCallback(
+    (status: string | null): keyof typeof Feather.glyphMap => {
+      switch (status) {
+        case 'created':
+          return 'chevron-right';
+        case 'started':
+          return 'flag';
+        default:
+          return 'clock';
+      }
+    },
+    [],
+  );
 
   const handlePress = () => {
     if (match.status === 'created') enterMatch();
@@ -53,7 +61,7 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
     if (match.status === 'started') continueMatch();
   };
 
-  if (!match)
+  if (!match || !matchPicture)
     return (
       <ThemedView style={styles.container}>
         <ThemedText darkColor={Colors.light.text}>Carregando...</ThemedText>
@@ -69,11 +77,20 @@ export function MatchItem({ match, enterMatch, continueMatch }: Props) {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText darkColor={Colors.light.text}>{match.name}</ThemedText>
+        <ThemedText
+          darkColor={Colors.light.text}
+          lineBreakMode='tail'
+          numberOfLines={1}
+          style={{ flex: 1 }}
+        >
+          {match.name}
+        </ThemedText>
       </ThemedView>
-      <ThemedText type='default' darkColor={Colors.light.success}>
-        {getStatus(match?.status)}
-      </ThemedText>
+      <Feather
+        name={getStatus(match.status)}
+        color={Colors.light.text}
+        size={16}
+      />
     </SoundButton>
   );
 }

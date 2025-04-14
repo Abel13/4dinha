@@ -3,11 +3,12 @@ import {
   ImageBackground,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   useColorScheme,
 } from 'react-native';
 
-import { useRouter } from 'expo-router';
-import { useCallback } from 'react';
+import { RelativePathString, usePathname, useRouter } from 'expo-router';
+import { useCallback, useEffect } from 'react';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -20,8 +21,8 @@ import { useHome } from '@/hooks/useHome';
 import MenuIcon from '@/components/MenuIcon';
 import { ThemedFlatList } from '@/components/ThemedFlatList';
 import { SoundButton } from '@/components/SoundButton';
-import { Lottie } from '@/components/Lottie';
-import FailToLoadAnimation from '@/assets/lotties/nothing.json';
+import { useSound } from '@/hooks/useAudioConfig';
+import { useAuth } from '@/hooks/useAuth';
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.dark.black },
@@ -55,10 +56,10 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingRight: 10,
     backgroundColor: Colors.dark.purpleLight,
-    borderRadius: 50,
+    borderRadius: 8,
   },
   iconWrapper: {
-    borderRadius: 50,
+    borderRadius: 8,
     padding: 6,
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,19 +130,25 @@ const styles = StyleSheet.create({
 
 export default function LobbyScreen() {
   const router = useRouter();
+  const pathname = usePathname();
   const theme = useColorScheme() || 'light';
+  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { signOut } = useAuth();
 
   const { footerMenu, headerMenu } = useHome();
-
-  const handleMenu = () => {
-    // select menu
-  };
 
   const handleNewMatch = useCallback(() => {
     router.push({ pathname: '/lobby/new' });
   }, [router]);
+
+  useEffect(() => {
+    if (pathname === '/')
+      playSoundAsync({
+        looping: true,
+      });
+  }, [pathname]);
 
   return (
     <ThemedView style={styles.screen}>
@@ -156,7 +163,10 @@ export default function LobbyScreen() {
             <SoundButton
               sound='menu'
               style={styles.profile}
-              onPress={() => router.push('/(tabs)/profile')}
+              onPress={() => {
+                stopSoundAsync();
+                router.push('/(tabs)/profile');
+              }}
             >
               <Image
                 source={{ uri: profilePicture }}
@@ -171,10 +181,10 @@ export default function LobbyScreen() {
             <ThemedView darkColor='transparent' style={styles.topContainer}>
               <ThemedView style={styles.rowContainer}>
                 {[
-                  { icon: 'coins', value: '1.520' },
+                  { icon: 'coins', value: '0' },
                   { icon: 'sack-dollar', value: '0' },
-                ].map((item, index) => (
-                  <ThemedView key={index} style={styles.coinContainer}>
+                ].map((item) => (
+                  <ThemedView key={item.icon} style={styles.coinContainer}>
                     <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
                       <FontAwesome6
                         name={item.icon}
@@ -192,10 +202,25 @@ export default function LobbyScreen() {
 
             <ThemedView style={styles.iconsMenu}>
               {headerMenu.map((icon) => (
-                <SoundButton key={icon.name} sound='menu' onPress={handleMenu}>
+                <SoundButton
+                  key={icon.name}
+                  sound='menu'
+                  onPress={() => {
+                    stopSoundAsync();
+                    router.push(icon.route as RelativePathString);
+                  }}
+                >
                   <Ionicons name={icon.icon} size={28} color='#FFF' />
                 </SoundButton>
               ))}
+              <TouchableOpacity
+                onPress={() => {
+                  stopSoundAsync();
+                  signOut();
+                }}
+              >
+                <Ionicons name='exit-outline' size={28} color='#FFF' />
+              </TouchableOpacity>
             </ThemedView>
           </ThemedView>
 
@@ -205,7 +230,10 @@ export default function LobbyScreen() {
                 <SoundButton
                   sound='menu'
                   style={styles.menu}
-                  onPress={handleNewMatch}
+                  onPress={() => {
+                    stopSoundAsync();
+                    handleNewMatch();
+                  }}
                 >
                   <ThemedText type='subtitle' lightColor={Colors.dark.text}>
                     Criar partida
@@ -234,25 +262,21 @@ export default function LobbyScreen() {
                     keyExtractor={(item) => item.matches.id.toString()}
                     numColumns={2}
                     renderItem={({ item }) => (
-                      <SoundButton
-                        sound='menu'
-                        style={styles.matchesMenu}
-                        onPress={() => {
-                          router.push({
-                            pathname: '/(game)/4dinha',
-                            params: {
-                              gameId: item.matches.id,
-                            },
-                          });
-                        }}
-                      >
-                        <ThemedText
-                          style={{ fontSize: 13 }}
-                          lightColor={Colors.dark.text}
-                        >
-                          {item.matches.name}
-                        </ThemedText>
-                      </SoundButton>
+                      <ThemedView style={{ margin: 5 }}>
+                        <MatchItem
+                          match={item.matches}
+                          enterMatch={() => {}}
+                          continueMatch={() => {
+                            stopSoundAsync();
+                            router.push({
+                              pathname: '/(game)/4dinha',
+                              params: {
+                                gameId: item.matches.id,
+                              },
+                            });
+                          }}
+                        />
+                      </ThemedView>
                     )}
                   />
                 </ThemedView>
@@ -260,7 +284,7 @@ export default function LobbyScreen() {
             </ScrollView>
             <ThemedView style={styles.matchContainer}>
               <ThemedText type='subtitle' lightColor={Colors.dark.text}>
-                Novas Partidas
+                Partidas Abertas
               </ThemedText>
               <ThemedFlatList
                 data={matches}
@@ -268,13 +292,12 @@ export default function LobbyScreen() {
                 renderItem={({ item }) => (
                   <MatchItem
                     match={item}
-                    enterMatch={() => enterMatch(item.id)}
+                    enterMatch={() => {
+                      stopSoundAsync();
+                      enterMatch(item.id);
+                    }}
                     continueMatch={() => {}}
                   />
-                )}
-                ListEmptyComponent={<Lottie source={FailToLoadAnimation} />}
-                ItemSeparatorComponent={() => (
-                  <ThemedView style={{ height: 5 }} />
                 )}
               />
             </ThemedView>

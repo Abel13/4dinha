@@ -13,14 +13,28 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.abelb13.4dinha",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UISupportsGameController": true,
+        "UIViewControllerBasedStatusBarAppearance": true
       }
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#000000"
     },
     "android": {
       "package": "com.abelb13.x4dinha",
+      "intentFilters": [
+        {
+          "action": "android.intent.action.MAIN",
+          "category": [
+            "android.intent.category.LAUNCHER",
+            "android.intent.category.GAME"
+          ]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000"
+        "backgroundColor": "#ffffff"
       }
     },
     "plugins": [
@@ -31,7 +45,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000"
+          "backgroundColor": "#000000"
         }
       ],
       "expo-localization",
