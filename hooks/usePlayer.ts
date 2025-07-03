@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { getPlayer } from '@/services/player';
+import { useDiceBear } from './useDiceBear';
 
 export const usePlayer = (playerId: string) => {
+  const getAvatar = useDiceBear();
+
   const [playerName, setPlayerName] = useState<string | null>('');
   const [playerPicture, setPlayerPicture] = useState<string | null>('');
 
@@ -15,7 +18,11 @@ export const usePlayer = (playerId: string) => {
     if (player) {
       setPlayerName(player.email.substring(0, player.email.indexOf('@')));
       setPlayerPicture(
-        `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${player.email}&scale=90`,
+        getAvatar({
+          version: 7,
+          avatar: 'bottts-neutral',
+          seed: player.email,
+        }),
       );
     }
   }, [player]);

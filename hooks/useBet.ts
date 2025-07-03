@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { ImpactFeedbackStyle } from 'expo-haptics';
+import { useHaptics } from './useHaptics';
 
 export default function useBet(
   currentCount: number,
@@ -6,6 +8,7 @@ export default function useBet(
   checkLimit: boolean = false,
 ) {
   const [bet, setBet] = useState(0);
+  const { impact } = useHaptics();
 
   function calculateMaxBet(roundNumber: number): number {
     const maxCards = 6;
@@ -22,9 +25,10 @@ export default function useBet(
       newBet += 1;
     }
     if (newBet <= max) {
+      impact(ImpactFeedbackStyle.Rigid);
       setBet(newBet);
     }
-  }, [bet, checkLimit, currentCount, cardQuantity, max]);
+  }, [bet, currentCount, cardQuantity, checkLimit, max, impact]);
 
   const subtract = useCallback(() => {
     let newBet = bet - 1;
@@ -32,9 +36,10 @@ export default function useBet(
       newBet -= 1;
     }
     if (newBet >= 0) {
+      impact(ImpactFeedbackStyle.Rigid);
       setBet(newBet);
     }
-  }, [bet, checkLimit, currentCount, cardQuantity]);
+  }, [bet, currentCount, cardQuantity, checkLimit, impact]);
 
   useEffect(() => {
     if (checkLimit) {

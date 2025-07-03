@@ -14,8 +14,6 @@ export function ResultItem({ result }: { result: GameResult }) {
     <ThemedView
       key={result.user_id}
       style={{
-        borderWidth: 1,
-        borderColor: Colors.dark.tabIconDefault,
         padding: 10,
         borderRadius: 10,
         gap: 10,
@@ -23,8 +21,6 @@ export function ResultItem({ result }: { result: GameResult }) {
     >
       <ThemedView
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
@@ -40,24 +36,31 @@ export function ResultItem({ result }: { result: GameResult }) {
             }}
           />
         )}
-        <ThemedText type='subtitle'>{playerName}</ThemedText>
+        <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+          {playerName}
+        </ThemedText>
       </ThemedView>
       <ThemedView
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 20,
+          gap: 10,
         }}
       >
-        <ThemedText type='title'>{`${result.bets}/${result.wins}`}</ThemedText>
-        <ThemedText>
-          {`${Array.from(Array(lives)).fill('❤️').join('')}${Array.from(
-            Array(5 - (lives || 0)),
-          )
-            .fill('🤍')
-            .join('')}`}
-        </ThemedText>
+        <ThemedView>
+          <ThemedText type='title'>❤️</ThemedText>
+          <ThemedText
+            type='defaultSemiBold'
+            style={{ position: 'absolute', top: '30%', left: '40%' }}
+          >
+            {result.lives - Math.abs(result.wins - result.bets)}
+          </ThemedText>
+        </ThemedView>
+        <ThemedText
+          type='title'
+          lightColor={Colors.dark.text}
+        >{`${result.wins}/${result.bets}`}</ThemedText>
       </ThemedView>
     </ThemedView>
   );

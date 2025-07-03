@@ -1,25 +1,27 @@
-import { useSound } from '@/hooks/useAudioConfig';
-import { useSettingsStore } from '@/hooks/useSettingsStore';
+import { SoundEffects, useSound } from '@/hooks/useAudioConfig';
+import { useHaptics } from '@/hooks/useHaptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useCallback } from 'react';
 import { GestureResponderEvent, TouchableOpacity } from 'react-native';
 import { TouchableOpacityProps } from 'react-native-gesture-handler';
 
 interface Props extends TouchableOpacityProps {
-  sound: 'menu';
+  sound: keyof typeof SoundEffects;
 }
 
 export function SoundButton({ children, sound, onPress, ...rest }: Props) {
-  const { soundEnabled } = useSettingsStore((state) => state);
-  const playSound = useSound(soundEnabled);
+  const { playSoundAsync } = useSound(sound);
+  const { impact } = useHaptics();
 
   const handlePress = useCallback(
     (event: GestureResponderEvent) => {
       if (onPress) {
-        playSound(sound);
+        playSoundAsync();
         onPress(event);
+        impact(ImpactFeedbackStyle.Soft);
       }
     },
-    [onPress, playSound, sound],
+    [impact, onPress, playSoundAsync],
   );
 
   return (

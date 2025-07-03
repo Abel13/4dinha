@@ -1,13 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`<ThemedText /> CustomText renders correctly 1`] = `
 <Text
   style={
     [
       {
-        "color": "#11181C",
+        "color": "#151718",
       },
       {
+        "fontFamily": "BarlowCondensed",
         "fontSize": 16,
         "lineHeight": 24,
       },
@@ -16,9 +17,11 @@ exports[`renders correctly 1`] = `
       undefined,
       undefined,
       undefined,
+      undefined,
+      undefined,
     ]
   }
 >
-  Snapshot test!
+  Some text
 </Text>
 `;

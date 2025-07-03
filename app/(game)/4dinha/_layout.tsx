@@ -1,10 +1,13 @@
 import { Stack } from 'expo-router';
 
-export default function AuthLayout() {
+export default function GameLayout() {
   return (
     <Stack
       screenOptions={{
         headerShown: false,
+        animationMatchesGesture: true,
+        navigationBarHidden: true,
+        statusBarHidden: true,
       }}
     >
       <Stack.Screen name='index' />

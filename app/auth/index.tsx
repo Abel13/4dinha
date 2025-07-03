@@ -10,6 +10,7 @@ import { ThemedInput } from '@/components/ThemedInput';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from '@/hooks/useTranslation';
+import { Colors } from '@/constants/Colors';
 
 const schema = yup.object({
   email: yup.string().required('Inform seu e-mail').email('E-mail inválido!'),
@@ -30,45 +31,41 @@ export default function LoginScreen() {
 
   return (
     <ThemedView style={styles.titleContainer}>
-      <ScrollView>
-        <Image
-          source={require('@/assets/images/logo.png')}
-          style={{ alignSelf: 'center', width: 200, height: 200 }}
+      <Image
+        source={require('@/assets/images/logo.png')}
+        style={{ alignSelf: 'center', width: 40, height: 40 }}
+      />
+      <ThemedText type='title' lightColor={Colors.dark.text}>
+        LOGIN
+      </ThemedText>
+      <ThemedView>
+        <ThemedText lightColor={Colors.dark.text}>e-mail</ThemedText>
+        <ThemedInput
+          name='email'
+          inputMode='email'
+          keyboardType='email-address'
+          autoCapitalize='none'
+          autoCorrect={false}
+          autoComplete='off'
+          control={control}
+          error={errors.email?.message}
+          returnKeyType='next'
+          onSubmitEditing={() => inputPasswordRef.current?.focus()}
+          lightColor={Colors.dark.text}
         />
-        <ThemedText type='title'>LOGIN</ThemedText>
-        <ThemedView>
-          <ThemedText>e-mail</ThemedText>
-          <ThemedInput
-            name='email'
-            inputMode='email'
-            keyboardType='email-address'
-            autoCapitalize='none'
-            autoCorrect={false}
-            autoComplete='off'
-            control={control}
-            error={errors.email?.message}
-            returnKeyType='next'
-            onSubmitEditing={() => inputPasswordRef.current?.focus()}
-          />
-        </ThemedView>
-        <ThemedView>
-          <ThemedText>senha</ThemedText>
-          <ThemedInput
-            ref={inputPasswordRef}
-            name='password'
-            control={control}
-            secureTextEntry
-            textContentType='password'
-            error={errors.password?.message}
-            returnKeyType='done'
-            onSubmitEditing={handleSubmit(onAuth)}
-          />
-        </ThemedView>
-        <ThemedText type='error'>{t(authError as any)}</ThemedText>
-        <ThemedButton
-          title='ENTRAR'
-          onPress={handleSubmit(onAuth)}
-          loading={loading}
+      </ThemedView>
+      <ThemedView>
+        <ThemedText lightColor={Colors.dark.text}>senha</ThemedText>
+        <ThemedInput
+          ref={inputPasswordRef}
+          name='password'
+          control={control}
+          secureTextEntry
+          textContentType='password'
+          error={errors.password?.message}
+          returnKeyType='done'
+          onSubmitEditing={handleSubmit(onAuth)}
+          lightColor={Colors.dark.text}
         />
       </ScrollView>
     </ThemedView>

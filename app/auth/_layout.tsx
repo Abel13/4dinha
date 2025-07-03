@@ -5,6 +5,9 @@ export default function AuthLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
+        animationMatchesGesture: true,
+        navigationBarHidden: true,
+        statusBarHidden: true,
       }}
     >
       <Stack.Screen name='index' />

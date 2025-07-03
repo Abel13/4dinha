@@ -34,7 +34,7 @@ export function StatusPanel({
   me,
   roundStatus,
 }: Props) {
-  const { playerName } = usePlayer(currentPlayer?.user_id!);
+  const { playerName } = usePlayer(currentPlayer?.user_id as string);
 
   const getEmoji = useCallback(
     (
@@ -110,7 +110,11 @@ export function StatusPanel({
           </ThemedText>
         </ThemedView>
 
-        <ThemedText type='defaultSemiBold' style={{ padding: 5 }}>
+        <ThemedText
+          type='defaultSemiBold'
+          style={{ padding: 5 }}
+          lightColor={Colors.dark.text}
+        >
           {getStatus()}
         </ThemedText>
       </ThemedView>

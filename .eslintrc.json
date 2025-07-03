@@ -1,12 +1,14 @@
 {
   "env": {
-    "es2021": true
+    "es2021": true,
+    "jest": true
   },
   "extends": [
     "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,7 +19,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
+  "plugins": ["react", "@typescript-eslint", "react-hooks", "prettier", "jest"],
   "globals": {
     "__DEV__": "readonly"
   },
@@ -27,6 +29,7 @@
     "no-tabs": "error",
     "no-undef": "error",
     "no-console": 1,
+    "no-plusplus": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-redeclare": "error",
@@ -80,6 +83,7 @@
         "extensions": [".tsx"]
       }
     ],
+    "react/style-prop-object": "warn",
     "react/jsx-no-bind": "off",
     "react/require-default-props": "off",
     "react/react-in-jsx-scope": "off",

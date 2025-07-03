@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
@@ -11,7 +11,10 @@ import { useMatchUsers } from '@/hooks/useMatchUsers';
 import { PlayerItem } from '@/components/PlayerItem';
 import { useMatch } from '@/hooks/useMatch';
 import { Colors } from '@/constants/Colors';
+import { useKeepAwake } from 'expo-keep-awake';
 import { SoundButton } from '@/components/SoundButton';
+import { useEffect } from 'react';
+import { useSound } from '@/hooks/useAudioConfig';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -42,8 +45,10 @@ const styles = StyleSheet.create({
 });
 
 export default function LobbyScreen() {
+  useKeepAwake();
   const { matchId } = useLocalSearchParams();
   const { session } = useUserSessionStore((state) => state);
+  const { playSoundAsync } = useSound('changePlayer');
   const { match, matchPicture, startMatch } = useMatch(matchId as string);
   const { players, loadingLobby, updateStatus } = useMatchUsers(
     matchId as string,
@@ -51,10 +56,16 @@ export default function LobbyScreen() {
 
   const me = players.find((p) => p.user_id === session?.user.id);
 
+  useEffect(() => {
+    playSoundAsync();
+  }, [players.length]);
+
   if (!me)
     return (
       <ThemedView style={[styles.titleContainer, styles.padding]}>
-        <ThemedText type='subtitle'>{match?.name}</ThemedText>
+        <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+          {match?.name}
+        </ThemedText>
       </ThemedView>
     );
 
@@ -74,14 +85,22 @@ export default function LobbyScreen() {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText type='subtitle' style={{ width: '90%' }}>
+        <ThemedText
+          type='subtitle'
+          style={{ width: '90%' }}
+          lightColor={Colors.dark.text}
+        >
           {match?.name}
         </ThemedText>
       </ThemedView>
       <ThemedView />
       <PlayerItem matchUser={me} />
       <ThemedView />
-      <ThemedText style={styles.paddingHorizontal} type='subtitle'>
+      <ThemedText
+        style={styles.paddingHorizontal}
+        type='subtitle'
+        lightColor={Colors.dark.text}
+      >
         Jogadores
       </ThemedText>
       <ThemedFlatList

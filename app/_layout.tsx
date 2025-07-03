@@ -5,9 +5,10 @@ import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import 'react-native-reanimated';
-import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAudioConfig } from '@/hooks/useAudioConfig';
+import { StatusBar } from 'expo-status-bar';
+import { Platform } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -19,6 +20,7 @@ export default function RootLayout() {
     BarlowCondensedSemiBold: require('../assets/fonts/BarlowCondensed-SemiBold.ttf'),
     BarlowCondensedBold: require('../assets/fonts/BarlowCondensed-Bold.ttf'),
   });
+  const isAndroid = Platform.OS === 'android';
   useAudioConfig();
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={DarkTheme}>
         <Slot />
-        <StatusBar style='auto' hidden />
+        {isAndroid && <StatusBar hidden style='auto' />}
       </ThemeProvider>
     </QueryClientProvider>
   );

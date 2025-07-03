@@ -19,6 +19,7 @@ export default function TabLayout() {
         headerShown: false,
         animationMatchesGesture: true,
         navigationBarHidden: true,
+        statusBarHidden: true,
       }}
     >
       <Stack.Screen
@@ -33,6 +34,33 @@ export default function TabLayout() {
           animationDuration: 1500,
           animation: 'simple_push',
           title: 'Perfil',
+        }}
+      />
+      <Stack.Screen
+        name='settings'
+        options={{
+          animationDuration: 700,
+          animation: 'slide_from_bottom',
+          presentation: 'transparentModal',
+          title: 'Configurações',
+        }}
+      />
+      <Stack.Screen
+        name='chat'
+        options={{
+          animationDuration: 700,
+          animation: 'slide_from_bottom',
+          presentation: 'transparentModal',
+          title: 'Configurações',
+        }}
+      />
+      <Stack.Screen
+        name='leaderboard'
+        options={{
+          animationDuration: 700,
+          animation: 'slide_from_bottom',
+          presentation: 'transparentModal',
+          title: 'Configurações',
         }}
       />
     </Stack>

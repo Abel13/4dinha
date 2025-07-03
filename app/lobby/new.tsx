@@ -1,19 +1,19 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { format } from 'date-fns';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedInput } from '@/components/ThemedInput';
-import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useMatchList } from '@/hooks/useMatchList';
 import { Colors } from '@/constants/Colors';
 import { SoundButton } from '@/components/SoundButton';
+import { useEffect } from 'react';
+import { useSound } from '@/hooks/useAudioConfig';
+import * as Clipboard from 'expo-clipboard';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -28,14 +28,40 @@ const schema = yup.object({
 });
 
 export default function NewMatchScreen() {
-  const { username } = useUserSessionStore((state) => state);
   const { createMatch, creatingMatch } = useMatchList();
-  const { control, handleSubmit } = useForm({
+  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
+  function generateRandomCode(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+
+    for (let i = 0; i < 5; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length);
+      code += chars[randomIndex];
+    }
+
+    return code;
+  }
+
+  const { handleSubmit, getValues } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: `Partida de ${username} ${format(new Date(), 'dd-MM-yyyy HH:mm')}`,
+      name: generateRandomCode(),
     },
   });
+
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(getValues('name'));
+  };
+
+  useEffect(() => {
+    playSoundAsync({
+      looping: true,
+    });
+
+    return () => {
+      stopSoundAsync();
+    };
+  }, []);
 
   return (
     <ThemedView style={styles.titleContainer}>
@@ -49,14 +75,38 @@ export default function NewMatchScreen() {
             size={28}
           />
         </SoundButton>
-        <ThemedText type='title'>Nova Partida</ThemedText>
+        <ThemedText type='subtitle'>Nova Partida</ThemedText>
       </ThemedView>
-      <ThemedInput name='name' control={control} />
-      <ThemedButton
-        title='CRIAR PARTIDA'
-        onPress={handleSubmit(createMatch)}
-        loading={creatingMatch}
-      />
+      <ThemedView
+        style={{
+          flex: 1,
+        }}
+      >
+        <ThemedView
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ThemedView
+            style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}
+          >
+            <ThemedText type='outdoor'>{getValues('name')}</ThemedText>
+            <Feather
+              name='copy'
+              size={36}
+              color={Colors.dark.icon}
+              onPress={copyToClipboard}
+            />
+          </ThemedView>
+        </ThemedView>
+        <ThemedButton
+          title='CRIAR PARTIDA'
+          onPress={handleSubmit(createMatch)}
+          loading={creatingMatch}
+        />
+      </ThemedView>
     </ThemedView>
   );
 }

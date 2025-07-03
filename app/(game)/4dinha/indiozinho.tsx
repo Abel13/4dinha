@@ -1,16 +1,17 @@
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { Button, Image, Modal, StyleSheet } from 'react-native';
+import { Button, Modal, StyleSheet } from 'react-native';
 import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
-import { TableSeat } from '@/components/TableSeat';
+import { TableSeat } from '@/components/Table/TableSeat';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const styles = StyleSheet.create({
   container: {
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Indiozinho() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isModalVisible, setModalVisible] = useState(false);
 

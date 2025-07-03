@@ -23,7 +23,9 @@ function MenuIcon({ icon, text, onPress }: MenuIconProps): ReactNode {
   return (
     <SoundButton sound='menu' onPress={onPress} style={styles.footerItem}>
       <Ionicons name={icon} size={36} color={Colors[theme].icon} />
-      <ThemedText type='default'>{text}</ThemedText>
+      <ThemedText type='default' lightColor={Colors.dark.text}>
+        {text}
+      </ThemedText>
     </SoundButton>
   );
 }

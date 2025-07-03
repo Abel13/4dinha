@@ -1,17 +1,10 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  useColorScheme,
-} from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedButton } from '@/components/ThemedButton';
-import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
 
@@ -20,7 +13,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingTop: 10,
+    marginLeft: 60,
+    marginTop: 20,
   },
   stepContainer: {
     gap: 8,
@@ -39,54 +33,20 @@ const styles = StyleSheet.create({
 });
 
 export default function HomeScreen() {
-  const { signOut, loading: loggingOut } = useAuth();
   const { username } = useUserSessionStore((state) => state);
 
   const theme = useColorScheme() || 'dark';
 
   return (
-    <ScrollView
-      style={{ backgroundColor: 'transparent', paddingHorizontal: 60 }}
-    >
-      <ThemedView style={styles.titleContainer}>
-        <Feather
-          name='chevron-left'
-          color={Colors[theme].icon}
-          size={28}
-          onPress={router.back}
-        />
-        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedButton
-        title='SAIR'
-        type='outlined'
-        onPress={signOut}
-        loading={loggingOut}
+    <ThemedView style={styles.titleContainer}>
+      <Feather
+        name='chevron-left'
+        color={Colors[theme].icon}
+        size={28}
+        onPress={router.back}
       />
-      <ThemedView style={styles.stepContainer}>
-        <TouchableOpacity onPress={() => router.push('/animations/card')}>
-          <ThemedText>GIFT</ThemedText>
-        </TouchableOpacity>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type='defaultSemiBold'>npm run reset-project</ThemedText>{' '}
-          to get a fresh <ThemedText type='defaultSemiBold'>app</ThemedText>{' '}
-          directory. This will move the current{' '}
-          <ThemedText type='defaultSemiBold'>app</ThemedText> to{' '}
-          <ThemedText type='defaultSemiBold'>app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ScrollView>
+      <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
+      <HelloWave />
+    </ThemedView>
   );
 }
