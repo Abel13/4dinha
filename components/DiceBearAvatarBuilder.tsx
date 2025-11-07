@@ -15,7 +15,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import MenuIcon from './MenuIcon';
-import { StyleKey, useDicebearBuilder } from '@/hooks/useDicebear';
+import { StyleKey, useDicebearBuilder } from '@/hooks/useDicebearBuilder';
 import { ThemedButton } from './ThemedButton';
 import { useTranslation } from '@/hooks/useTranslation';
 import { SvgImage } from './SvgImage';

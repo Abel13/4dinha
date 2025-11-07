@@ -1,7 +1,7 @@
 import { supabase } from '@/providers/supabase';
 import { useState } from 'react';
 import { router } from 'expo-router';
-import { useDicebearBuilder } from './useDicebear';
+import { useDicebearBuilder } from './useDicebearBuilder';
 
 interface IPlayerData {
   username: string;
