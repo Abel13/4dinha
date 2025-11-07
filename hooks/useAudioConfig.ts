@@ -1,16 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { Audio, InterruptionModeAndroid, InterruptionModeIOS } from 'expo-av';
+import { useEffect } from 'react';
+import { setAudioModeAsync, useAudioPlayer } from 'expo-audio';
 import { useSettingsStore, VolumeType } from './useSettingsStore';
 
-export const SoundEffects = {
-  ambient: {
-    type: 'music',
-    uri: require('@/assets/sounds/ambient.mp3'),
-  },
-  card: {
-    type: 'effects',
-    uri: require('@/assets/sounds/card.wav'),
-  },
+const SoundEffects = {
+  ambient: { type: 'music', uri: require('@/assets/sounds/ambient.mp3') },
+  button: { type: 'ui', uri: require('@/assets/sounds/button.mp3') },
+  card: { type: 'effects', uri: require('@/assets/sounds/card.wav') },
   changePlayer: {
     type: 'effects',
     uri: require('@/assets/sounds/change-player.wav'),
@@ -23,94 +18,65 @@ export const SoundEffects = {
     type: 'effects',
     uri: require('@/assets/sounds/negative-touch.wav'),
   },
-  collapse: {
-    type: 'ui',
-    uri: require('@/assets/sounds/collapse.wav'),
-  },
-  menu: {
-    type: 'ui',
-    uri: require('@/assets/sounds/touch.wav'),
-  },
+  collapse: { type: 'ui', uri: require('@/assets/sounds/collapse.wav') },
+  menu: { type: 'ui', uri: require('@/assets/sounds/touch.wav') },
 };
+
+export type SoundEffectKey = keyof typeof SoundEffects;
 
 export const useAudioConfig = () => {
   useEffect(() => {
-    const configureAudio = async () => {
-      try {
-        await Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          interruptionModeIOS: InterruptionModeIOS.MixWithOthers,
-          playsInSilentModeIOS: true,
-          staysActiveInBackground: false,
-          interruptionModeAndroid: InterruptionModeAndroid.DuckOthers,
-          shouldDuckAndroid: true,
-          playThroughEarpieceAndroid: true,
-        });
-      } catch (error) {
-        console.error('Audio configuration failed', error);
-      }
-    };
-    configureAudio();
+    setAudioModeAsync({
+      allowsRecording: false,
+      playsInSilentMode: true,
+      interruptionMode: 'duckOthers',
+    }).catch(console.error);
   }, []);
 };
 
-interface PlayProps {
-  looping: boolean;
+interface UseSoundReturn {
+  playSound: ({ looping }: { looping?: boolean }) => void;
+  stopSound: () => void;
 }
 
-export const useSound = (soundEffect: keyof typeof SoundEffects) => {
-  const currentSoundRef = useRef<Audio.Sound | null>(null);
-
+export const useSound = (effectKey: SoundEffectKey): UseSoundReturn => {
   const {
     soundEnabled,
+    getVolume,
     effectsVolume,
     generalVolume,
     musicVolume,
     uiVolume,
-    getVolume,
-  } = useSettingsStore((store) => store);
+  } = useSettingsStore((s) => s);
+  const effect = SoundEffects[effectKey];
+  const player = useAudioPlayer(effect.uri);
 
-  const setVolumeAsync = (volume: number) => {
-    if (!currentSoundRef.current) return;
-    if (volume <= 1 || volume >= 0) {
-      currentSoundRef.current.setVolumeAsync(volume);
+  const volumeChange = effectsVolume + generalVolume + musicVolume + uiVolume;
+
+  useEffect(() => {
+    if (!player) return;
+
+    player.volume = !soundEnabled ? 0 : getVolume(effect.type as VolumeType);
+    player.loop = false;
+  }, [soundEnabled, volumeChange]);
+
+  const playSound = ({ looping = false } = {}) => {
+    if (!player) return;
+
+    player.seekTo(0);
+    player.loop = looping;
+    player.play();
+  };
+
+  const stopSound = () => {
+    if (!player) return;
+    try {
+      player.pause();
+      player.seekTo(0);
+    } catch {
+      console.warn('Tried to stop a non-existent player');
     }
   };
 
-  const stopSoundAsync = () => {
-    if (!currentSoundRef.current) return;
-    currentSoundRef.current.stopAsync();
-  };
-
-  const playSoundAsync = async (props?: PlayProps) => {
-    const looping = !!props?.looping;
-    if (!soundEnabled) return;
-
-    const { sound } = await Audio.Sound.createAsync(
-      SoundEffects[soundEffect].uri,
-      {
-        volume: getVolume(SoundEffects[soundEffect].type as VolumeType),
-      },
-    );
-
-    await sound.playAsync();
-    await sound.setIsLoopingAsync(looping);
-
-    // Atualiza a referência em vez de usar useState
-    currentSoundRef.current = sound;
-  };
-
-  useEffect(() => {
-    if (currentSoundRef.current)
-      currentSoundRef.current.setIsMutedAsync(!soundEnabled);
-  }, [soundEnabled]);
-
-  useEffect(() => {
-    setVolumeAsync(getVolume(SoundEffects[soundEffect].type as VolumeType));
-  }, [generalVolume, musicVolume, uiVolume, effectsVolume]);
-
-  return {
-    playSoundAsync,
-    stopSoundAsync,
-  };
+  return { playSound, stopSound };
 };

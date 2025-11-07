@@ -45,3 +45,8 @@ android
 *.apk
 *.aab
 *.ipa
+
+# Expo
+.expo
+dist/
+web-build/

@@ -7,4 +7,7 @@ const config = getDefaultConfig(__dirname, {
   isCSSEnabled: true,
 });
 
+// Add support for Rive files
+config.resolver.assetExts.push('riv');
+
 module.exports = config;

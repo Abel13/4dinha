@@ -2,6 +2,7 @@ import { FlatList, type FlatListProps, StyleSheet } from 'react-native';
 import FailToLoadAnimation from '@/assets/lotties/nothing.json';
 import { ThemedView } from './ThemedView';
 import { Lottie } from './Lottie';
+import { ThemedText } from './ThemedText';
 
 const styles = StyleSheet.create({
   default: {
@@ -9,9 +10,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export type ThemedFlatListProps = FlatListProps<any> & {};
+export type ThemedFlatListProps = FlatListProps<any> & {
+  emptyMessage?: string;
+};
 
-export function ThemedFlatList({ style, ...rest }: ThemedFlatListProps) {
+export function ThemedFlatList({
+  emptyMessage,
+  style,
+  ...rest
+}: ThemedFlatListProps) {
   const renderSeparator = () => {
     return <ThemedView style={{ height: 5, width: 5 }} />;
   };
@@ -19,7 +26,17 @@ export function ThemedFlatList({ style, ...rest }: ThemedFlatListProps) {
     <FlatList
       style={[style, styles.default]}
       ItemSeparatorComponent={renderSeparator}
-      ListEmptyComponent={<Lottie source={FailToLoadAnimation} />}
+      ListEmptyComponent={
+        <ThemedView>
+          {emptyMessage && (
+            <ThemedText type='h4' lightColor='white' darkColor='white'>
+              {emptyMessage}
+            </ThemedText>
+          )}
+
+          <Lottie source={FailToLoadAnimation} />
+        </ThemedView>
+      }
       {...rest}
     />
   );

@@ -65,13 +65,13 @@ const styles = StyleSheet.create({
   },
   suit_big: { textAlign: 'right', fontSize: 22 },
   logo_small: {
-    width: 35,
-    height: 35,
+    width: 30,
+    height: 30,
     resizeMode: 'contain',
   },
   logo_big: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     resizeMode: 'contain',
   },
   '♥️': {

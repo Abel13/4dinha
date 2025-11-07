@@ -7,23 +7,14 @@ import {
   startMatchService,
 } from '@/services/match';
 import { supabase } from '@/providers/supabase';
-import { useDiceBear } from './useDiceBear';
 
 export const useMatch = (matchId: string) => {
   const router = useRouter();
-  const getAvatar = useDiceBear();
 
   const { data: match } = useQuery({
     ...fetchMatch(matchId || ''),
     enabled: matchId.length > 0,
   });
-
-  const matchPicture = match
-    ? getAvatar({
-        avatar: 'icons',
-        seed: matchId,
-      })
-    : null;
 
   const startMatchMutation = useMutation({
     mutationFn: startMatchService,
@@ -87,6 +78,5 @@ export const useMatch = (matchId: string) => {
     startMatch,
     endMatch,
     match,
-    matchPicture,
   };
 };

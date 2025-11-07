@@ -9,7 +9,7 @@ import {
   finishRoundMutation,
   usePlayMutation,
 } from '@/services/game';
-import { type Bet, type GamePlayer } from '@/types';
+import { Game, type Bet, type GamePlayer } from '@/types';
 import { NotificationFeedbackType } from 'expo-haptics';
 import { useUserSessionStore } from './useUserSessionStore';
 import { useSound } from './useAudioConfig';
@@ -33,6 +33,7 @@ export const useGame = (matchId: string) => {
   const [finishing, setFinishing] = useState<boolean>(false);
 
   const [turn, setTurn] = useState<number>(1);
+  const [roundStatus, setRoundStatus] = useState('');
   const [currentPage, setCurrentPage] = useState<'indiozinho' | 'end' | null>(
     null,
   );
@@ -50,12 +51,15 @@ export const useGame = (matchId: string) => {
   const [winner, setWinner] = useState<GamePlayer>();
 
   const [checkLimit, setCheckLimit] = useState(false);
-  const { playSoundAsync: playCardSound } = useSound('card');
-  const { playSoundAsync: playNegativeTouch } = useSound('negativeTouch');
-  const { playSoundAsync: playCurrentPlayer } = useSound('currentPlayer');
-  const { playSoundAsync: playChangePlayer } = useSound('changePlayer');
+  const { playSound: playCardSound } = useSound('card');
+  const { playSound: playNegativeTouch } = useSound('negativeTouch');
+  const { playSound: playCurrentPlayer } = useSound('currentPlayer');
+  const { playSound: playChangePlayer } = useSound('changePlayer');
 
   const { notification } = useHaptics();
+
+  // aguardando ação do usuário
+  const waitingAction = (me?.dealer && !roundStatus) || me?.current;
 
   const {
     data: game,
@@ -65,18 +69,23 @@ export const useGame = (matchId: string) => {
     refetch,
   } = useQuery({
     ...updateGame(matchId, session?.access_token || ''),
-    enabled: matchId !== '',
-    refetchOnWindowFocus: true,
-    refetchInterval: 60000,
+    enabled: matchId !== '' && !waitingAction,
+    refetchOnReconnect: 'always',
+    refetchOnMount: 'always',
+    refetchInterval: 5000,
+    initialData: {} as Game,
   });
+
+  const turnStatus =
+    game?.players?.length -
+      game?.player_cards?.filter((c) => c.turn === turn)?.length || 0;
+  const roundNumber = game?.round?.round_number || -1;
 
   useEffect(() => {
     if (error) {
       loadSession();
     }
   }, [error, loadSession]);
-
-  const roundNumber = game?.round?.round_number || -1;
 
   const { data: trumps } = useQuery({
     ...getTrumps(matchId, roundNumber, session?.access_token || ''),
@@ -115,7 +124,7 @@ export const useGame = (matchId: string) => {
     async (id: string) => {
       if (me?.current) {
         setPlaying(true);
-        playCardSound();
+        playCardSound({});
 
         mutatePlay(id, {
           onSuccess: () => {
@@ -127,7 +136,7 @@ export const useGame = (matchId: string) => {
           },
         });
       } else {
-        playNegativeTouch();
+        playNegativeTouch({});
         notification(NotificationFeedbackType.Error);
       }
     },
@@ -178,12 +187,16 @@ export const useGame = (matchId: string) => {
   );
 
   useEffect(() => {
+    setRoundStatus(game?.round?.status);
+  }, [game.round]);
+
+  useEffect(() => {
     if (currentPlayer) {
       if (currentPlayer.id === me?.id) {
-        playCurrentPlayer();
+        playCurrentPlayer({});
         return;
       }
-      playChangePlayer();
+      playChangePlayer({});
     }
   }, [currentPlayer]);
 
@@ -378,7 +391,7 @@ export const useGame = (matchId: string) => {
     playing,
     isLoading,
     isFetching,
-    roundStatus: game?.round?.status,
+    roundStatus,
     trump: {
       symbol: game?.round?.trump_symbol,
       suit: game?.round?.trump_suit,
@@ -387,6 +400,7 @@ export const useGame = (matchId: string) => {
     trumps,
     betCount,
     turn,
+    turnStatus,
     cardQuantity,
     roundNumber,
     checkLimit,

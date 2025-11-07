@@ -1,11 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { getPlayer } from '@/services/player';
-import { useDiceBear } from './useDiceBear';
 
 export const usePlayer = (playerId: string) => {
-  const getAvatar = useDiceBear();
-
   const [playerName, setPlayerName] = useState<string | null>('');
   const [playerPicture, setPlayerPicture] = useState<string | null>('');
 
@@ -16,14 +13,8 @@ export const usePlayer = (playerId: string) => {
 
   useEffect(() => {
     if (player) {
-      setPlayerName(player.email.substring(0, player.email.indexOf('@')));
-      setPlayerPicture(
-        getAvatar({
-          version: 7,
-          avatar: 'bottts-neutral',
-          seed: player.email,
-        }),
-      );
+      setPlayerName(player.username);
+      setPlayerPicture(player.avatar_svg);
     }
   }, [player]);
 

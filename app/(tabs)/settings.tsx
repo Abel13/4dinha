@@ -49,15 +49,15 @@ export default function Settings() {
     effectsVolume,
     musicVolume,
   } = useSettingsStore((store) => store);
-  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
+  const { playSound, stopSound } = useSound('ambient');
 
   useEffect(() => {
-    playSoundAsync({
+    playSound({
       looping: true,
     });
 
     return () => {
-      stopSoundAsync();
+      stopSound();
     };
   }, []);
 

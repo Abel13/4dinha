@@ -10,8 +10,22 @@ export default function LobbyLayout() {
         statusBarHidden: true,
       }}
     >
-      <Stack.Screen name='[matchId]' />
-      <Stack.Screen name='new' />
+      <Stack.Screen
+        name='[matchId]'
+        options={{
+          animationDuration: 500,
+          animation: 'simple_push',
+          title: 'Perfil',
+        }}
+      />
+      <Stack.Screen
+        name='new'
+        options={{
+          animationDuration: 500,
+          animation: 'simple_push',
+          title: 'Perfil',
+        }}
+      />
     </Stack>
   );
 }

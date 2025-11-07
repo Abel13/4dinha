@@ -2,7 +2,7 @@ import { Image, StyleSheet } from 'react-native';
 import { useCallback } from 'react';
 import { type Match } from '@/types/Match';
 import { Colors } from '@/constants/Colors';
-import { useDiceBear } from '@/hooks/useDiceBear';
+import { getDiceBear } from '@/utils/getDiceBear';
 import { Feather } from '@expo/vector-icons';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
@@ -39,7 +39,7 @@ interface Props {
 }
 
 export function MatchItem({ match, enterMatch, continueMatch }: Props) {
-  const matchPicture = useDiceBear()({ avatar: 'icons', seed: match.id });
+  const matchPicture = getDiceBear()({ avatar: 'icons', seed: match.id });
 
   const getStatus = useCallback(
     (status: string | null): keyof typeof Feather.glyphMap => {

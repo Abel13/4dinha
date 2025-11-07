@@ -5,10 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   useColorScheme,
+  View,
 } from 'react-native';
 
-import { RelativePathString, usePathname, useRouter } from 'expo-router';
-import { useCallback, useEffect } from 'react';
+import { RelativePathString, useFocusEffect, useRouter } from 'expo-router';
+import { useCallback } from 'react';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -23,11 +24,19 @@ import { ThemedFlatList } from '@/components/ThemedFlatList';
 import { SoundButton } from '@/components/SoundButton';
 import { useSound } from '@/hooks/useAudioConfig';
 import { useAuth } from '@/hooks/useAuth';
+import { ThemedButton } from '@/components/ThemedButton';
+import { SvgImage } from '@/components/SvgImage';
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: Colors.dark.black },
+  screen: { flex: 1, backgroundColor: Colors.dark.background },
   container: { flex: 1, justifyContent: 'space-between' },
   background: { flex: 1, alignItems: 'flex-start' },
+  diagonalBorder: {
+    position: 'absolute',
+    borderColor: Colors.dark.shadowText,
+    borderWidth: 1,
+    transform: [{ rotate: '45deg' }],
+  },
   header: {
     flexDirection: 'row',
     width: '100%',
@@ -40,14 +49,14 @@ const styles = StyleSheet.create({
     gap: 10,
     borderBottomStartRadius: 10,
     borderBottomEndRadius: 10,
-    backgroundColor: Colors.dark.purpleLight,
-    shadowColor: Colors.dark.purpleLight,
+    shadowColor: Colors.dark.icon,
+    alignItems: 'center',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.4,
     shadowRadius: 3,
     elevation: 8,
   },
-  profilePic: { height: 50, width: 50, borderRadius: 8, borderWidth: 3 },
+  profilePic: { height: 30, width: 30 },
   topContainer: { marginTop: 10 },
   rowContainer: { flexDirection: 'row', gap: 10 },
   coinContainer: {
@@ -93,9 +102,9 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   matchesContainer: {
-    maxWidth: '100%',
+    width: 300,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     borderWidth: 2,
     borderColor: Colors.dark.purpleLight,
     backgroundColor: Colors.dark.purple,
@@ -106,6 +115,10 @@ const styles = StyleSheet.create({
   logo: { width: 100, height: 100 },
   matchContainer: {
     backgroundColor: Colors.dark.purple,
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderLeftWidth: 2,
+    borderColor: Colors.dark.purpleLight,
     padding: 10,
     paddingRight: 60,
     borderTopStartRadius: 10,
@@ -125,14 +138,22 @@ const styles = StyleSheet.create({
   },
   darkBorder: {
     borderColor: Colors.dark.border,
+    borderWidth: 1,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  lightBorder: {
+    borderColor: Colors.dark.border,
+    borderWidth: 1,
+    borderRadius: 10,
+    overflow: 'hidden',
   },
 });
 
 export default function LobbyScreen() {
   const router = useRouter();
-  const pathname = usePathname();
   const theme = useColorScheme() || 'light';
-  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
+  const { playSound, stopSound } = useSound('ambient');
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
   const { signOut } = useAuth();
@@ -143,131 +164,164 @@ export default function LobbyScreen() {
     router.push({ pathname: '/lobby/new' });
   }, [router]);
 
-  useEffect(() => {
-    if (pathname === '/')
-      playSoundAsync({
-        looping: true,
-      });
-  }, [pathname]);
+  useFocusEffect(
+    useCallback(() => {
+      playSound({ looping: true });
+
+      return () => {
+        stopSound();
+      };
+    }, [playSound, stopSound]),
+  );
 
   return (
     <ThemedView style={styles.screen}>
-      <ImageBackground
-        source={require('@/assets/images/background.jpg')}
-        resizeMode='cover'
-        style={styles.background}
-        blurRadius={3}
-      >
-        <ThemedView style={styles.container} darkColor='transparent'>
-          <ThemedView style={styles.header}>
+      <View
+        style={[
+          styles.diagonalBorder,
+          { width: 10, height: 10, bottom: '15%', left: '8%' },
+        ]}
+      />
+      <View
+        style={[
+          styles.diagonalBorder,
+          { width: 15, height: 15, top: '12%', left: '50%' },
+        ]}
+      />
+      <View
+        style={[
+          styles.diagonalBorder,
+          { width: 50, height: 50, top: '18%', right: '30%' },
+        ]}
+      />
+      <ThemedView style={styles.header}>
+        <SoundButton
+          sound='menu'
+          style={styles.profile}
+          onPress={() => {
+            stopSound();
+            router.push('/(tabs)/profile');
+          }}
+        >
+          {/* <CustomImage
+            source={{ uri: profilePicture }}
+            style={[styles.profilePic, styles[`${theme}Border`]]}
+          /> */}
+          <ThemedView style={styles[`${theme}Border`]}>
+            <SvgImage
+              xml={profilePicture as string}
+              style={[styles.profilePic]}
+            />
+          </ThemedView>
+          <ThemedText type='defaultSemiBold'>{`Olá, ${username}!`}</ThemedText>
+          <HelloWave size={14} />
+        </SoundButton>
+
+        <ThemedView darkColor='transparent' style={styles.topContainer}>
+          <ThemedView style={styles.rowContainer}>
+            {[
+              { icon: 'coins', value: '0' },
+              { icon: 'sack-dollar', value: '0' },
+            ].map((item) => (
+              <ThemedView key={item.icon} style={styles.coinContainer}>
+                <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
+                  <FontAwesome6
+                    name={item.icon}
+                    size={14}
+                    color={Colors[theme].text}
+                  />
+                </ThemedView>
+                <ThemedText type='h4'>{item.value}</ThemedText>
+              </ThemedView>
+            ))}
+          </ThemedView>
+        </ThemedView>
+
+        <ThemedView style={styles.iconsMenu}>
+          {headerMenu.map((icon) => (
             <SoundButton
+              key={icon.name}
               sound='menu'
-              style={styles.profile}
               onPress={() => {
-                stopSoundAsync();
-                router.push('/(tabs)/profile');
+                stopSound();
+                router.push(icon.route as RelativePathString);
               }}
             >
-              <Image
-                source={{ uri: profilePicture }}
-                style={[styles.profilePic, styles[`${theme}Border`]]}
-              />
-              <ThemedText type='defaultSemiBold' darkColor='#070f2b'>
-                {`Olá, ${username}!`}
-              </ThemedText>
-              <HelloWave size={14} />
-            </SoundButton>
-
-            <ThemedView darkColor='transparent' style={styles.topContainer}>
-              <ThemedView style={styles.rowContainer}>
-                {[
-                  { icon: 'coins', value: '0' },
-                  { icon: 'sack-dollar', value: '0' },
-                ].map((item) => (
-                  <ThemedView key={item.icon} style={styles.coinContainer}>
-                    <ThemedView style={styles.iconWrapper} darkColor='#1b1a55'>
-                      <FontAwesome6
-                        name={item.icon}
-                        size={14}
-                        color={Colors[theme].text}
-                      />
-                    </ThemedView>
-                    <ThemedText darkColor='#070f2b' type='h4'>
-                      {item.value}
-                    </ThemedText>
-                  </ThemedView>
-                ))}
-              </ThemedView>
-            </ThemedView>
-
-            <ThemedView style={styles.iconsMenu}>
-              {headerMenu.map((icon) => (
-                <SoundButton
-                  key={icon.name}
-                  sound='menu'
-                  onPress={() => {
-                    stopSoundAsync();
-                    router.push(icon.route as RelativePathString);
-                  }}
-                >
-                  <Ionicons name={icon.icon} size={28} color='#FFF' />
-                </SoundButton>
-              ))}
-              <TouchableOpacity
-                onPress={() => {
-                  stopSoundAsync();
-                  signOut();
+              <Ionicons
+                name={icon.icon}
+                size={28}
+                color='#FFF'
+                style={{
+                  shadowColor: Colors.dark.shadowIcon,
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.9,
+                  shadowRadius: 10,
+                  elevation: 5,
                 }}
-              >
-                <Ionicons name='exit-outline' size={28} color='#FFF' />
-              </TouchableOpacity>
-            </ThemedView>
-          </ThemedView>
+              />
+            </SoundButton>
+          ))}
+          <TouchableOpacity
+            onPress={() => {
+              stopSound();
+              signOut();
+            }}
+          >
+            <Ionicons
+              name='exit-outline'
+              size={28}
+              color='#FFF'
+              style={{
+                shadowColor: Colors.dark.shadowIcon,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.9,
+                shadowRadius: 10,
+                elevation: 5,
+              }}
+            />
+          </TouchableOpacity>
+        </ThemedView>
+      </ThemedView>
 
-          <ThemedView style={styles.center}>
-            <ScrollView horizontal style={styles.scrollContainer}>
-              <ThemedView style={styles.menuContainer}>
-                <SoundButton
-                  sound='menu'
-                  style={styles.menu}
-                  onPress={() => {
-                    stopSoundAsync();
-                    handleNewMatch();
+      <ThemedView style={styles.center}>
+        <ScrollView horizontal style={styles.scrollContainer}>
+          <ThemedView style={styles.menuContainer}>
+            <ThemedButton
+              title='CRIAR PARTIDA'
+              type='outlined'
+              onPress={() => {
+                stopSound();
+                handleNewMatch();
+              }}
+            />
+            {inProgressMatches && inProgressMatches.length > 0 && (
+              <ThemedView style={styles.matchesContainer}>
+                <ThemedText
+                  lineBreakMode='tail'
+                  type='subtitle'
+                  numberOfLines={3}
+                  lightColor={Colors.dark.text}
+                  style={{
+                    textAlign: 'left',
+                    alignSelf: 'flex-start',
+                    paddingBottom: 20,
                   }}
                 >
-                  <ThemedText type='subtitle' lightColor={Colors.dark.text}>
-                    Criar partida
-                  </ThemedText>
-                  <Image
-                    source={require('@/assets/images/logo.png')}
-                    style={styles.logo}
-                  />
-                </SoundButton>
-                <ThemedView style={styles.matchesContainer}>
-                  <ThemedText
-                    lineBreakMode='tail'
-                    type='subtitle'
-                    numberOfLines={3}
-                    lightColor={Colors.dark.text}
-                    style={{
-                      textAlign: 'left',
-                      alignSelf: 'flex-start',
-                    }}
-                  >
-                    Voltar para
-                  </ThemedText>
+                  Volte para a partida
+                </ThemedText>
 
-                  <ThemedFlatList
-                    data={inProgressMatches}
-                    keyExtractor={(item) => item.matches.id.toString()}
-                    numColumns={2}
-                    renderItem={({ item }) => (
-                      <ThemedView style={{ margin: 5 }}>
-                        <MatchItem
-                          match={item.matches}
-                          enterMatch={() => {}}
-                          continueMatch={() => {
-                            stopSoundAsync();
+                <ThemedFlatList
+                  data={inProgressMatches}
+                  keyExtractor={(item) => item.matches.id.toString()}
+                  numColumns={2}
+                  renderItem={({ item }) => {
+                    return (
+                      <ThemedView>
+                        <ThemedButton
+                          title={'8W5BO'}
+                          type='outlined'
+                          onPress={() => {
+                            stopSound();
                             router.push({
                               pathname: '/(game)/4dinha',
                               params: {
@@ -277,44 +331,47 @@ export default function LobbyScreen() {
                           }}
                         />
                       </ThemedView>
-                    )}
-                  />
-                </ThemedView>
+                    );
+                  }}
+                />
               </ThemedView>
-            </ScrollView>
-            <ThemedView style={styles.matchContainer}>
-              <ThemedText type='subtitle' lightColor={Colors.dark.text}>
-                Partidas Abertas
-              </ThemedText>
-              <ThemedFlatList
-                data={matches}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <MatchItem
-                    match={item}
-                    enterMatch={() => {
-                      stopSoundAsync();
-                      enterMatch(item.id);
-                    }}
-                    continueMatch={() => {}}
-                  />
-                )}
-              />
-            </ThemedView>
+            )}
           </ThemedView>
-
-          <ThemedView style={styles.footer}>
-            {footerMenu.map((item) => (
-              <MenuIcon
-                key={item.name}
-                icon={item.icon}
-                onPress={() => {}}
-                text={item.name}
-              />
-            ))}
-          </ThemedView>
+        </ScrollView>
+        <ThemedView style={styles.matchContainer}>
+          <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+            Salas Abertas
+          </ThemedText>
+          <ThemedFlatList
+            data={matches}
+            keyExtractor={(item) => item.id}
+            emptyMessage='Nenhuma sala criada...'
+            renderItem={({ item }) => (
+              <ThemedView style={{ height: 50 }}>
+                <ThemedButton
+                  title={item.name}
+                  type='outlined'
+                  onPress={() => {
+                    stopSound();
+                    enterMatch(item.id);
+                  }}
+                />
+              </ThemedView>
+            )}
+          />
         </ThemedView>
-      </ImageBackground>
+      </ThemedView>
+
+      <ThemedView style={styles.footer}>
+        {footerMenu.map((item) => (
+          <MenuIcon
+            key={item.name}
+            icon={item.icon}
+            onPress={() => {}}
+            text={item.name}
+          />
+        ))}
+      </ThemedView>
     </ThemedView>
   );
 }

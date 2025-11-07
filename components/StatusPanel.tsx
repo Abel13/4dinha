@@ -65,8 +65,6 @@ export function StatusPanel({
   );
 
   const getStatus = useCallback(() => {
-    if (loading) return '';
-
     switch (roundStatus) {
       case 'betting': {
         if (me?.current) return 'Sua vez de apostar';
@@ -77,7 +75,7 @@ export function StatusPanel({
         return `Vez de ${playerName} jogar`;
       }
       default: {
-        if (me?.dealer) return 'Distribua as cartas';
+        if (me?.dealer) return 'Sua vez de dar cartas';
         if (!roundStatus) return 'O dealer está distribuindo as cartas';
       }
     }

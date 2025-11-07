@@ -31,7 +31,7 @@ export default function TabLayout() {
       <Stack.Screen
         name='profile'
         options={{
-          animationDuration: 1500,
+          animationDuration: 500,
           animation: 'simple_push',
           title: 'Perfil',
         }}

@@ -71,10 +71,16 @@ export interface GameResult {
   wins: number;
 }
 
+export interface GameTurn {
+  turn_number: number;
+  winner_card: PlayerCardOnGame;
+}
+
 export interface Game {
   match: Match;
   players: GamePlayer[];
   round: GameRound;
+  turns: GameTurn[];
   player_cards: PlayerCardOnGame;
   bets: Bet[];
   results: GameResult[];

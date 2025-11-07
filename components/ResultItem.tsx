@@ -4,6 +4,8 @@ import { usePlayer } from '@/hooks/usePlayer';
 import { type GameResult } from '@/types';
 import { ThemedView } from './ThemedView';
 import { ThemedText } from './ThemedText';
+import { SvgImage } from './SvgImage';
+import Lives from './Lives';
 
 export function ResultItem({ result }: { result: GameResult }) {
   const { playerName, playerPicture } = usePlayer(result.user_id);
@@ -17,6 +19,8 @@ export function ResultItem({ result }: { result: GameResult }) {
         padding: 10,
         borderRadius: 10,
         gap: 10,
+        borderWidth: 2,
+        borderColor: Colors.dark.border,
       }}
     >
       <ThemedView
@@ -25,18 +29,20 @@ export function ResultItem({ result }: { result: GameResult }) {
         }}
       >
         {playerPicture && (
-          <Image
-            source={{
-              uri: playerPicture,
-            }}
-            style={{
+          <SvgImage
+            xml={playerPicture}
+            containerStyle={{
               width: 35,
               height: 35,
-              borderRadius: 18,
+              borderRadius: 4,
             }}
           />
         )}
-        <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+        <ThemedText
+          type='defaultSemiBold'
+          lightColor={Colors.dark.text}
+          numberOfLines={1}
+        >
           {playerName}
         </ThemedText>
       </ThemedView>
@@ -48,15 +54,17 @@ export function ResultItem({ result }: { result: GameResult }) {
           gap: 10,
         }}
       >
-        <ThemedView>
-          <ThemedText type='title'>❤️</ThemedText>
-          <ThemedText
-            type='defaultSemiBold'
-            style={{ position: 'absolute', top: '30%', left: '40%' }}
-          >
+        <Lives
+          totalSegments={5}
+          filledSegments={result.lives - Math.abs(result.wins - result.bets)}
+          glowIntensity={1}
+          size={40}
+          strokeWidth={3}
+        >
+          <ThemedText type='defaultSemiBold'>
             {result.lives - Math.abs(result.wins - result.bets)}
           </ThemedText>
-        </ThemedView>
+        </Lives>
         <ThemedText
           type='title'
           lightColor={Colors.dark.text}

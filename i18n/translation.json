@@ -1,0 +1,89 @@
+{
+  "pt": {
+    "language": {
+      "flag": "🇧🇷",
+      "country": "Brasil"
+    },
+    "login": {
+      "errors": {
+        "invalid_credentials": "Credenciais inválidas!",
+        "email_not_confirmed": "Email não confirmado",
+        "Unknown error": "Erro não identificado!",
+        "over_email_send_rate_limit": "Falha interna, contate o suporte!"
+      },
+      "email": "e-mail",
+      "password": "senha",
+      "login": "ENTRAR",
+      "register": "CADASTRAR",
+      "loading": "CARREGANDO"
+    },
+    "register": {
+      "errors": {
+        "Unknown error": "Erro não identificado!",
+        "unexpected_failure": "Falha ao criar a conta!",
+        "over_email_send_rate_limit": "Falha interna, contate o suporte!"
+      },
+      "username": "usuário",
+      "email": "e-mail",
+      "password": "senha",
+      "confirmPassword": "confirmação de senha",
+      "save": "CADASTRAR",
+      "loading": "CARREGANDO",
+      "cancel": "CANCELAR"
+    },
+    "confirmation": {
+      "errors": {
+        "required_field": "Campo obrigatório!",
+        "minimum_required": "Código inválido!"
+      },
+      "code": "código",
+      "message": "Um e-mail foi enviado para {{email}} com seu código de validação.",
+      "validate": "VALIDAR",
+      "cancel": "CANCELAR"
+    },
+    "components": {
+      "DiceBearAvatarBuilder": {
+        "save": "SALVAR"
+      }
+    }
+  },
+  "en": {
+    "login": {
+      "errors": {
+        "invalid_credentials": "Invalid credentials!",
+        "Unknown error": "Unknown error!"
+      },
+      "email": "email",
+      "password": "password",
+      "login": "LOGIN",
+      "save": "REGISTER",
+      "loading": "LOADING"
+    }
+  },
+  "es": {
+    "login": {
+      "errors": {
+        "invalid_credentials": "¡Credenciales inválidas!",
+        "Unknown error": "¡Error desconocido!"
+      },
+      "email": "correo electrónico",
+      "password": "contraseña",
+      "login": "INGRESAR",
+      "save": "REGISTRARSE",
+      "loading": "CARGANDO"
+    }
+  },
+  "zh": {
+    "login": {
+      "errors": {
+        "invalid_credentials": "凭证无效！",
+        "Unknown error": "未知错误！"
+      },
+      "email": "邮箱",
+      "password": "密码",
+      "login": "登录",
+      "save": "注册",
+      "loading": "加载中"
+    }
+  }
+}
