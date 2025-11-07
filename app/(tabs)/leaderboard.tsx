@@ -37,15 +37,15 @@ const styles = StyleSheet.create({
 });
 
 export default function Settings() {
-  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
+  const { playSound, stopSound } = useSound('ambient');
 
   useEffect(() => {
-    playSoundAsync({
+    playSound({
       looping: true,
     });
 
     return () => {
-      stopSoundAsync();
+      stopSound();
     };
   }, []);
 

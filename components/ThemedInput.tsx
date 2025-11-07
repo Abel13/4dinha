@@ -12,8 +12,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
     fontFamily: 'BarlowCondensed',
-    borderBottomWidth: 1,
-    borderRadius: 8,
+    borderWidth: 0.5,
+
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 0,
     borderColor: Colors.dark.tint,
   },
 });

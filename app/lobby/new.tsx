@@ -13,7 +13,6 @@ import { Colors } from '@/constants/Colors';
 import { SoundButton } from '@/components/SoundButton';
 import { useEffect } from 'react';
 import { useSound } from '@/hooks/useAudioConfig';
-import * as Clipboard from 'expo-clipboard';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -29,7 +28,7 @@ const schema = yup.object({
 
 export default function NewMatchScreen() {
   const { createMatch, creatingMatch } = useMatchList();
-  const { playSoundAsync, stopSoundAsync } = useSound('ambient');
+  const { playSound, stopSound } = useSound('ambient');
   function generateRandomCode(): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = '';
@@ -49,17 +48,13 @@ export default function NewMatchScreen() {
     },
   });
 
-  const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(getValues('name'));
-  };
-
   useEffect(() => {
-    playSoundAsync({
+    playSound({
       looping: true,
     });
 
     return () => {
-      stopSoundAsync();
+      stopSound();
     };
   }, []);
 
@@ -93,12 +88,6 @@ export default function NewMatchScreen() {
             style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}
           >
             <ThemedText type='outdoor'>{getValues('name')}</ThemedText>
-            <Feather
-              name='copy'
-              size={36}
-              color={Colors.dark.icon}
-              onPress={copyToClipboard}
-            />
           </ThemedView>
         </ThemedView>
         <ThemedButton

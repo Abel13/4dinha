@@ -1,1 +1,2 @@
-export type SupportedLocale = 'en_us' | 'pt_br';
+import translations from '@/i18n/translation.json';
+export type SupportedLocale = keyof typeof translations;

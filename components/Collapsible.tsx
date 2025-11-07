@@ -29,7 +29,7 @@ export function Collapsible({
   const [isOpen, setIsOpen] = useState(startOpen);
   const theme = useColorScheme() ?? 'light';
 
-  const { playSoundAsync } = useSound('collapse');
+  const { playSound } = useSound('collapse');
   const { selection } = useHaptics();
 
   return (
@@ -39,7 +39,7 @@ export function Collapsible({
         onPress={() => {
           selection();
           setIsOpen((value) => !value);
-          playSoundAsync();
+          playSound({});
         }}
         activeOpacity={0.8}
       >

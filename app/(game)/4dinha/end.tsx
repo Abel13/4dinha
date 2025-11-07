@@ -10,6 +10,7 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { useMatch } from '@/hooks/useMatch';
 import { useKeepAwake } from 'expo-keep-awake';
+import { SvgImage } from '@/components/SvgImage';
 
 const styles = StyleSheet.create({
   container: {
@@ -100,11 +101,9 @@ export default function End() {
 
       <ThemedView style={styles.card}>
         {playerPicture && (
-          <Image
-            source={{
-              uri: playerPicture,
-            }}
-            style={{ width: 100, height: 100, borderRadius: 50 }}
+          <SvgImage
+            xml={playerPicture}
+            containerStyle={{ width: 100, height: 100, borderRadius: 50 }}
           />
         )}
         <ThemedText type='subtitle' style={styles.winnerName}>

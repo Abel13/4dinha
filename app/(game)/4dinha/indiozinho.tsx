@@ -103,7 +103,6 @@ export default function Indiozinho() {
     trump,
     trumps,
     results,
-    getEmoji,
     playing,
   } = useGame(gameId as string);
 
@@ -279,13 +278,6 @@ export default function Indiozinho() {
             gap: 5,
           }}
         >
-          <ThemedView style={styles.popup}>
-            <ThemedText type='title'>
-              {isFetching || isLoading
-                ? getEmoji('loading')
-                : getEmoji(roundStatus)}
-            </ThemedText>
-          </ThemedView>
           <ThemedView
             style={{
               borderWidth: 1,

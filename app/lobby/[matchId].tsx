@@ -15,10 +15,12 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { SoundButton } from '@/components/SoundButton';
 import { useEffect } from 'react';
 import { useSound } from '@/hooks/useAudioConfig';
+import * as Clipboard from 'expo-clipboard';
 
 const styles = StyleSheet.create({
   titleContainer: {
     flex: 1,
+    backgroundColor: Colors.dark.background,
     paddingHorizontal: 60,
     paddingBottom: 20,
     gap: 10,
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 5,
     gap: 10,
   },
   padding: {
@@ -48,16 +51,20 @@ export default function LobbyScreen() {
   useKeepAwake();
   const { matchId } = useLocalSearchParams();
   const { session } = useUserSessionStore((state) => state);
-  const { playSoundAsync } = useSound('changePlayer');
-  const { match, matchPicture, startMatch } = useMatch(matchId as string);
+  const { playSound } = useSound('changePlayer');
+  const { match, startMatch } = useMatch(matchId as string);
   const { players, loadingLobby, updateStatus } = useMatchUsers(
     matchId as string,
   );
 
   const me = players.find((p) => p.user_id === session?.user.id);
 
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(match?.name || '');
+  };
+
   useEffect(() => {
-    playSoundAsync();
+    playSound({});
   }, [players.length]);
 
   if (!me)
@@ -71,46 +78,35 @@ export default function LobbyScreen() {
 
   return (
     <ThemedView style={styles.titleContainer}>
-      <ThemedView style={[styles.row, styles.padding]}>
+      <ThemedView style={[styles.row, { gap: 20 }]}>
         <SoundButton sound='menu' onPress={router.back}>
           <Feather
             name='chevron-left'
             color={Colors.dark.tabIconDefault}
-            size={28}
+            size={24}
           />
         </SoundButton>
-        <Image
-          source={{
-            uri: matchPicture?.toString(),
-          }}
-          style={styles.matchPicture}
-        />
-        <ThemedText
-          type='subtitle'
-          style={{ width: '90%' }}
-          lightColor={Colors.dark.text}
-        >
+
+        <ThemedText type='subtitle' lightColor={Colors.dark.text}>
           {match?.name}
         </ThemedText>
+        <Feather
+          name='copy'
+          size={20}
+          color={Colors.dark.icon}
+          onPress={copyToClipboard}
+        />
       </ThemedView>
-      <ThemedView />
       <PlayerItem matchUser={me} />
-      <ThemedView />
-      <ThemedText
-        style={styles.paddingHorizontal}
-        type='subtitle'
-        lightColor={Colors.dark.text}
-      >
-        Jogadores
-      </ThemedText>
       <ThemedFlatList
         data={players.filter((p) => p.user_id !== session?.user.id)}
+        emptyMessage='Aguardando jogadores...'
         renderItem={({ item }) => {
           return <PlayerItem matchUser={item} />;
         }}
         refreshing={loadingLobby}
       />
-      <ThemedView style={[styles.row, styles.center]}>
+      <ThemedView style={[styles.row, styles.center, { height: 60 }]}>
         <ThemedButton
           title={me.ready ? 'CANCELAR' : 'PRONTO'}
           type={me.ready ? 'danger' : 'default'}

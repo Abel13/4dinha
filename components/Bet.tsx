@@ -16,12 +16,15 @@ import { ThemedButton } from './ThemedButton';
 import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 
+const SILENT = true;
+
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
     width: '100%',
     alignItems: 'center',
+    zIndex: 5000,
   },
   animatedContainer: {
     alignItems: 'center',
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     paddingHorizontal: 10,
-    height: 150,
+    height: 190,
     shadowColor: Colors.dark.background,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
@@ -44,6 +47,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 20,
+  },
+  betNumber: {
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 20,
   },
   controlBar: {
     flexDirection: 'row',
@@ -88,23 +103,34 @@ export function Bet({
   );
   const slideAnim = useRef(new Animated.Value(0)).current;
   const [hide, setHide] = useState(false);
-  const { playSoundAsync } = useSound('collapse');
+  const { playSound } = useSound('collapse');
   const { selection } = useHaptics();
 
-  const toggleHide = useCallback(() => {
-    setHide(!hide);
-    playSoundAsync();
-    selection();
-    Animated.timing(slideAnim, {
-      toValue: !hide ? 1 : 0,
-      duration: 500,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start();
-  }, [hide, playSoundAsync, selection, slideAnim]);
+  const toggleHide = useCallback(
+    (silent?: boolean) => {
+      setHide(!hide);
+      if (!silent) playSound({});
+      selection();
+      Animated.timing(slideAnim, {
+        toValue: !hide ? 1 : 0,
+        duration: 500,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    },
+    [hide, playSound, selection, slideAnim],
+  );
 
   useEffect(() => {
-    if (cardQuantity === 1) toggleHide();
+    if (cardQuantity === 1) {
+      setTimeout(() => {
+        setTimeout(() => {
+          toggleHide();
+        }, 2000);
+
+        toggleHide(SILENT);
+      }, 1500);
+    }
   }, []);
 
   return (
@@ -117,7 +143,7 @@ export function Bet({
               {
                 translateY: slideAnim.interpolate({
                   inputRange: [0, 1],
-                  outputRange: [0, -150],
+                  outputRange: [0, -190],
                 }),
               },
             ],
@@ -130,9 +156,29 @@ export function Bet({
       >
         <View style={styles.betContainer}>
           <View style={styles.betControls}>
-            <ThemedButton title='-' onPress={subtract} disabled={bet === 0} />
-            <ThemedText lightColor={Colors.dark.text}>{bet}</ThemedText>
-            <ThemedButton title='+' onPress={add} disabled={bet === max} />
+            <Feather
+              name='minus'
+              size={50}
+              onPress={subtract}
+              disabled={bet === 0}
+              color={bet === 0 ? Colors.dark.disabledButton : Colors.dark.text}
+            />
+            {/* <ThemedButton title='-' onPress={subtract} disabled={bet === 0} /> */}
+            <ThemedView style={styles.betNumber}>
+              <ThemedText type='outdoor' lightColor={Colors.dark.text}>
+                {bet}
+              </ThemedText>
+            </ThemedView>
+            <Feather
+              name='plus'
+              size={50}
+              onPress={add}
+              disabled={bet === max}
+              color={
+                bet === max ? Colors.dark.disabledButton : Colors.dark.text
+              }
+            />
+            {/* <ThemedButton title='+' onPress={add} disabled={bet === max} /> */}
           </View>
           <ThemedText type='error'>
             {checkLimit &&
@@ -140,25 +186,29 @@ export function Bet({
                 betCount - cardQuantity,
               )}`}
           </ThemedText>
-          <ThemedButton
-            title='APOSTAR'
-            onPress={() => handleBet(bet)}
-            loading={betting}
-            disabled={loading}
-          />
+          <ThemedView style={styles.row}>
+            <ThemedView style={{ width: 24 }} />
+            <ThemedButton
+              title='APOSTAR'
+              onPress={() => handleBet(bet)}
+              loading={betting}
+              disabled={loading}
+            />
+            <TouchableOpacity onPress={refreshGame}>
+              {loading ? (
+                <ActivityIndicator color={Colors.dark.tint} />
+              ) : (
+                <Feather name='refresh-cw' color={Colors.dark.tint} size={22} />
+              )}
+            </TouchableOpacity>
+          </ThemedView>
         </View>
 
         <ThemedView style={styles.controlBar}>
           {hide && (
             <ThemedText type='link'>desça o painel para apostar</ThemedText>
           )}
-          <TouchableOpacity onPress={refreshGame}>
-            {loading ? (
-              <ActivityIndicator color={Colors.dark.tint} />
-            ) : (
-              <Feather name='refresh-cw' color={Colors.dark.tint} size={22} />
-            )}
-          </TouchableOpacity>
+
           <TouchableOpacity onPress={toggleHide}>
             <Feather
               name={hide ? 'chevron-down' : 'chevron-up'}

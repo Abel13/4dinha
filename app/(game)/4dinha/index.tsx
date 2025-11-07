@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { FlatList, ImageBackground, Modal, StyleSheet } from 'react-native';
+import { ImageBackground, Modal, StyleSheet } from 'react-native';
 import { useKeepAwake } from 'expo-keep-awake';
 
 import { Bet } from '@/components/Bet';
@@ -16,14 +16,13 @@ import { StatusPanel } from '@/components/StatusPanel';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import type { Suit, Symbol } from '@/types';
-import { height, scale, verticalScale, width } from '@/utils/scalingUtils';
-import { ThemedFlatList } from '@/components/ThemedFlatList';
+import { scale, verticalScale, width } from '@/utils/scalingUtils';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width,
-    height,
+    width: '100%',
+    height: '100%',
   },
   background: {
     flex: 1,
@@ -50,8 +49,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.dark.blackTransparent03,
     position: 'absolute',
-    width,
-    height,
+    width: '100%',
+    height: '100%',
   },
   modalContent: {
     alignItems: 'center',
@@ -90,7 +89,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
   },
   roundFinishedModalInner: {
-    // width: '50%',
+    flexDirection: 'row',
+    gap: 10,
   },
   roundFinishedHeaderTitle: {
     margin: 10,
@@ -113,6 +113,8 @@ const styles = StyleSheet.create({
     elevation: 8,
     alignSelf: 'center',
     justifyContent: 'center',
+
+    flexDirection: 'row',
   },
   trumpsCardRow: {
     flexDirection: 'row',
@@ -146,11 +148,14 @@ const styles = StyleSheet.create({
   },
   dealButton: {
     justifyContent: 'center',
-    alignItems: 'center',
     width: '30%',
     height: '100%',
-    backgroundColor: Colors.dark.tint,
-    borderRadius: 10,
+    backgroundColor: Colors.dark.background,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.dark.border,
+    borderBottomColor: Colors.dark.transparent,
   },
   playerSeat: {
     maxWidth: '35%',
@@ -217,6 +222,7 @@ interface BettingModalProps {
   refreshGame: () => void;
   loading: boolean;
   trumps: Trump[];
+  trump: Trump;
 }
 
 interface GameInfoProps {
@@ -224,6 +230,8 @@ interface GameInfoProps {
   cardQuantity: number | undefined;
   betCount: number;
   isDealer: boolean | undefined;
+  turn: number;
+  turnStatus: number;
 }
 
 function TrumpsModal({ isVisible, onClose, trumps }: TrumpsModalProps) {
@@ -297,7 +305,7 @@ function RoundFinishedModal({
             {isDealer ? (
               <ThemedButton
                 title='Concluir Rodada'
-                color={Colors.dark.success}
+                color={Colors.dark.icon}
                 onPress={onFinishRound}
                 disabled={finishing}
               />
@@ -309,15 +317,16 @@ function RoundFinishedModal({
           </ThemedView>
         </ThemedView>
         <ThemedView style={styles.roundFinishedModalInner}>
-          <ThemedFlatList
-            keyExtractor={(i) => i.user_id}
-            data={results?.sort((a, b) => a.user_id.localeCompare(b.user_id))}
-            stickyHeaderIndices={[0]}
-            horizontal
-            renderItem={({ item }) => (
-              <ResultItem result={item} key={item.user_id} />
-            )}
-          />
+          {results
+            ?.sort((a, b) => a.user_id.localeCompare(b.user_id))
+            .map((item) => (
+              <ThemedView
+                key={item.user_id}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <ResultItem result={item} />
+              </ThemedView>
+            ))}
         </ThemedView>
       </ThemedView>
     </Modal>
@@ -334,6 +343,7 @@ function BettingModal({
   refreshGame,
   loading,
   trumps,
+  trump,
 }: BettingModalProps) {
   return (
     <Modal
@@ -358,18 +368,26 @@ function BettingModal({
           )}
         </ThemedView>
         <ThemedView style={styles.trumpsOverlay}>
-          <ThemedText type='subtitle' lightColor={Colors.dark.text}>
-            TRUNFOS
-          </ThemedText>
-          <ThemedView style={styles.trumpsCardRow}>
-            {trumps.map((card) => (
-              <Card
-                key={`${card.symbol}${card.suit}`}
-                status='played'
-                suit={card.suit}
-                symbol={card.symbol}
-              />
-            ))}
+          <ThemedView style={{ justifyContent: 'space-between' }}>
+            <ThemedText type='default' lightColor={Colors.dark.text}>
+              MANILHA
+            </ThemedText>
+            <Card suit={trump?.suit} symbol={trump?.symbol} status='played' />
+          </ThemedView>
+          <ThemedView>
+            <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+              TRUNFOS
+            </ThemedText>
+            <ThemedView style={styles.trumpsCardRow}>
+              {trumps.map((card) => (
+                <Card
+                  key={`${card.symbol}${card.suit}`}
+                  status='played'
+                  suit={card.suit}
+                  symbol={card.symbol}
+                />
+              ))}
+            </ThemedView>
           </ThemedView>
         </ThemedView>
       </ThemedView>
@@ -382,6 +400,8 @@ function GameInfo({
   cardQuantity,
   betCount,
   isDealer,
+  turn,
+  turnStatus,
 }: GameInfoProps) {
   return (
     <ThemedView style={styles.gameInfoContainer}>
@@ -426,6 +446,7 @@ export default function Table() {
     roundStatus,
     betCount,
     turn,
+    turnStatus,
     cardQuantity,
     roundNumber,
     checkLimit,
@@ -482,6 +503,7 @@ export default function Table() {
         refreshGame={refreshGame}
         loading={isFetching || isLoading}
         trumps={trumps}
+        trump={trump}
       />
       <ImageBackground
         source={require('@/assets/images/background.jpg')}
@@ -494,6 +516,8 @@ export default function Table() {
           cardQuantity={cardQuantity}
           betCount={betCount}
           isDealer={me?.dealer}
+          turn={turn}
+          turnStatus={turnStatus}
         />
 
         <ThemedView style={[styles.container, styles.topRowContainer]}>
@@ -529,7 +553,7 @@ export default function Table() {
           {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
             <ThemedView style={styles.dealButton}>
               <ThemedButton
-                title='dar cartas'
+                title='distribuir cartas'
                 loading={dealing}
                 color='white'
                 onPress={handleDeal}
