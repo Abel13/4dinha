@@ -334,13 +334,6 @@ export const useGame = (matchId: string) => {
           ?.wins,
       } as GamePlayer);
 
-      setMe({
-        ...me,
-        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
-        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
-        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
-      } as GamePlayer);
-
       if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
 
       return;
