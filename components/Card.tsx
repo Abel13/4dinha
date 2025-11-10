@@ -86,6 +86,18 @@ const styles = StyleSheet.create({
   '♣️': {
     color: Colors.dark.black,
   },
+  '♥️': {
+    color: '#FF4C4C',
+  },
+  '♦️': {
+    color: '#FF4C4C',
+  },
+  '♠️': {
+    color: '#000',
+  },
+  '♣️': {
+    color: '#000',
+  },
 });
 
 export function Card({

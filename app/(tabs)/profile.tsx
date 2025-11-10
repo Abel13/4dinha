@@ -1,13 +1,12 @@
 import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
-import { router, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
-import { CustomImage } from '@/components/Image';
 import { useEffect } from 'react';
 import { SvgImage } from '@/components/SvgImage';
 import { SoundButton } from '@/components/SoundButton';

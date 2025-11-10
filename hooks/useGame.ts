@@ -14,6 +14,7 @@ import { NotificationFeedbackType } from 'expo-haptics';
 import { useUserSessionStore } from './useUserSessionStore';
 import { useSound } from './useAudioConfig';
 import { useHaptics } from './useHaptics';
+import { RoundStatus } from '@/types/Round';
 
 export const useGame = (matchId: string) => {
   const { session, loadSession } = useUserSessionStore();
@@ -33,7 +34,7 @@ export const useGame = (matchId: string) => {
   const [finishing, setFinishing] = useState<boolean>(false);
 
   const [turn, setTurn] = useState<number>(1);
-  const [roundStatus, setRoundStatus] = useState('');
+  const [roundStatus, setRoundStatus] = useState<RoundStatus>();
   const [currentPage, setCurrentPage] = useState<'indiozinho' | 'end' | null>(
     null,
   );
@@ -333,6 +334,13 @@ export const useGame = (matchId: string) => {
           ?.wins,
       } as GamePlayer);
 
+      setMe({
+        ...me,
+        cards: game.player_cards.filter((p) => p.user_id === me?.user_id),
+        bet: game.bets.find((p) => p.user_id === me?.user_id)?.bet,
+        wins: game?.results?.find((r) => r.user_id === me?.user_id)?.wins,
+      } as GamePlayer);
+
       if (cardQuantity) setCheckLimit(!!me?.dealer && betCount <= cardQuantity);
 
       return;
@@ -412,5 +420,6 @@ export const useGame = (matchId: string) => {
     handleBet,
     handleFinishRound,
     refreshGame,
+    getEmoji,
   };
 };

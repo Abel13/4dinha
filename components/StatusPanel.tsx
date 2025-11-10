@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   currentPlayer?: GamePlayer;
-  roundStatus: RoundStatus;
+  roundStatus?: RoundStatus;
   me: GamePlayer;
   loading: boolean;
 }
