@@ -261,22 +261,22 @@ export interface Database {
           _user_id: string;
           _round_number: number;
         };
-        Returns: Array<{
+        Returns: {
           id: string;
           user_id: string;
           symbol: Database['public']['Enums']['card_symbol'];
           suit: Database['public']['Enums']['card_suit'];
           status: Database['public']['Enums']['hand_status'];
           turn: number;
-        }>;
+        }[];
       };
       get_user_email: {
         Args: {
           user_id: string;
         };
-        Returns: Array<{
+        Returns: {
           email: string;
-        }>;
+        }[];
       };
       update_dealer: {
         Args: {
@@ -363,14 +363,14 @@ export type Tables<
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] &
-      PublicSchema['Views'])
-  ? (PublicSchema['Tables'] &
-      PublicSchema['Views'])[PublicTableNameOrOptions] extends {
-      Row: infer R;
-    }
-    ? R
-    : never
-  : never;
+        PublicSchema['Views'])
+    ? (PublicSchema['Tables'] &
+        PublicSchema['Views'])[PublicTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -386,12 +386,12 @@ export type TablesInsert<
     ? I
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-  ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
-      Insert: infer I;
-    }
-    ? I
-    : never
-  : never;
+    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -407,12 +407,12 @@ export type TablesUpdate<
     ? U
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-  ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
-      Update: infer U;
-    }
-    ? U
-    : never
-  : never;
+    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -424,8 +424,8 @@ export type Enums<
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
-  ? PublicSchema['Enums'][PublicEnumNameOrOptions]
-  : never;
+    ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
@@ -439,5 +439,5 @@ export type CompositeTypes<
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
   ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
-  ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
-  : never;
+    ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;

@@ -14,6 +14,7 @@ import { NotificationFeedbackType } from 'expo-haptics';
 import { useUserSessionStore } from './useUserSessionStore';
 import { useSound } from './useAudioConfig';
 import { useHaptics } from './useHaptics';
+import { RoundStatus } from '@/types/Round';
 
 export const useGame = (matchId: string) => {
   const { session, loadSession } = useUserSessionStore();
@@ -33,7 +34,7 @@ export const useGame = (matchId: string) => {
   const [finishing, setFinishing] = useState<boolean>(false);
 
   const [turn, setTurn] = useState<number>(1);
-  const [roundStatus, setRoundStatus] = useState('');
+  const [roundStatus, setRoundStatus] = useState<RoundStatus>();
   const [currentPage, setCurrentPage] = useState<'indiozinho' | 'end' | null>(
     null,
   );
@@ -412,5 +413,6 @@ export const useGame = (matchId: string) => {
     handleBet,
     handleFinishRound,
     refreshGame,
+    getEmoji,
   };
 };

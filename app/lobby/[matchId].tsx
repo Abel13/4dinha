@@ -1,4 +1,4 @@
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
