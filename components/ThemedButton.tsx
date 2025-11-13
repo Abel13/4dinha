@@ -21,12 +21,11 @@ import { useSound, SoundEffectKey } from '@/hooks/useAudioConfig';
 import { useHaptics } from '@/hooks/useHaptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { ThemedText } from './ThemedText';
-import { Loading } from './Loading';
 
 const styles = StyleSheet.create({
   button: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -233,3 +232,5 @@ export function ThemedButton({
     </TouchableOpacity>
   );
 }
+
+ThemedButton.displayName = 'ThemedButton';

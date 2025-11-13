@@ -1,4 +1,3 @@
-import { Colors } from '@/constants/Colors';
 import { useSound, SoundEffectKey } from '@/hooks/useAudioConfig';
 import { useHaptics } from '@/hooks/useHaptics';
 import { ImpactFeedbackStyle } from 'expo-haptics';

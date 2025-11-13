@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { StyleSheet, TextInput, useColorScheme } from 'react-native';
+import { useRef } from 'react';
+import { StyleSheet, TextInput } from 'react-native';
 
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -53,7 +53,6 @@ const schema = yup.object({
 });
 
 export default function LoginScreen() {
-  const theme = useColorScheme() || 'light';
   const { onAuth, handleRegister, loading, authError } = useAuth();
 
   const { t, locales, changeLanguage, customLanguage } =

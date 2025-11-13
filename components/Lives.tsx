@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
-import { ThemedText } from './ThemedText';
 import { ThemedView } from './ThemedView';
 
 interface CircularProgressBarProps {

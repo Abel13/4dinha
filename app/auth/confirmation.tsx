@@ -9,12 +9,7 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import {
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  useColorScheme,
-} from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
 import * as yup from 'yup';
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import { StyleSheet, Image, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 import React, { memo } from 'react';
 
 import { Colors } from '@/constants/Colors';

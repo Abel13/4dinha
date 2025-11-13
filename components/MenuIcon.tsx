@@ -1,5 +1,4 @@
 import {
-  TouchableOpacity,
   useColorScheme,
   StyleSheet,
   TouchableOpacityProps,
