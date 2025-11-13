@@ -317,7 +317,7 @@ export default function LobbyScreen() {
                   contentContainerStyle={{ alignItems: 'center' }}
                   renderItem={({ item }: { item: MyMatch }) => {
                     return (
-                      <ThemedView style={{ width: '45%', margin: 5 }}>
+                      <ThemedView style={{ width: '100%' }}>
                         <ThemedButton
                           title={item.matches.name}
                           type='outlined'
