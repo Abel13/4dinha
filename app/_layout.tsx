@@ -23,6 +23,7 @@ const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [session, setSession] = useState<Session | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const segments = useSegments();
 
   const [loaded] = useFonts({
@@ -45,9 +46,10 @@ export default function RootLayout() {
       RiveRendererIOS.Rive,
       RiveRendererAndroid.Rive,
     );
-    // pega sessão atual
+    // pega sessão atual e marca que já verificamos
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session ?? null);
+      setAuthChecked(true);
     });
 
     // escuta mudanças de auth
@@ -60,7 +62,7 @@ export default function RootLayout() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  if (!loaded) {
+  if (!loaded || !authChecked) {
     return null;
   }
 
