@@ -1,6 +1,4 @@
 import {
-  Image,
-  ImageBackground,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -17,7 +15,6 @@ import { useMatchList } from '@/hooks/useMatchList';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { HelloWave } from '@/components/HelloWave';
 import { Colors } from '@/constants/Colors';
-import { MatchItem } from '@/components/MatchItem';
 import { useHome } from '@/hooks/useHome';
 import MenuIcon from '@/components/MenuIcon';
 import { ThemedFlatList } from '@/components/ThemedFlatList';
@@ -26,6 +23,7 @@ import { useSound } from '@/hooks/useAudioConfig';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemedButton } from '@/components/ThemedButton';
 import { SvgImage } from '@/components/SvgImage';
+import { MyMatch } from '@/types/MyMatch';
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.dark.background },
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
   matchesContainer: {
     width: 300,
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     borderWidth: 2,
     borderColor: Colors.dark.purpleLight,
     backgroundColor: Colors.dark.purple,
@@ -147,6 +145,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     overflow: 'hidden',
+  },
+  subtitle: {
+    textAlign: 'left',
+    alignSelf: 'flex-start',
+    paddingBottom: 20,
   },
 });
 
@@ -301,11 +304,7 @@ export default function LobbyScreen() {
                   type='subtitle'
                   numberOfLines={3}
                   lightColor={Colors.dark.text}
-                  style={{
-                    textAlign: 'left',
-                    alignSelf: 'flex-start',
-                    paddingBottom: 20,
-                  }}
+                  style={styles.subtitle}
                 >
                   Volte para a partida
                 </ThemedText>
@@ -314,11 +313,13 @@ export default function LobbyScreen() {
                   data={inProgressMatches}
                   keyExtractor={(item) => item.matches.id.toString()}
                   numColumns={2}
-                  renderItem={({ item }) => {
+                  columnWrapperStyle={{ justifyContent: 'space-between' }}
+                  contentContainerStyle={{ alignItems: 'center' }}
+                  renderItem={({ item }: { item: MyMatch }) => {
                     return (
-                      <ThemedView>
+                      <ThemedView style={{ width: '100%' }}>
                         <ThemedButton
-                          title={'8W5BO'}
+                          title={item.matches.name}
                           type='outlined'
                           onPress={() => {
                             stopSound();
@@ -339,7 +340,11 @@ export default function LobbyScreen() {
           </ThemedView>
         </ScrollView>
         <ThemedView style={styles.matchContainer}>
-          <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+          <ThemedText
+            type='subtitle'
+            lightColor={Colors.dark.text}
+            style={styles.subtitle}
+          >
             Salas Abertas
           </ThemedText>
           <ThemedFlatList
@@ -347,7 +352,7 @@ export default function LobbyScreen() {
             keyExtractor={(item) => item.id}
             emptyMessage='Nenhuma sala criada...'
             renderItem={({ item }) => (
-              <ThemedView style={{ height: 50 }}>
+              <ThemedView style={{ height: 50, marginBottom: 5 }}>
                 <ThemedButton
                   title={item.name}
                   type='outlined'

@@ -1,4 +1,3 @@
-import { Image } from 'react-native';
 import { Colors } from '@/constants/Colors';
 import { usePlayer } from '@/hooks/usePlayer';
 import { type GameResult } from '@/types';

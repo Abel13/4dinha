@@ -413,6 +413,5 @@ export const useGame = (matchId: string) => {
     handleBet,
     handleFinishRound,
     refreshGame,
-    getEmoji,
   };
 };

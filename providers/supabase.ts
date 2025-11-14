@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 import { type Database } from '@/types';
-import { Redirect } from 'expo-router';
 
 const ExpoSecureStoreAdapter = {
   getItem: async (key: string): Promise<string | null> => {
@@ -17,9 +16,10 @@ const ExpoSecureStoreAdapter = {
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
-
-console.log('SUPABASE_URL =', supabaseUrl);
-console.log('SUPABASE_KEY starts with', supabaseAnonKey.slice(0, 8));
+if (__DEV__) {
+  console.log('SUPABASE_URL =', supabaseUrl);
+  console.log('SUPABASE_KEY starts with', supabaseAnonKey.slice(0, 8));
+}
 
 (async () => {
   try {

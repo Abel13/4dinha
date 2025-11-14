@@ -48,7 +48,7 @@ export const dealCardsMutation = (token: string) => {
             },
           },
         );
-      } catch (error) {
+      } catch (error: any) {
         throw new Error(error.response?.data?.error || 'Failed to deal cards');
       }
     },
@@ -69,7 +69,7 @@ export const finishRoundMutation = (token: string) => {
             },
           },
         );
-      } catch (error) {
+      } catch (error: any) {
         throw new Error(
           error.response?.data?.error || 'Failed to finish round',
         );
@@ -97,7 +97,7 @@ export const usePlayMutation = (
             },
           },
         );
-      } catch (error) {
+      } catch {
         // ignore error
       }
     },

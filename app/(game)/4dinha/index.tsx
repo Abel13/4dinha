@@ -16,7 +16,7 @@ import { StatusPanel } from '@/components/StatusPanel';
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
 import type { Suit, Symbol } from '@/types';
-import { scale, verticalScale, width } from '@/utils/scalingUtils';
+import { scale, verticalScale } from '@/utils/scalingUtils';
 
 const styles = StyleSheet.create({
   container: {

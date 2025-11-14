@@ -167,10 +167,10 @@ export default function Register() {
           </ThemedView>
           <ThemedView>
             <ThemedText lightColor={Colors.dark.text}>
-              {t('password')}
+              {t('confirmPassword')}
             </ThemedText>
             <ThemedInput
-              ref={inputPasswordRef}
+              ref={inputConfirmPasswordRef}
               name='confirmPassword'
               control={control}
               secureTextEntry

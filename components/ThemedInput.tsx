@@ -77,3 +77,5 @@ export const ThemedInput = forwardRef<TextInput, ThemedInputProps>(
     );
   },
 );
+
+ThemedInput.displayName = 'ThemedInput';
