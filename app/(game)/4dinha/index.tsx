@@ -1,77 +1,436 @@
+import { useCallback, useEffect, useState } from 'react';
+import { Feather } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from 'expo-router';
+import { ImageBackground, Modal, StyleSheet } from 'react-native';
+import { useKeepAwake } from 'expo-keep-awake';
+
 import { Bet } from '@/components/Bet';
 import { Card } from '@/components/Card';
 import { ResultItem } from '@/components/ResultItem';
-import { TableSeat } from '@/components/TableSeat';
+import { TableSeat } from '@/components/Table/TableSeat';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { StatusPanel } from '@/components/StatusPanel';
+
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
-import { Feather } from '@expo/vector-icons';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
-import { Button, Modal, StyleSheet } from 'react-native';
+import type { Suit, Symbol } from '@/types';
+import { scale, verticalScale } from '@/utils/scalingUtils';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    paddingTop: 50,
-    paddingBottom: 40,
+    width: '100%',
+    height: '100%',
+  },
+  background: {
+    flex: 1,
+    paddingTop: 25,
+    gap: 30,
   },
   track: {
     flex: 1,
-    width: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
-    margin: 2,
+    justifyContent: 'space-between',
+    marginHorizontal: 60,
+    gap: 20,
   },
   row: {
     flex: 1,
     flexDirection: 'row',
   },
   trump: {
-    backgroundColor: Colors.dark.background,
-    alignSelf: 'center',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    width: 120,
-    height: 100,
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: Colors.dark.tint,
-  },
-  popup: {
     flex: 1,
-    backgroundColor: Colors.dark.info,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: Colors.dark.tint,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: scale(7),
   },
   modalContainer: {
     flex: 1,
-    paddingBottom: '40%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(10, 60, 120, 0.4)',
+    backgroundColor: Colors.dark.blackTransparent03,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   modalContent: {
-    width: '80%',
-    padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
   },
+  centeredContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  trumpsModalContent: {
+    width: '40%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    paddingBottom: 20,
+    backgroundColor: Colors.dark.trumpsModalBackground,
+    borderColor: Colors.dark.tint,
+    borderWidth: 1,
+    borderRadius: 10,
+    gap: 20,
+  },
+  trumpsModalHeader: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  trumpsCardContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-evenly',
+  },
+  roundFinishedModalContent: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: Colors.dark.background,
+  },
+  roundFinishedModalInner: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  roundFinishedHeaderTitle: {
+    margin: 10,
+  },
+  roundFinishedHeaderAction: {
+    // flex: 1,
+    marginBottom: 20,
+  },
+  trumpsOverlay: {
+    top: '40%',
+    backgroundColor: Colors.dark.black,
+    padding: 10,
+    borderRadius: 10,
+    gap: 15,
+    zIndex: 1000,
+    shadowColor: Colors.dark.black,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+    elevation: 8,
+    alignSelf: 'center',
+    justifyContent: 'center',
+
+    flexDirection: 'row',
+  },
+  trumpsCardRow: {
+    flexDirection: 'row',
+    gap: 5,
+  },
+  gameInfoContainer: {
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    backgroundColor: Colors.dark.background,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    gap: 1,
+    width: scale(55),
+    position: 'absolute',
+    top: scale(5),
+    left: verticalScale(30),
+  },
+  topRowContainer: {
+    paddingHorizontal: 70,
+  },
+  bottomSection: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    gap: 10,
+    width: '70%',
+    paddingRight: verticalScale(75),
+  },
+  dealButton: {
+    justifyContent: 'center',
+    width: '30%',
+    height: '100%',
+    backgroundColor: Colors.dark.background,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.dark.border,
+    borderBottomColor: Colors.dark.transparent,
+  },
+  playerSeat: {
+    maxWidth: '35%',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    height: 110,
+  },
+  refreshButtonContainer: {
+    height: 110,
+    borderTopStartRadius: 10,
+    borderTopEndRadius: 10,
+    borderColor: Colors.dark.tint,
+    backgroundColor: Colors.dark.tint,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    width: 50,
+    alignContent: 'center',
+    padding: 0,
+  },
+  refreshButton: {
+    paddingHorizontal: 0,
+  },
 });
 
+interface Trump {
+  symbol: Symbol;
+  suit: Suit;
+}
+
+interface Result {
+  user_id: string;
+  bets: number;
+  wins: number;
+  lives: number;
+}
+
+interface TrumpsModalProps {
+  isVisible: boolean;
+  onClose: () => void;
+  trumps: Trump[];
+}
+
+interface RoundFinishedModalProps {
+  isVisible: boolean;
+  roundNumber: number;
+  results: Result[];
+  isDealer: boolean | undefined;
+  onFinishRound: () => void;
+  finishing: boolean;
+}
+
+interface BettingModalProps {
+  isVisible: boolean;
+  betCount: number;
+  betting: boolean;
+  cardQuantity: number | undefined;
+  checkLimit: boolean;
+  handleBet: (bet: number) => void;
+  refreshGame: () => void;
+  loading: boolean;
+  trumps: Trump[];
+  trump: Trump;
+}
+
+interface GameInfoProps {
+  roundNumber: number;
+  cardQuantity: number | undefined;
+  betCount: number;
+  isDealer: boolean | undefined;
+  turn: number;
+  turnStatus: number;
+}
+
+function TrumpsModal({ isVisible, onClose, trumps }: TrumpsModalProps) {
+  return (
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType='fade'
+      onRequestClose={onClose}
+      supportedOrientations={['landscape']}
+    >
+      <ThemedView style={[styles.modalContainer, styles.centeredContent]}>
+        <ThemedView style={styles.trumpsModalContent}>
+          <ThemedView style={styles.trumpsModalHeader}>
+            <ThemedText type='title' lightColor={Colors.dark.text}>
+              Trunfos
+            </ThemedText>
+            <Feather
+              name='x-circle'
+              onPress={onClose}
+              color={Colors.dark.link}
+              size={24}
+            />
+          </ThemedView>
+          <ThemedView style={styles.trumpsCardContainer}>
+            {trumps.map((card) => (
+              <Card
+                key={`${card.symbol}${card.suit}`}
+                status='played'
+                suit={card.suit}
+                symbol={card.symbol}
+              />
+            ))}
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+    </Modal>
+  );
+}
+
+function RoundFinishedModal({
+  isVisible,
+  roundNumber,
+  results,
+  isDealer,
+  onFinishRound,
+  finishing,
+}: RoundFinishedModalProps) {
+  return (
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType='slide'
+      supportedOrientations={['landscape']}
+    >
+      <ThemedView
+        style={[styles.modalContainer, styles.roundFinishedModalContent]}
+      >
+        <ThemedView
+          darkColor={Colors.dark.background}
+          lightColor={Colors.dark.background}
+        >
+          <ThemedView style={styles.roundFinishedHeaderTitle}>
+            <ThemedText
+              type='title'
+              lightColor={Colors.dark.text}
+            >{`Fim da rodada ${roundNumber}`}</ThemedText>
+          </ThemedView>
+
+          <ThemedView style={styles.roundFinishedHeaderAction}>
+            {isDealer ? (
+              <ThemedButton
+                title='Concluir Rodada'
+                color={Colors.dark.icon}
+                onPress={onFinishRound}
+                disabled={finishing}
+              />
+            ) : (
+              <ThemedText lightColor={Colors.dark.text}>
+                Aguarde o início da próxima rodada...
+              </ThemedText>
+            )}
+          </ThemedView>
+        </ThemedView>
+        <ThemedView style={styles.roundFinishedModalInner}>
+          {results
+            ?.sort((a, b) => a.user_id.localeCompare(b.user_id))
+            .map((item) => (
+              <ThemedView
+                key={item.user_id}
+                style={{ justifyContent: 'space-between' }}
+              >
+                <ResultItem result={item} />
+              </ThemedView>
+            ))}
+        </ThemedView>
+      </ThemedView>
+    </Modal>
+  );
+}
+
+function BettingModal({
+  isVisible,
+  betCount,
+  betting,
+  cardQuantity,
+  checkLimit,
+  handleBet,
+  refreshGame,
+  loading,
+  trumps,
+  trump,
+}: BettingModalProps) {
+  return (
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType='fade'
+      supportedOrientations={['landscape']}
+      statusBarTranslucent
+    >
+      <ThemedView style={styles.modalContainer}>
+        <ThemedView style={styles.modalContent}>
+          {cardQuantity && (
+            <Bet
+              betCount={betCount}
+              betting={betting}
+              cardQuantity={cardQuantity}
+              checkLimit={checkLimit}
+              handleBet={handleBet}
+              refreshGame={refreshGame}
+              loading={loading}
+            />
+          )}
+        </ThemedView>
+        <ThemedView style={styles.trumpsOverlay}>
+          <ThemedView style={{ justifyContent: 'space-between' }}>
+            <ThemedText type='default' lightColor={Colors.dark.text}>
+              MANILHA
+            </ThemedText>
+            <Card suit={trump?.suit} symbol={trump?.symbol} status='played' />
+          </ThemedView>
+          <ThemedView>
+            <ThemedText type='subtitle' lightColor={Colors.dark.text}>
+              TRUNFOS
+            </ThemedText>
+            <ThemedView style={styles.trumpsCardRow}>
+              {trumps.map((card) => (
+                <Card
+                  key={`${card.symbol}${card.suit}`}
+                  status='played'
+                  suit={card.suit}
+                  symbol={card.symbol}
+                />
+              ))}
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+    </Modal>
+  );
+}
+
+function GameInfo({
+  roundNumber,
+  cardQuantity,
+  betCount,
+  isDealer,
+  turn,
+  turnStatus,
+}: GameInfoProps) {
+  return (
+    <ThemedView style={styles.gameInfoContainer}>
+      <ThemedText type='h4' lightColor={Colors.dark.text}>
+        {roundNumber > 0
+          ? `RODADA ${roundNumber}`
+          : isDealer
+            ? 'DISTRIBUA AS CARTAS'
+            : 'INICIANDO A RODADA.\nAGUARDE!'}
+      </ThemedText>
+      <ThemedView />
+      {roundNumber > 0 && (
+        <ThemedView>
+          <ThemedText lightColor={Colors.dark.text}>{`${
+            cardQuantity || '-'
+          } carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
+          <ThemedText
+            lightColor={Colors.dark.text}
+          >{`APOSTAS: ${betCount}`}</ThemedText>
+        </ThemedView>
+      )}
+    </ThemedView>
+  );
+}
+
 export default function Table() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isTrumpsModalVisible, setTrumpsModalVisible] = useState(false);
 
   const {
     dealing,
@@ -87,6 +446,7 @@ export default function Table() {
     roundStatus,
     betCount,
     turn,
+    turnStatus,
     cardQuantity,
     roundNumber,
     checkLimit,
@@ -94,281 +454,145 @@ export default function Table() {
     trumps,
     results,
     currentPage,
+    betting,
+    finishing,
+    currentPlayer,
     handleDeal,
     handlePlay,
     handleBet,
-    betting,
     handleFinishRound,
     refreshGame,
-    getEmoji,
   } = useGame(gameId as string);
 
-  const closeModal = useCallback(() => {
-    setModalVisible(false);
-  }, []);
-
-  const onTrumpPress = useCallback(() => {
-    setModalVisible(true);
-  }, []);
+  const closeTrumpsModal = useCallback(() => setTrumpsModalVisible(false), []);
+  const openTrumpsModal = useCallback(() => setTrumpsModalVisible(true), []);
 
   useEffect(() => {
     if (currentPage) {
       router.replace({
         pathname: `/(game)/4dinha/${currentPage}`,
-        params: {
-          gameId,
-        },
+        params: { gameId },
       });
     }
   }, [currentPage]);
 
   return (
     <ThemedView style={styles.container}>
-      <Modal
-        visible={isModalVisible}
-        transparent={true}
-        animationType='slide'
-        onRequestClose={closeModal}
+      <TrumpsModal
+        isVisible={isTrumpsModalVisible}
+        onClose={closeTrumpsModal}
+        trumps={trumps}
+      />
+
+      <RoundFinishedModal
+        isVisible={roundStatus === 'finished'}
+        roundNumber={roundNumber}
+        results={results}
+        isDealer={me?.dealer}
+        onFinishRound={handleFinishRound}
+        finishing={finishing}
+      />
+
+      <BettingModal
+        isVisible={!!(roundStatus === 'betting' && me?.current)}
+        betCount={betCount}
+        betting={betting}
+        cardQuantity={cardQuantity}
+        checkLimit={checkLimit}
+        handleBet={handleBet}
+        refreshGame={refreshGame}
+        loading={isFetching || isLoading}
+        trumps={trumps}
+        trump={trump}
+      />
+      <ImageBackground
+        source={require('@/assets/images/background.jpg')}
+        resizeMode='stretch'
+        style={styles.background}
       >
-        <ThemedView style={styles.modalContainer}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedView
-              style={[
-                {
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                },
-              ]}
-            >
-              <ThemedText type='title'>Trunfos</ThemedText>
-              <Feather
-                name='x-circle'
-                onPress={closeModal}
-                color={Colors.dark.link}
-                size={24}
+        {/* TOPO */}
+        <GameInfo
+          roundNumber={roundNumber}
+          cardQuantity={cardQuantity}
+          betCount={betCount}
+          isDealer={me?.dealer}
+          turn={turn}
+          turnStatus={turnStatus}
+        />
+
+        <ThemedView style={[styles.container, styles.topRowContainer]}>
+          <ThemedView style={[styles.track, styles.row]}>
+            <TableSeat number={3} player={player3} currentTurn={turn} />
+            <TableSeat number={4} player={player4} currentTurn={turn} />
+            <TableSeat number={5} player={player5} currentTurn={turn} />
+          </ThemedView>
+        </ThemedView>
+
+        {/* MEIO */}
+        <ThemedView style={styles.container}>
+          <ThemedView style={styles.track}>
+            <ThemedView style={styles.row}>
+              <TableSeat number={2} player={player2} currentTurn={turn} />
+              <ThemedView>
+                <ThemedView style={styles.trump}>
+                  <Card
+                    suit={trump?.suit}
+                    symbol={trump?.symbol}
+                    status='on hand'
+                    onPress={openTrumpsModal}
+                  />
+                </ThemedView>
+              </ThemedView>
+              <TableSeat number={6} player={player6} currentTurn={turn} />
+            </ThemedView>
+          </ThemedView>
+        </ThemedView>
+
+        {/* ME */}
+        <ThemedView style={styles.bottomSection}>
+          {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
+            <ThemedView style={styles.dealButton}>
+              <ThemedButton
+                title='distribuir cartas'
+                loading={dealing}
+                color='white'
+                onPress={handleDeal}
               />
             </ThemedView>
-            <ThemedView
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'space-evenly',
-              }}
-            >
-              {trumps.map((card) => {
-                return (
-                  <Card
-                    key={`${card.symbol}${card.suit}`}
-                    status='played'
-                    suit={card.suit}
-                    symbol={card.symbol}
-                  />
-                );
-              })}
+          ) : (
+            <ThemedView style={styles.playerSeat}>
+              <TableSeat
+                number={1}
+                player={me}
+                handlePlay={async (id) => {
+                  await handlePlay(id!);
+                }}
+                playing={playing}
+                currentTurn={turn}
+              />
             </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </Modal>
+          )}
 
-      <Modal
-        visible={roundStatus === 'finished'}
-        transparent={true}
-        animationType='slide'
-      >
-        <ThemedView style={styles.modalContainer}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedView
-              style={[
-                {
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                },
-              ]}
-            >
-              <ThemedText type='title'>{`Fim da rodada ${roundNumber}`}</ThemedText>
-            </ThemedView>
-            <ThemedView style={{ width: '100%', gap: 5 }}>
-              {results &&
-                results.map((result) => {
-                  return <ResultItem result={result} key={result.user_id} />;
-                })}
-            </ThemedView>
-            <ThemedView style={{}}>
-              {me?.dealer ? (
-                <Button
-                  title='Concluir Rodada'
-                  color={Colors.dark.success}
-                  onPress={handleFinishRound}
-                />
-              ) : (
-                <ThemedText>Aguarde o início da próxima rodada...</ThemedText>
-              )}
-            </ThemedView>
-          </ThemedView>
-        </ThemedView>
-      </Modal>
-
-      <Modal
-        visible={
-          !!(
-            roundStatus === 'betting' &&
-            me?.current &&
-            !isFetching &&
-            !isLoading
-          )
-        }
-        transparent={true}
-        animationType='slide'
-      >
-        <ThemedView style={styles.modalContainer}>
-          <ThemedView style={styles.modalContent}>
-            <Bet
-              betCount={betCount}
-              betting={betting}
-              cardQuantity={cardQuantity!}
-              checkLimit={checkLimit}
-              handleBet={handleBet}
-              refreshGame={refreshGame}
-              loading={isFetching || isLoading}
+          <ThemedView style={styles.statusContainer}>
+            <StatusPanel
+              currentPlayer={currentPlayer}
+              loading={isLoading || isFetching}
+              me={me!}
+              roundStatus={roundStatus}
             />
-          </ThemedView>
-        </ThemedView>
-      </Modal>
-      <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
-          <ThemedView
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              borderColor: Colors.dark.border,
-              borderRadius: 10,
-              padding: 10,
-              marginVertical: 5,
-              gap: 2,
-            }}
-          >
-            <ThemedText type='subtitle'>
-              {roundNumber > 0 ? `RODADA ${roundNumber}` : 'INICIANDO RODADA'}
-            </ThemedText>
-            <ThemedView />
-            <ThemedText>{`${cardQuantity || '-'} carta${cardQuantity === 1 ? '' : 's'}`}</ThemedText>
-            <ThemedText>{`APOSTAS: ${betCount}`}</ThemedText>
-          </ThemedView>
-          <ThemedView style={{ maxWidth: '50%' }}>
-            <TableSeat number={4} player={player4} currentTurn={turn} />
-          </ThemedView>
-          <ThemedView
-            style={{
-              flex: 1,
-              gap: 5,
-            }}
-          >
-            <ThemedView style={styles.popup}>
-              <ThemedText type='title'>
-                {isFetching || isLoading
-                  ? getEmoji('loading')
-                  : getEmoji(roundStatus)}
-              </ThemedText>
-            </ThemedView>
-            <ThemedView
-              style={{
-                borderWidth: 1,
-                borderColor:
-                  checkLimit && me?.current && roundStatus === 'betting'
-                    ? Colors.dark.danger
-                    : Colors.dark.border,
-                borderRadius: 10,
-                minHeight: '60%',
-                padding: 10,
-                marginBottom: 5,
-              }}
-            >
-              {checkLimit &&
-                me?.current &&
-                cardQuantity &&
-                roundStatus === 'betting' && (
-                  <ThemedText type='error'>{`Sua aposta precisa ser diferente de: ${Math.abs(betCount - cardQuantity)}`}</ThemedText>
-                )}
+
+            <ThemedView style={styles.refreshButtonContainer}>
+              <ThemedButton
+                title='↻'
+                loading={isFetching || isLoading}
+                color='white'
+                onPress={refreshGame}
+                style={styles.refreshButton}
+              />
             </ThemedView>
           </ThemedView>
         </ThemedView>
-      </ThemedView>
-      <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
-          <TableSeat number={3} player={player3} currentTurn={turn} />
-          <TableSeat number={5} player={player5} currentTurn={turn} />
-        </ThemedView>
-      </ThemedView>
-      <ThemedView style={styles.trump}>
-        <ThemedText>MANILHA</ThemedText>
-        {roundStatus && (
-          <Card
-            suit={trump?.suit}
-            symbol={trump?.symbol}
-            status={'on hand'}
-            onPress={onTrumpPress}
-          />
-        )}
-      </ThemedView>
-      <ThemedView style={styles.track}>
-        <ThemedView style={styles.row}>
-          <TableSeat number={2} player={player2} currentTurn={turn} />
-          <TableSeat number={6} player={player6} currentTurn={turn} />
-        </ThemedView>
-      </ThemedView>
-
-      <ThemedView
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          gap: 10,
-          marginTop: 20,
-          paddingTop: 5,
-          borderColor: Colors.dark.border,
-          borderTopWidth: 1,
-        }}
-      >
-        {me?.dealer && !roundStatus && !isFetching && !isLoading ? (
-          <ThemedView
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: 1,
-            }}
-          >
-            <ThemedButton
-              title='dar cartas'
-              loading={dealing}
-              onPress={handleDeal}
-            />
-          </ThemedView>
-        ) : (
-          <ThemedView
-            style={{
-              flex: 1,
-            }}
-          >
-            <TableSeat
-              number={1}
-              player={me}
-              handlePlay={(id) => handlePlay(id as string)}
-              playing={playing}
-              currentTurn={turn}
-            />
-          </ThemedView>
-        )}
-
-        <ThemedView style={{ justifyContent: 'center', alignItems: 'center' }}>
-          <ThemedButton
-            title='↻'
-            loading={isFetching || isLoading}
-            onPress={refreshGame}
-          />
-        </ThemedView>
-      </ThemedView>
+      </ImageBackground>
     </ThemedView>
   );
 }

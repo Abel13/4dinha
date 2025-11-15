@@ -1,9 +1,10 @@
-import { BetInsert, Deck, Game } from '@/types';
-import { api } from './api';
+import { type BetInsert, type Deck, type Game } from '@/types';
 import { supabase } from '@/providers/supabase';
+import { UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { api } from './api';
 
-export const gameKey = (gameId: string) => {
-  return ['game', gameId];
+export const gameKey = () => {
+  return ['game'];
 };
 
 export const trumpKey = (gameId: string, roundNumber: number) => {
@@ -12,7 +13,7 @@ export const trumpKey = (gameId: string, roundNumber: number) => {
 
 export const updateGame = (gameId: string, token: string) => {
   return {
-    queryKey: gameKey(gameId),
+    queryKey: gameKey(),
     queryFn: async (): Promise<Game> => {
       if (!gameId) return {} as Game;
 
@@ -47,7 +48,7 @@ export const dealCardsMutation = (token: string) => {
             },
           },
         );
-      } catch (error) {
+      } catch (error: any) {
         throw new Error(error.response?.data?.error || 'Failed to deal cards');
       }
     },
@@ -68,7 +69,7 @@ export const finishRoundMutation = (token: string) => {
             },
           },
         );
-      } catch (error) {
+      } catch (error: any) {
         throw new Error(
           error.response?.data?.error || 'Failed to finish round',
         );
@@ -77,7 +78,11 @@ export const finishRoundMutation = (token: string) => {
   };
 };
 
-export const playMutation = (token: string) => {
+export const usePlayMutation = (
+  token: string,
+): UseMutationOptions<void, Error, string, unknown> => {
+  const queryClient = useQueryClient();
+
   return {
     mutationFn: async (id: string): Promise<void> => {
       try {
@@ -92,9 +97,48 @@ export const playMutation = (token: string) => {
             },
           },
         );
-      } catch (error) {
+      } catch {
         // ignore error
       }
+    },
+    onMutate: async (id: string) => {
+      await queryClient.cancelQueries({ queryKey: gameKey() });
+
+      const previousGame = queryClient.getQueryData<Game>(gameKey());
+
+      if (previousGame) {
+        const turn =
+          previousGame.player_cards
+            .sort((a, b) => a.turn - b.turn)
+            .findLast((c) => c.turn)?.turn || 1;
+
+        const currentCard = previousGame.player_cards.find((c) => c.id === id);
+
+        const updatedGame = {
+          ...previousGame,
+          player_cards: previousGame.player_cards.map((card) => {
+            if (card.id === id) return { ...card, status: 'on table', turn };
+
+            if (
+              card.user_id === currentCard?.user_id &&
+              card.status === 'on table'
+            )
+              return { ...card, status: 'played', turn };
+
+            return card;
+          }),
+        };
+
+        queryClient.setQueryData(gameKey(), updatedGame);
+      }
+
+      return previousGame;
+    },
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(gameKey(), context);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: gameKey() });
     },
   };
 };
@@ -105,15 +149,11 @@ export const playMutation = (token: string) => {
  */
 export const betMutation = () => {
   return {
-    mutationFn: async ({
-      bet,
-      match_id,
-      round_number,
-    }: BetInsert): Promise<void> => {
+    mutationFn: async (payload: BetInsert): Promise<void> => {
       const { error } = await supabase.from('bets').insert({
-        match_id,
-        round_number,
-        bet,
+        match_id: payload.match_id,
+        round_number: payload.round_number,
+        bet: payload.bet,
       });
 
       if (error) {
@@ -131,20 +171,16 @@ export const getTrumps = (
   return {
     queryKey: trumpKey(gameId, roundNumber),
     queryFn: async (): Promise<Deck[]> => {
-      try {
-        const response = await api.get('api/trumps', {
-          params: {
-            matchID: gameId,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const response = await api.get('api/trumps', {
+        params: {
+          matchID: gameId,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+      return response.data;
     },
     initialData: [],
   };

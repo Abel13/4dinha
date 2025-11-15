@@ -1,7 +1,10 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { HandStatus, Suit, Symbol } from '@/types/Card';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+
+import { type HandStatus, type Suit, type Symbol } from '@/types/Card';
 import { Colors } from '@/constants/Colors';
+
+import { ThemedView } from './ThemedView';
+import { ThemedText } from './ThemedText';
 
 interface CardProps {
   id?: string;
@@ -13,7 +16,79 @@ interface CardProps {
   onPress?: (id?: string) => void;
 }
 
-export const Card: React.FC<CardProps> = ({
+const styles = StyleSheet.create({
+  small: {
+    width: 38,
+    height: 50,
+  },
+  big: {
+    width: 50,
+    height: 68,
+  },
+  card: {
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    backgroundColor: Colors.dark.white,
+    shadowColor: Colors.dark.black,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+    padding: 2,
+    paddingTop: -5,
+    paddingLeft: 3,
+  },
+  cardBack: {
+    backgroundColor: Colors.dark.cardBack,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardContent: {
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  symbol_small: {
+    flex: 0.8,
+    textAlign: 'left',
+    fontSize: 14,
+    fontFamily: 'BarlowCondensedBold',
+  },
+  symbol_big: {
+    textAlign: 'left',
+    fontSize: 20,
+    fontFamily: 'BarlowCondensedBold',
+  },
+  suit_small: {
+    textAlign: 'right',
+    fontSize: 17,
+  },
+  suit_big: { textAlign: 'right', fontSize: 22 },
+  logo_small: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+  },
+  logo_big: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+  },
+  '♥️': {
+    color: Colors.dark.cardRed,
+  },
+  '♦️': {
+    color: Colors.dark.cardRed,
+  },
+  '♠️': {
+    color: Colors.dark.black,
+  },
+  '♣️': {
+    color: Colors.dark.black,
+  },
+});
+
+export function Card({
   id,
   suit,
   symbol,
@@ -21,45 +96,54 @@ export const Card: React.FC<CardProps> = ({
   status,
   size = 'small',
   onPress,
-}) => {
+}: CardProps) {
   const visible = symbol && suit;
 
   if (playing || status !== 'on hand')
     return (
-      <View style={[styles.card, styles[size], !visible && styles.cardBack]}>
+      <ThemedView
+        style={[styles.card, styles[size], !visible && styles.cardBack]}
+      >
         {visible ? (
-          <View style={styles.cardContent}>
-            <Text style={[styles[`symbol_${size}`], styles[suit]]}>
+          <ThemedView style={styles.cardContent}>
+            <ThemedText
+              type='paragraph'
+              style={[styles[`symbol_${size}`], styles[suit]]}
+            >
               {symbol}
-            </Text>
-            <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
-          </View>
+            </ThemedText>
+            <ThemedText type='paragraph' style={[styles[`suit_${size}`]]}>
+              {suit}
+            </ThemedText>
+          </ThemedView>
         ) : (
           <Image
             source={require('../assets/images/logo.png')}
             style={styles[`logo_${size}`]}
           />
         )}
-      </View>
+      </ThemedView>
     );
 
   return (
     <TouchableOpacity
-      style={[
-        styles.card,
-        styles[size],
-        !visible && styles.cardBack,
-        visible && styles.notPlayed,
-      ]}
+      style={[styles.card, styles[size], !visible && styles.cardBack]}
       onPress={() => {
         if (onPress) onPress(id || '');
       }}
     >
       {visible ? (
-        <View style={styles.cardContent}>
-          <Text style={[styles[`symbol_${size}`], styles[suit]]}>{symbol}</Text>
-          <Text style={[styles[`suit_${size}`]]}>{suit}</Text>
-        </View>
+        <ThemedView style={styles.cardContent}>
+          <ThemedText
+            type='paragraph'
+            style={[styles[`symbol_${size}`], styles[suit]]}
+          >
+            {symbol}
+          </ThemedText>
+          <ThemedText type='paragraph' style={[styles[`suit_${size}`]]}>
+            {suit}
+          </ThemedText>
+        </ThemedView>
       ) : (
         <Image
           source={require('../assets/images/logo.png')}
@@ -68,75 +152,4 @@ export const Card: React.FC<CardProps> = ({
       )}
     </TouchableOpacity>
   );
-};
-
-const styles = StyleSheet.create({
-  small: {
-    width: 35,
-    height: 45,
-  },
-  big: {
-    width: 62,
-    height: 80,
-  },
-  card: {
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    elevation: 5,
-    padding: 1,
-  },
-  cardBack: {
-    backgroundColor: '#994050',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cardContent: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  symbol_small: {
-    textAlign: 'left',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  symbol_big: {
-    textAlign: 'left',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  suit_small: { textAlign: 'right', fontSize: 18 },
-  suit_big: { textAlign: 'right', fontSize: 40 },
-  logo_small: {
-    width: 35,
-    height: 35,
-    resizeMode: 'contain',
-  },
-  logo_big: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
-  },
-  notPlayed: {
-    borderColor: Colors.dark.success,
-    borderWidth: 2,
-    shadowColor: Colors.dark.success,
-  },
-  '♥️': {
-    color: '#FF4C4C',
-  },
-  '♦️': {
-    color: '#FF4C4C',
-  },
-  '♠️': {
-    color: '#000',
-  },
-  '♣️': {
-    color: '#000',
-  },
-});
+}

@@ -1,6 +1,6 @@
 import { supabase } from '@/providers/supabase';
-import { Match, MatchInsert } from '@/types/Match';
-import { MyMatch } from '@/types/MyMatch';
+import { type Match, type MatchInsert } from '@/types/Match';
+import { type MyMatch } from '@/types/MyMatch';
 
 export const matchesKey = () => {
   return ['matches'];
@@ -44,7 +44,7 @@ export const fetchInProgressMatch = (userId: string) => {
               matches!inner(*)
             `,
         )
-        .neq('matches.status', 'end')
+        .eq('matches.status', 'started')
         .eq('user_id', userId);
 
       if (error) {

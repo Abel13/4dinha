@@ -1,4 +1,4 @@
-import { Database } from './Database';
+import { type Database } from './Database';
 
 export type Symbol = Database['public']['Enums']['card_symbol'];
 export type Suit = Database['public']['Enums']['card_suit'];

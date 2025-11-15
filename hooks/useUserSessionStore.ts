@@ -1,5 +1,4 @@
-import { supabase } from '@/providers/supabase';
-import { Session } from '@supabase/supabase-js';
+import { type Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,19 +13,15 @@ interface ISessionStore {
 
 export const useUserSessionStore = create<ISessionStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       session: null,
       loadSession: async () => {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+        const session = get().session as Session;
 
-        const username = session?.user.email?.substring(
-          0,
-          session?.user.email.indexOf('@'),
-        );
+        const { username } = session.user.user_metadata;
 
-        const profilePicture = `https://api.dicebear.com/7.x/bottts-neutral/png?seed=${session?.user.email}&scale=90`;
+        const profilePicture = session.user.user_metadata.image;
+
         set({ session, username, profilePicture });
       },
       setSession: (session) => {

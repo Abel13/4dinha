@@ -1,82 +1,27 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Pressable, StyleSheet, useColorScheme } from 'react-native';
 
+import { Feather } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedButton } from '@/components/ThemedButton';
-import { useAuth } from '@/hooks/useAuth';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { Colors } from '@/constants/Colors';
-
-export default function HomeScreen() {
-  const { signOut, loading: loggingOut } = useAuth();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
-
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ dark: '#1D6A47' }}
-      headerImage={
-        <Image
-          source={{
-            uri: profilePicture,
-          }}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedButton
-        title='SAIR'
-        type='outlined'
-        onPress={signOut}
-        loading={loggingOut}
-      />
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{' '}
-          <ThemedText type='defaultSemiBold'>app/(tabs)/index.tsx</ThemedText>{' '}
-          to see changes. Press{' '}
-          <ThemedText type='defaultSemiBold'>
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type='subtitle'>Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type='defaultSemiBold'>npm run reset-project</ThemedText>{' '}
-          to get a fresh <ThemedText type='defaultSemiBold'>app</ThemedText>{' '}
-          directory. This will move the current{' '}
-          <ThemedText type='defaultSemiBold'>app</ThemedText> to{' '}
-          <ThemedText type='defaultSemiBold'>app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
-}
+import { useEffect } from 'react';
+import { SvgImage } from '@/components/SvgImage';
+import { SoundButton } from '@/components/SoundButton';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.dark.background,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginLeft: 60,
+    marginTop: 20,
   },
   stepContainer: {
     gap: 8,
@@ -92,4 +37,86 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.dark.border,
   },
+  profilePicture: {
+    height: 100,
+    width: 100,
+  },
+  border: {
+    margin: 2,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: Colors.dark.border,
+    overflow: 'hidden',
+  },
+  content: {
+    paddingHorizontal: 60,
+    paddingVertical: 10,
+  },
+  profileCard: {
+    flexDirection: 'row',
+  },
+  editContainer: {
+    position: 'absolute',
+    backgroundColor: Colors.dark.background,
+    borderTopLeftRadius: 10,
+    borderBottomRightRadius: 16,
+    bottom: 0,
+    right: 0,
+    padding: 10,
+  },
 });
+
+export default function HomeScreen() {
+  const { username, profilePicture, loadSession, session } =
+    useUserSessionStore((state) => state);
+  const router = useRouter();
+
+  const theme = useColorScheme() || 'dark';
+
+  const createAvatar = () => {
+    router.push({
+      pathname: '/avatarCreator',
+      params: {
+        username,
+        imageSvg: profilePicture,
+      },
+    });
+  };
+
+  useEffect(() => {
+    loadSession();
+  }, [session]);
+
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedView style={styles.titleContainer}>
+        <SoundButton sound='menu' onPress={router.back}>
+          <Feather name='chevron-left' color={Colors[theme].icon} size={28} />
+        </SoundButton>
+        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
+        <HelloWave />
+      </ThemedView>
+
+      <ThemedView style={styles.content}>
+        <ThemedView style={styles.profileCard}>
+          <ThemedView>
+            {/* <CustomImage
+              source={{ uri: profilePicture }}
+              style={styles.profilePicture}
+            /> */}
+
+            <ThemedView style={styles.border}>
+              <SvgImage
+                xml={profilePicture as string}
+                style={styles.profilePicture}
+              />
+            </ThemedView>
+            <Pressable style={styles.editContainer} onPress={createAvatar}>
+              <Feather name='edit-2' size={18} color={Colors[theme].tint} />
+            </Pressable>
+          </ThemedView>
+        </ThemedView>
+      </ThemedView>
+    </ThemedView>
+  );
+}

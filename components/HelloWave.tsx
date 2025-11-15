@@ -10,7 +10,11 @@ import Animated, {
 
 import { ThemedText } from '@/components/ThemedText';
 
-export function HelloWave() {
+interface Props {
+  size?: number;
+}
+
+export function HelloWave({ size = 28 }: Props) {
   const rotationAnimation = useSharedValue(0);
 
   useEffect(() => {
@@ -21,7 +25,7 @@ export function HelloWave() {
       ),
       4,
     );
-  }, []);
+  }, [rotationAnimation]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotationAnimation.value}deg` }],
@@ -29,14 +33,13 @@ export function HelloWave() {
 
   return (
     <Animated.View style={animatedStyle}>
-      <ThemedText style={styles.text}>👋</ThemedText>
+      <ThemedText style={[styles.text, { fontSize: size }]}>👋</ThemedText>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 28,
     lineHeight: 32,
     marginTop: -6,
   },

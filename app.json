@@ -1,38 +1,59 @@
 {
   "expo": {
-    "owner": "abelb13",
+    "owner": "b13soft",
     "name": "4dinha",
     "slug": "4dinha",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "x4dinha",
+    "platforms": ["ios", "android"],
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
+      "icon": "./assets/images/icon.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.abelb13.4dinha"
+      "bundleIdentifier": "com.abelb13.4dinha",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "UISupportsGameController": true,
+        "UIViewControllerBasedStatusBarAppearance": true
+      }
+    },
+    "androidNavigationBar": {
+      "backgroundColor": "#021223"
     },
     "android": {
       "package": "com.abelb13.x4dinha",
+      "intentFilters": [
+        {
+          "action": "android.intent.action.MAIN",
+          "category": [
+            "android.intent.category.LAUNCHER",
+            "android.intent.category.GAME"
+          ]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000"
+        "backgroundColor": "#021223"
       }
     },
     "plugins": [
       "expo-router",
+      "expo-audio",
+      "expo-localization",
+      "expo-secure-store",
       [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000"
+          "backgroundColor": "#021223"
         }
       ],
-      "expo-localization",
-      "expo-secure-store"
+      "expo-font",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true
@@ -44,6 +65,12 @@
       "eas": {
         "projectId": "9d5a4b4c-abcd-4bc5-b859-3a48433a6ff5"
       }
+    },
+    "runtimeVersion": {
+      "policy": "fingerprint"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9d5a4b4c-abcd-4bc5-b859-3a48433a6ff5"
     }
   }
 }

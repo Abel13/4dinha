@@ -1,5 +1,5 @@
 import { ThemedText } from './ThemedText';
 
-export const ThemedPlayerStatus = () => {
+export function ThemedPlayerStatus() {
   return <ThemedText>TESTE</ThemedText>;
-};
+}

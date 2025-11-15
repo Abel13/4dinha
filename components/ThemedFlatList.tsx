@@ -1,19 +1,43 @@
-import { FlatList, FlatListProps, StyleSheet } from 'react-native';
-
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { Colors } from '@/constants/Colors';
-import { Control, useController } from 'react-hook-form';
-import { ThemedText } from './ThemedText';
+import { FlatList, type FlatListProps, StyleSheet } from 'react-native';
+import FailToLoadAnimation from '@/assets/lotties/nothing.json';
 import { ThemedView } from './ThemedView';
-
-export type ThemedFlatListProps = FlatListProps<any> & {};
-
-export function ThemedFlatList({ style, ...rest }: ThemedFlatListProps) {
-  return <FlatList style={[style, styles.default]} {...rest} />;
-}
+import { Lottie } from './Lottie';
+import { ThemedText } from './ThemedText';
 
 const styles = StyleSheet.create({
   default: {
     flex: 1,
   },
 });
+
+export type ThemedFlatListProps = FlatListProps<any> & {
+  emptyMessage?: string;
+};
+
+export function ThemedFlatList({
+  emptyMessage,
+  style,
+  ...rest
+}: ThemedFlatListProps) {
+  const renderSeparator = () => {
+    return <ThemedView style={{ height: 5, width: 5 }} />;
+  };
+  return (
+    <FlatList
+      style={[style, styles.default]}
+      ItemSeparatorComponent={renderSeparator}
+      ListEmptyComponent={
+        <ThemedView>
+          {emptyMessage && (
+            <ThemedText type='h4' lightColor='white' darkColor='white'>
+              {emptyMessage}
+            </ThemedText>
+          )}
+
+          <Lottie source={FailToLoadAnimation} />
+        </ThemedView>
+      }
+      {...rest}
+    />
+  );
+}

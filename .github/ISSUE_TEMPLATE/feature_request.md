@@ -4,29 +4,28 @@ about: user history
 title: ''
 labels: enhancement
 assignees: ''
-
 ---
 
-### Description
+### 📖 Description
 
 [...]
 
 ---
 
-__Branch:__ [...]
+**Branch:** [...]
 
-__Como um__ [...]
-__Quero__ [...]
-__Para que__ [...]
+**Como um** [...]
+**Quero** [...]
+**Para que** [...]
 
 ---
 
-### Critérios de Aceitação:
+### 🎯 Critérios de Aceitação:
 
 - [ ] [...]
 
 ---
 
-### Tarefas Técnicas: (opcional)
+### 🔧 Tarefas Técnicas: (opcional)
 
 - [ ] [...]

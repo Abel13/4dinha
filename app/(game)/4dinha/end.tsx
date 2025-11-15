@@ -1,16 +1,64 @@
+import { useLocalSearchParams } from 'expo-router';
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { useGame } from '@/hooks/useGame';
-import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Image, StyleSheet } from 'react-native';
-import ConfettiCannon from 'react-native-confetti-cannon';
 import { Colors } from '@/constants/Colors';
 import { usePlayer } from '@/hooks/usePlayer';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { useMatch } from '@/hooks/useMatch';
+import { useKeepAwake } from 'expo-keep-awake';
+import { SvgImage } from '@/components/SvgImage';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 60,
+    paddingVertical: 20,
+    backgroundColor: Colors.dark.background,
+  },
+  title: {
+    fontSize: 28,
+    fontFamily: 'BarlowCondensedBold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: Colors.dark.text,
+  },
+  message: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: Colors.dark.text,
+  },
+  card: {
+    width: '80%',
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: Colors.dark.info,
+    shadowColor: Colors.dark.info,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    gap: 10,
+    alignItems: 'center',
+  },
+  winnerName: {
+    fontSize: 24,
+    fontFamily: 'BarlowCondensedBold',
+    color: Colors.dark.text,
+    marginBottom: 10,
+  },
+  stats: {
+    color: Colors.dark.icon,
+  },
+});
 
 export default function End() {
+  useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const { session } = useUserSessionStore();
 
@@ -38,7 +86,7 @@ export default function End() {
       </ThemedView>
     );
 
-  if (!playerName || !playerPicture)
+  if (!playerName || !playerPicture || !match)
     return <ActivityIndicator size={100} color={Colors.dark.info} />;
 
   return (
@@ -53,11 +101,9 @@ export default function End() {
 
       <ThemedView style={styles.card}>
         {playerPicture && (
-          <Image
-            source={{
-              uri: playerPicture,
-            }}
-            style={{ width: 100, height: 100, borderRadius: 50 }}
+          <SvgImage
+            xml={playerPicture}
+            containerStyle={{ width: 100, height: 100, borderRadius: 50 }}
           />
         )}
         <ThemedText type='subtitle' style={styles.winnerName}>
@@ -76,48 +122,3 @@ export default function End() {
     </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: '50%',
-    padding: 20,
-    backgroundColor: Colors.dark.background,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    color: Colors.dark.text,
-  },
-  message: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.dark.text,
-  },
-  card: {
-    width: '80%',
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: Colors.dark.info,
-    shadowColor: Colors.dark.info,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-    gap: 10,
-    alignItems: 'center',
-  },
-  winnerName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: Colors.dark.text,
-    marginBottom: 10,
-  },
-  stats: {
-    color: Colors.dark.icon,
-  },
-});

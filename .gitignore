@@ -41,3 +41,11 @@ app-example
 ios
 android
 
+# builds
+*.apk
+*.aab
+*.ipa
+
+# Expo
+.expo
+dist/

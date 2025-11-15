@@ -1,0 +1,194 @@
+{
+  "pt": {
+    "language": {
+      "flag": "🇧🇷",
+      "country": "Brasil"
+    },
+    "login": {
+      "errors": {
+        "invalid_credentials": "Credenciais inválidas!",
+        "email_not_confirmed": "Email não confirmado",
+        "Unknown error": "Erro não identificado!",
+        "over_email_send_rate_limit": "Falha interna, contate o suporte!"
+      },
+      "email": "e-mail",
+      "password": "senha",
+      "login": "ENTRAR",
+      "register": "CADASTRAR",
+      "loading": "CARREGANDO"
+    },
+    "register": {
+      "errors": {
+        "Unknown error": "Erro não identificado!",
+        "unexpected_failure": "Falha ao criar a conta!",
+        "over_email_send_rate_limit": "Falha interna, contate o suporte!"
+      },
+      "username": "usuário",
+      "email": "e-mail",
+      "password": "senha",
+      "confirmPassword": "confirmação de senha",
+      "save": "CADASTRAR",
+      "loading": "CARREGANDO",
+      "cancel": "CANCELAR"
+    },
+    "confirmation": {
+      "errors": {
+        "required_field": "Campo obrigatório!",
+        "minimum_required": "Código inválido!"
+      },
+      "code": "código",
+      "message": "Um e-mail foi enviado para {{email}} com seu código de validação.",
+      "validate": "VALIDAR",
+      "cancel": "CANCELAR"
+    },
+    "components": {
+      "DiceBearAvatarBuilder": {
+        "save": "SALVAR"
+      }
+    }
+  },
+  "en": {
+    "language": {
+      "flag": "🇺🇸",
+      "country": "United States"
+    },
+    "login": {
+      "errors": {
+        "invalid_credentials": "Invalid credentials!",
+        "email_not_confirmed": "Email not confirmed",
+        "Unknown error": "Unknown error!",
+        "over_email_send_rate_limit": "Internal error, contact support!"
+      },
+      "email": "email",
+      "password": "password",
+      "login": "LOGIN",
+      "register": "REGISTER",
+      "loading": "LOADING"
+    },
+    "register": {
+      "errors": {
+        "Unknown error": "Unknown error!",
+        "unexpected_failure": "Failed to create account!",
+        "over_email_send_rate_limit": "Internal error, contact support!"
+      },
+      "username": "username",
+      "email": "email",
+      "password": "password",
+      "confirmPassword": "confirm password",
+      "save": "REGISTER",
+      "loading": "LOADING",
+      "cancel": "CANCEL"
+    },
+    "confirmation": {
+      "errors": {
+        "required_field": "Required field!",
+        "minimum_required": "Invalid code!"
+      },
+      "code": "code",
+      "message": "An email has been sent to {{email}} with your verification code.",
+      "validate": "VALIDATE",
+      "cancel": "CANCEL"
+    },
+    "components": {
+      "DiceBearAvatarBuilder": {
+        "save": "SAVE"
+      }
+    }
+  },
+  "es": {
+    "language": {
+      "flag": "🇪🇸",
+      "country": "España"
+    },
+    "login": {
+      "errors": {
+        "invalid_credentials": "¡Credenciales inválidas!",
+        "email_not_confirmed": "Correo no confirmado",
+        "Unknown error": "¡Error desconocido!",
+        "over_email_send_rate_limit": "¡Error interno, contacte al soporte!"
+      },
+      "email": "correo electrónico",
+      "password": "contraseña",
+      "login": "INGRESAR",
+      "register": "REGISTRARSE",
+      "loading": "CARGANDO"
+    },
+    "register": {
+      "errors": {
+        "Unknown error": "¡Error desconocido!",
+        "unexpected_failure": "¡Error al crear la cuenta!",
+        "over_email_send_rate_limit": "¡Error interno, contacte al soporte!"
+      },
+      "username": "usuario",
+      "email": "correo electrónico",
+      "password": "contraseña",
+      "confirmPassword": "confirmación de contraseña",
+      "save": "REGISTRAR",
+      "loading": "CARGANDO",
+      "cancel": "CANCELAR"
+    },
+    "confirmation": {
+      "errors": {
+        "required_field": "¡Campo obligatorio!",
+        "minimum_required": "¡Código inválido!"
+      },
+      "code": "código",
+      "message": "Se envió un correo electrónico a {{email}} con tu código de verificación.",
+      "validate": "VALIDAR",
+      "cancel": "CANCELAR"
+    },
+    "components": {
+      "DiceBearAvatarBuilder": {
+        "save": "GUARDAR"
+      }
+    }
+  },
+  "zh": {
+    "language": {
+      "flag": "🇨🇳",
+      "country": "中国"
+    },
+    "login": {
+      "errors": {
+        "invalid_credentials": "凭证无效！",
+        "email_not_confirmed": "邮箱未验证",
+        "Unknown error": "未知错误！",
+        "over_email_send_rate_limit": "内部错误，请联系支持！"
+      },
+      "email": "邮箱",
+      "password": "密码",
+      "login": "登录",
+      "register": "注册",
+      "loading": "加载中"
+    },
+    "register": {
+      "errors": {
+        "Unknown error": "未知错误！",
+        "unexpected_failure": "创建账户失败！",
+        "over_email_send_rate_limit": "内部错误，请联系支持！"
+      },
+      "username": "用户名",
+      "email": "邮箱",
+      "password": "密码",
+      "confirmPassword": "确认密码",
+      "save": "注册",
+      "loading": "加载中",
+      "cancel": "取消"
+    },
+    "confirmation": {
+      "errors": {
+        "required_field": "必填字段！",
+        "minimum_required": "无效的代码！"
+      },
+      "code": "验证码",
+      "message": "已向 {{email}} 发送包含验证码的电子邮件。",
+      "validate": "验证",
+      "cancel": "取消"
+    },
+    "components": {
+      "DiceBearAvatarBuilder": {
+        "save": "保存"
+      }
+    }
+  }
+}

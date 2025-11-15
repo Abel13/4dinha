@@ -1,12 +1,12 @@
-import { supabase } from '@/providers/supabase';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect } from 'react';
 import {
   endMatchService,
   fetchMatch,
   startMatchService,
 } from '@/services/match';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { supabase } from '@/providers/supabase';
 
 export const useMatch = (matchId: string) => {
   const router = useRouter();
@@ -16,10 +16,6 @@ export const useMatch = (matchId: string) => {
     enabled: matchId.length > 0,
   });
 
-  const matchPicture = match
-    ? `https://api.dicebear.com/9.x/icons/png?seed=${match?.id}&scale=90`
-    : null;
-
   const startMatchMutation = useMutation({
     mutationFn: startMatchService,
     onSuccess: () => {},
@@ -27,8 +23,8 @@ export const useMatch = (matchId: string) => {
   });
 
   const startMatch = useCallback(async () => {
-    startMatchMutation.mutate(matchId as string);
-  }, []);
+    startMatchMutation.mutate(matchId);
+  }, [matchId, startMatchMutation]);
 
   const endMatchMutation = useMutation({
     mutationFn: endMatchService,
@@ -37,8 +33,8 @@ export const useMatch = (matchId: string) => {
   });
 
   const endMatch = useCallback(async () => {
-    endMatchMutation.mutate(matchId as string);
-  }, []);
+    endMatchMutation.mutate(matchId);
+  }, [endMatchMutation, matchId]);
 
   useEffect(() => {
     const channel = supabase
@@ -76,12 +72,11 @@ export const useMatch = (matchId: string) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [matchId]);
+  }, [matchId, router]);
 
   return {
     startMatch,
     endMatch,
     match,
-    matchPicture,
   };
 };

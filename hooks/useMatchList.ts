@@ -1,3 +1,7 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import { supabase } from '@/providers/supabase';
 import {
   createMatchService,
@@ -5,11 +9,7 @@ import {
   fetchMatches,
 } from '@/services/match';
 import { enterMatchService } from '@/services/matchUsers';
-import { MatchInsert } from '@/types/Match';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { type MatchInsert } from '@/types/Match';
 import { useUserSessionStore } from './useUserSessionStore';
 
 export const useMatchList = () => {
@@ -70,14 +70,20 @@ export const useMatchList = () => {
     },
   });
 
-  const enterMatch = useCallback(async (matchId: string) => {
-    enterMatchMutation.mutate({ matchId });
-  }, []);
+  const enterMatch = useCallback(
+    async (matchId: string) => {
+      enterMatchMutation.mutate({ matchId });
+    },
+    [enterMatchMutation],
+  );
 
-  const createMatch = useCallback(async (formData: MatchInsert) => {
-    setCreatingMatch(true);
-    createMatchMutation.mutate(formData);
-  }, []);
+  const createMatch = useCallback(
+    async (formData: MatchInsert) => {
+      setCreatingMatch(true);
+      createMatchMutation.mutate(formData);
+    },
+    [createMatchMutation],
+  );
 
   useEffect(() => {
     const channel = supabase
@@ -110,7 +116,7 @@ export const useMatchList = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [matches]);
+  }, [matches, refetch, refetchMyMatches]);
 
   return {
     createMatch,

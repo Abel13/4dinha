@@ -1,20 +1,23 @@
-import { ThemedView } from './ThemedView';
-import { ThemedText } from './ThemedText';
-import { Match } from '@/types/Match';
-import { Image, Pressable, StyleSheet } from 'react-native';
-import { Colors } from '@/constants/Colors';
-import { useMatch } from '@/hooks/useMatch';
+import { Image, StyleSheet } from 'react-native';
 import { useCallback } from 'react';
+import { type Match } from '@/types/Match';
+import { Colors } from '@/constants/Colors';
+import { getDiceBear } from '@/utils/getDiceBear';
+import { Feather } from '@expo/vector-icons';
+import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
+import { SoundButton } from './SoundButton';
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    borderColor: Colors.dark.border,
-    borderWidth: 1,
+    width: 150,
+    minHeight: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 4,
+    backgroundColor: '#9290c3',
+    padding: 5,
   },
   matchPicture: {
     width: 30,
@@ -22,7 +25,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   title: {
+    flex: 1,
     gap: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
@@ -32,19 +38,22 @@ interface Props {
   continueMatch: () => void;
 }
 
-export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
-  const { matchPicture } = useMatch(match.id);
+export function MatchItem({ match, enterMatch, continueMatch }: Props) {
+  const matchPicture = getDiceBear()({ avatar: 'icons', seed: match.id });
 
-  const getStatus = useCallback((status: string | null) => {
-    switch (status) {
-      case 'created':
-        return 'LOBBY';
-      case 'started':
-        return 'INICIADA';
-      default:
-        return '';
-    }
-  }, []);
+  const getStatus = useCallback(
+    (status: string | null): keyof typeof Feather.glyphMap => {
+      switch (status) {
+        case 'created':
+          return 'chevron-right';
+        case 'started':
+          return 'flag';
+        default:
+          return 'clock';
+      }
+    },
+    [],
+  );
 
   const handlePress = () => {
     if (match.status === 'created') enterMatch();
@@ -52,15 +61,15 @@ export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
     if (match.status === 'started') continueMatch();
   };
 
-  if (!matchPicture)
+  if (!match || !matchPicture)
     return (
       <ThemedView style={styles.container}>
-        <ThemedText>Carregando...</ThemedText>
+        <ThemedText darkColor={Colors.light.text}>Carregando...</ThemedText>
       </ThemedView>
     );
 
   return (
-    <Pressable onPress={handlePress} style={styles.container}>
+    <SoundButton sound='menu' onPress={handlePress} style={styles.container}>
       <ThemedView style={styles.title}>
         <Image
           source={{
@@ -68,11 +77,20 @@ export const MatchItem = ({ match, enterMatch, continueMatch }: Props) => {
           }}
           style={styles.matchPicture}
         />
-        <ThemedText>{match.name}</ThemedText>
+        <ThemedText
+          darkColor={Colors.light.text}
+          lineBreakMode='tail'
+          numberOfLines={1}
+          style={{ flex: 1 }}
+        >
+          {match.name}
+        </ThemedText>
       </ThemedView>
-      <ThemedText type='default' darkColor={Colors.dark.success}>
-        {getStatus(match?.status)}
-      </ThemedText>
-    </Pressable>
+      <Feather
+        name={getStatus(match.status)}
+        color={Colors.light.text}
+        size={16}
+      />
+    </SoundButton>
   );
-};
+}
