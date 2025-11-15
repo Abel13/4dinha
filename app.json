@@ -6,7 +6,10 @@
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "x4dinha",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
@@ -53,7 +56,8 @@
         }
       ],
       "expo-font",
-      "expo-asset"
+      "expo-asset",
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true

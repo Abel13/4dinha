@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 
 import { RelativePathString, useFocusEffect, useRouter } from 'expo-router';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -24,6 +24,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { ThemedButton } from '@/components/ThemedButton';
 import { SvgImage } from '@/components/SvgImage';
 import { MyMatch } from '@/types/MyMatch';
+
+import LogRocket from '@logrocket/react-native';
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.dark.background },
@@ -158,7 +160,9 @@ export default function LobbyScreen() {
   const theme = useColorScheme() || 'light';
   const { playSound, stopSound } = useSound('ambient');
   const { matches, enterMatch, inProgressMatches } = useMatchList();
-  const { username, profilePicture } = useUserSessionStore((state) => state);
+  const { username, session, profilePicture } = useUserSessionStore(
+    (state) => state,
+  );
   const { signOut } = useAuth();
 
   const { footerMenu, headerMenu } = useHome();
@@ -176,6 +180,18 @@ export default function LobbyScreen() {
       };
     }, [playSound, stopSound]),
   );
+
+  useEffect(() => {
+    if (session?.user) {
+      LogRocket.identify(session?.user?.id, {
+        name: username as string,
+        email: session?.user?.email as string,
+
+        // Add your own custom user variables, e.g.
+        subscriptionType: 'default',
+      });
+    }
+  }, []);
 
   return (
     <ThemedView style={styles.screen}>
