@@ -19,6 +19,14 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "abel.o.d@outlook.com",
+        "appleTeamId": "4NQ8JC26HJ"
+      },
+      "android": {
+        "track": "alpha"
+      }
+    }
   }
 }
