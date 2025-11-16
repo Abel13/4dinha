@@ -49,3 +49,4 @@ android
 # Expo
 .expo
 dist/
+flavors/
