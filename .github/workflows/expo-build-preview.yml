@@ -4,6 +4,8 @@ on:
       - 'develop'
 jobs:
   update:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup repo
