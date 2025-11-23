@@ -8,11 +8,10 @@ import { useRegister } from '@/hooks/useRegister';
 import { useTranslation } from '@/hooks/useTranslation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { ScrollView, StyleSheet, TextInput } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import * as yup from 'yup';
-import { Auth } from '@/components/Auth/Auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,31 +51,11 @@ const schema = yup.object().shape({
     .min(3, 'O nome de usuário deve ter pelo menos 3 caracteres')
     .max(20, 'O nome de usuário deve ter no máximo 20 caracteres')
     .required('O nome de usuário é obrigatório'),
-
-  email: yup
-    .string()
-    .email('E-mail inválido')
-    .required('O e-mail é obrigatório'),
-
-  password: yup
-    .string()
-    .min(6, 'A senha deve ter pelo menos 6 caracteres')
-    .max(32, 'A senha deve ter no máximo 32 caracteres')
-    .required('A senha é obrigatória'),
-
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'As senhas não conferem')
-    .required('A confirmação de senha é obrigatória'),
 });
 
 export default function Register() {
-  const { loading, loadImage, onAppleAuth } = useRegister();
+  const { loading, loadImage, updateUser } = useRegister();
   const { t } = useTranslation('register');
-
-  const router = useRouter();
-
-  const inputEmailRef = useRef<TextInput>(null);
 
   const {
     control,
@@ -129,18 +108,14 @@ export default function Register() {
               autoComplete='off'
               control={control}
               error={errors.username?.message}
-              returnKeyType='next'
-              onSubmitEditing={() => inputEmailRef.current?.focus()}
+              returnKeyType='done'
             />
           </ThemedView>
 
-          <ThemedView style={{ alignItems: 'center' }}>
-            <Auth mode='signUp' handleCredential={onAppleAuth} />
-          </ThemedView>
           <ThemedButton
             type='link'
-            title={t('cancel')}
-            onPress={router.back}
+            title={t('save')}
+            onPress={() => updateUser(watch('username'))}
             disabled={loading}
           />
         </ThemedView>

@@ -13,6 +13,7 @@
       "icon": "./assets/images/icon.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.abelb13.4dinha",
+      "usesAppleSignIn": true,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "UISupportsGameController": true,
@@ -42,6 +43,7 @@
       "expo-router",
       "expo-audio",
       "expo-localization",
+      "expo-apple-authentication",
       "expo-secure-store",
       [
         "expo-splash-screen",

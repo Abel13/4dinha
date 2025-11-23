@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { supabase } from '@/providers/supabase';
 import { useUserSessionStore } from './useUserSessionStore';
+import { AppleCredential } from './useAppleAuth';
 
 export const useAuth = () => {
   const { setSession } = useUserSessionStore((state) => state);
@@ -13,13 +14,7 @@ export const useAuth = () => {
     router.navigate('/auth/register');
   };
 
-  const onAuth = async (credentials: {
-    email: string;
-    password: string;
-    options?: {
-      captchaToken?: string;
-    };
-  }) => {
+  const onAppleAuth = async (credential: AppleCredential) => {
     try {
       setAuthError('');
       setLoading(true);
@@ -34,34 +29,33 @@ export const useAuth = () => {
       }
 
       const {
+        error: authError,
         data: { session },
-        error,
-      } = await supabase.auth.signInWithPassword(credentials);
+      } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token: credential.identityToken,
+      });
 
-      if (error) {
-        if (error.code === 'email_not_confirmed') {
-          const { email } = credentials;
-
-          router.push({
-            pathname: '/auth/confirmation',
-            params: {
-              email,
-            },
-          });
-          return;
+      if (authError) {
+        if (authError.message?.includes('Database error')) {
+          throw new Error(
+            'Database error: Please ensure your database triggers handle Apple Sign In users. The trigger may be expecting a username field.',
+          );
         }
-
-        throw error;
+        throw authError;
       }
 
       if (session) {
-        setSession(session);
-
-        router.replace('/(tabs)');
+        if (session.user.user_metadata.username) {
+          setSession(session);
+          router.replace('/(tabs)');
+        } else {
+          router.push('/auth/update');
+        }
       }
     } catch (error) {
       if (error) {
-        setAuthError((error as any).code);
+        setAuthError((error as any).code || (error as any).message);
       } else {
         setAuthError('Unknown error');
       }
@@ -80,5 +74,5 @@ export const useAuth = () => {
     }
   };
 
-  return { onAuth, signOut, handleRegister, loading, authError };
+  return { onAppleAuth, signOut, handleRegister, loading, authError };
 };

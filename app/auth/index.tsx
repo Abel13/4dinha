@@ -6,15 +6,15 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { ThemedInput } from '@/components/ThemedInput';
 import { useAuth } from '@/hooks/useAuth';
 import { Colors } from '@/constants/Colors';
-import { ThemedButton } from '@/components/ThemedButton';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Loading } from '@/components/Loading';
 import { BlurView } from 'expo-blur';
 import { CustomImage } from '@/components/Image';
 import { LanguageFlagPicker } from '@/components/LanguagePicker';
+import { Auth } from '@/components/Auth/Auth';
+import { ThemedButton } from '@/components/ThemedButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +32,10 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     margin: 50,
+  },
+  button: {
+    width: '100%',
+    height: 44,
   },
   title: {
     fontSize: 64,
@@ -53,19 +57,10 @@ const schema = yup.object({
 });
 
 export default function LoginScreen() {
-  const { onAuth, handleRegister, loading, authError } = useAuth();
+  const { handleRegister, loading, authError, onAppleAuth } = useAuth();
 
   const { t, locales, changeLanguage, customLanguage } =
     useTranslation('login');
-
-  const inputPasswordRef = useRef<TextInput>(null);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
 
   if (loading)
     return (
@@ -107,47 +102,14 @@ export default function LoginScreen() {
           }}
         />
         <ThemedView />
-        <ThemedView>
-          <ThemedText lightColor={Colors.dark.text}>{t('email')}</ThemedText>
-          <ThemedInput
-            name='email'
-            inputMode='email'
-            keyboardType='email-address'
-            autoCapitalize='none'
-            autoCorrect={false}
-            autoComplete='off'
-            control={control}
-            error={errors.email?.message}
-            returnKeyType='next'
-            onSubmitEditing={() => inputPasswordRef.current?.focus()}
-            lightColor={Colors.dark.text}
-          />
-        </ThemedView>
-        <ThemedView>
-          <ThemedText lightColor={Colors.dark.text}>{t('password')}</ThemedText>
-          <ThemedInput
-            ref={inputPasswordRef}
-            name='password'
-            control={control}
-            secureTextEntry
-            textContentType='password'
-            error={errors.password?.message}
-            returnKeyType='done'
-            onSubmitEditing={handleSubmit(onAuth)}
-            lightColor={Colors.dark.text}
-          />
+        <ThemedView style={{ alignItems: 'center' }}>
+          <Auth mode='signIn' handleCredential={onAppleAuth} />
         </ThemedView>
 
         {authError && (
           <ThemedText type='error'>{t(`errors.${authError}`)}</ThemedText>
         )}
         <ThemedView />
-        <ThemedButton
-          type='outlined'
-          title={loading ? t('loading') : t('login')}
-          onPress={handleSubmit(onAuth)}
-          disabled={loading}
-        />
         <ThemedButton
           type='link'
           title={loading ? t('loading') : t('register')}
