@@ -13,7 +13,7 @@ import { Loading } from '@/components/Loading';
 import { BlurView } from 'expo-blur';
 import { CustomImage } from '@/components/Image';
 import { LanguageFlagPicker } from '@/components/LanguagePicker';
-import { Auth } from '@/components/Auth/Auth';
+import { Auth } from '@/components/Auth';
 import { ThemedButton } from '@/components/ThemedButton';
 
 const styles = StyleSheet.create({

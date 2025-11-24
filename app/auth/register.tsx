@@ -12,7 +12,7 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet, TextInput } from 'react-native';
 import * as yup from 'yup';
-import { Auth } from '@/components/Auth/Auth';
+import { Auth } from '@/components/Auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,22 +52,6 @@ const schema = yup.object().shape({
     .min(3, 'O nome de usuário deve ter pelo menos 3 caracteres')
     .max(20, 'O nome de usuário deve ter no máximo 20 caracteres')
     .required('O nome de usuário é obrigatório'),
-
-  email: yup
-    .string()
-    .email('E-mail inválido')
-    .required('O e-mail é obrigatório'),
-
-  password: yup
-    .string()
-    .min(6, 'A senha deve ter pelo menos 6 caracteres')
-    .max(32, 'A senha deve ter no máximo 32 caracteres')
-    .required('A senha é obrigatória'),
-
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'As senhas não conferem')
-    .required('A confirmação de senha é obrigatória'),
 });
 
 export default function Register() {
