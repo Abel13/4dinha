@@ -8,9 +8,9 @@ import { useRegister } from '@/hooks/useRegister';
 import { useTranslation } from '@/hooks/useTranslation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { ScrollView, StyleSheet, TextInput } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import * as yup from 'yup';
 import { Auth } from '@/components/Auth';
 
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 64,
     textAlign: 'center',
-    fontFamily: 'BarlowCondensed-SemiBold',
+    fontFamily: 'BarlowCondensedSemiBold',
     shadowColor: Colors.dark.shadowText,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
@@ -60,8 +60,6 @@ export default function Register() {
 
   const router = useRouter();
 
-  const inputEmailRef = useRef<TextInput>(null);
-
   const {
     control,
     watch,
@@ -70,7 +68,8 @@ export default function Register() {
     resolver: yupResolver(schema),
   });
 
-  const seed = watch('username');
+  const username = watch('username');
+  const seed = username;
 
   useEffect(() => {
     if (seed)
@@ -113,13 +112,15 @@ export default function Register() {
               autoComplete='off'
               control={control}
               error={errors.username?.message}
-              returnKeyType='next'
-              onSubmitEditing={() => inputEmailRef.current?.focus()}
             />
           </ThemedView>
 
           <ThemedView style={{ alignItems: 'center' }}>
-            <Auth mode='signUp' handleCredential={onAppleAuth} />
+            <Auth
+              mode='signUp'
+              username={username}
+              handleCredential={onAppleAuth}
+            />
           </ThemedView>
           <ThemedButton
             type='link'

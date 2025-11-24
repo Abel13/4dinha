@@ -17,6 +17,10 @@ export const useRegister = () => {
       setRegisterError('');
       setLoading(true);
 
+      if (!username) {
+        throw new Error('username_required');
+      }
+
       const { error: authError } = await supabase.auth.signInWithIdToken({
         provider: 'apple',
         token: credential.identityToken,
@@ -29,7 +33,7 @@ export const useRegister = () => {
       // Update user metadata with all information
       await supabase.auth.updateUser({
         data: {
-          username: username,
+          username,
           image: imageSvg,
         },
       });

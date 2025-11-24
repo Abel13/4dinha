@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 64,
     textAlign: 'center',
-    fontFamily: 'BarlowCondensed-SemiBold',
+    fontFamily: 'BarlowCondensedSemiBold',
     shadowColor: Colors.dark.shadowText,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,

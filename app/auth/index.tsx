@@ -1,9 +1,4 @@
-import { useRef } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
-
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useAuth } from '@/hooks/useAuth';
@@ -40,7 +35,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 64,
     textAlign: 'center',
-    fontFamily: 'BarlowCondensed-SemiBold',
+    fontFamily: 'BarlowCondensedSemiBold',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
     shadowRadius: 10,
@@ -49,11 +44,6 @@ const styles = StyleSheet.create({
   rightText: {
     textAlign: 'right',
   },
-});
-
-const schema = yup.object({
-  email: yup.string().required('Inform seu e-mail').email('E-mail inválido!'),
-  password: yup.string().required('Informe sua senha'),
 });
 
 export default function LoginScreen() {

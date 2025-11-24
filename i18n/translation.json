@@ -15,7 +15,8 @@
       "password": "senha",
       "login": "ENTRAR",
       "register": "CADASTRAR",
-      "loading": "CARREGANDO"
+      "loading": "CARREGANDO",
+      "appleButton": "Entrar com a Apple"
     },
     "register": {
       "errors": {
@@ -29,7 +30,8 @@
       "confirmPassword": "confirmação de senha",
       "save": "CADASTRAR",
       "loading": "CARREGANDO",
-      "cancel": "CANCELAR"
+      "cancel": "CANCELAR",
+      "appleButton": "Criar conta com a Apple"
     },
     "confirmation": {
       "errors": {
@@ -63,7 +65,8 @@
       "password": "password",
       "login": "LOGIN",
       "register": "REGISTER",
-      "loading": "LOADING"
+      "loading": "LOADING",
+      "appleButton": "Sign in with Apple"
     },
     "register": {
       "errors": {
@@ -77,7 +80,8 @@
       "confirmPassword": "confirm password",
       "save": "REGISTER",
       "loading": "LOADING",
-      "cancel": "CANCEL"
+      "cancel": "CANCEL",
+      "appleButton": "Sign up with Apple"
     },
     "confirmation": {
       "errors": {
@@ -111,7 +115,8 @@
       "password": "contraseña",
       "login": "INGRESAR",
       "register": "REGISTRARSE",
-      "loading": "CARGANDO"
+      "loading": "CARGANDO",
+      "appleButton": "Iniciar sesión con Apple"
     },
     "register": {
       "errors": {
@@ -125,7 +130,8 @@
       "confirmPassword": "confirmación de contraseña",
       "save": "REGISTRAR",
       "loading": "CARGANDO",
-      "cancel": "CANCELAR"
+      "cancel": "CANCELAR",
+      "appleButton": "Crear cuenta con Apple"
     },
     "confirmation": {
       "errors": {
@@ -159,7 +165,8 @@
       "password": "密码",
       "login": "登录",
       "register": "注册",
-      "loading": "加载中"
+      "loading": "加载中",
+      "appleButton": "使用 Apple 登录"
     },
     "register": {
       "errors": {
@@ -173,7 +180,8 @@
       "confirmPassword": "确认密码",
       "save": "注册",
       "loading": "加载中",
-      "cancel": "取消"
+      "cancel": "取消",
+      "appleButton": "使用 Apple 创建账户"
     },
     "confirmation": {
       "errors": {

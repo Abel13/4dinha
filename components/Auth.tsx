@@ -3,13 +3,14 @@ import * as AppleAuthentication from 'expo-apple-authentication';
 import { useState, useEffect } from 'react';
 import { AppleCredential, useAppleAuth } from '@/hooks/useAppleAuth';
 import { ThemedText } from '@/components/ThemedText';
+import { useTranslation } from '@/hooks/useTranslation';
 
 type AuthMode = 'signIn' | 'signUp';
 
 interface AuthProps {
   mode?: AuthMode;
   username?: string;
-  handleCredential: (credential: AppleCredential, username: string) => void;
+  handleCredential: (credential: AppleCredential, username?: string) => void;
 }
 
 export function Auth({
@@ -27,6 +28,7 @@ export function Auth({
   const loading = appleLoading;
   const error = appleError;
   const isDisabled = mode === 'signUp' && !username;
+  const { t } = useTranslation(mode === 'signUp' ? 'register' : 'login');
 
   useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -40,7 +42,7 @@ export function Auth({
     }
     const credential = await getCredential();
     if (credential) {
-      handleCredential(credential, username as string);
+      handleCredential(credential, username);
     }
   };
 
@@ -79,10 +81,20 @@ export function Auth({
   return (
     <Pressable
       onPress={loading || isDisabled ? () => {} : handlePress}
-      style={{ opacity: loading || isDisabled ? 0.5 : 1 }}
+      style={{
+        width: '100%',
+        height: 50,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#d1d1d1',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: loading || isDisabled ? 0.5 : 1,
+      }}
     >
-      <Text style={{ color: 'white' }}>
-        {mode === 'signUp' ? 'Sign up with Apple' : 'Sign in with Apple'}
+      <Text style={{ color: '#000', fontWeight: '600' }}>
+        {t('appleButton')}
       </Text>
     </Pressable>
   );
