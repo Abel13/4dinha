@@ -7,7 +7,6 @@ import { Colors } from '@/constants/Colors';
 import { useRegister } from '@/hooks/useRegister';
 import { useTranslation } from '@/hooks/useTranslation';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet } from 'react-native';
@@ -45,17 +44,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .min(3, 'O nome de usuário deve ter pelo menos 3 caracteres')
-    .max(20, 'O nome de usuário deve ter no máximo 20 caracteres')
-    .required('O nome de usuário é obrigatório'),
-});
-
 export default function Register() {
   const { loading, loadImage, updateUser } = useRegister();
   const { t } = useTranslation('register');
+
+  const schema = yup.object().shape({
+    username: yup
+      .string()
+      .min(3, t('validation.username_min'))
+      .max(20, t('validation.username_max'))
+      .required(t('validation.username_required')),
+  });
 
   const {
     control,

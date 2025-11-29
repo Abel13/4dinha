@@ -3,6 +3,8 @@ import { useRouter } from 'expo-router';
 import { supabase } from '@/providers/supabase';
 import { useUserSessionStore } from './useUserSessionStore';
 import { AppleCredential } from './useAppleAuth';
+import type { SocialProvider } from '@/lib/auth/signInWithProvider';
+import { signInWithProvider } from '@/lib/auth/signInWithProvider';
 
 export const useAuth = () => {
   const { setSession } = useUserSessionStore((state) => state);
@@ -14,7 +16,7 @@ export const useAuth = () => {
     router.navigate('/auth/register');
   };
 
-  const onAppleAuth = async (credential: AppleCredential) => {
+  const authenticate = async (provider: SocialProvider, token: string) => {
     try {
       setAuthError('');
       setLoading(true);
@@ -31,10 +33,7 @@ export const useAuth = () => {
       const {
         error: authError,
         data: { session },
-      } = await supabase.auth.signInWithIdToken({
-        provider: 'apple',
-        token: credential.identityToken,
-      });
+      } = await signInWithProvider(provider, token);
 
       if (authError) {
         if (authError.message?.includes('Database error')) {
@@ -64,6 +63,18 @@ export const useAuth = () => {
     }
   };
 
+  const onAppleAuth = async (credential: AppleCredential) => {
+    if (!credential.identityToken) {
+      setAuthError('Unknown error');
+      return;
+    }
+    await authenticate('apple', credential.identityToken);
+  };
+
+  const onGoogleAuth = async (token: string) => {
+    await authenticate('google', token);
+  };
+
   const signOut = async () => {
     try {
       setLoading(true);
@@ -74,5 +85,12 @@ export const useAuth = () => {
     }
   };
 
-  return { onAppleAuth, signOut, handleRegister, loading, authError };
+  return {
+    onAppleAuth,
+    onGoogleAuth,
+    signOut,
+    handleRegister,
+    loading,
+    authError,
+  };
 };

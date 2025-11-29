@@ -9,20 +9,31 @@
         "invalid_credentials": "Credenciais inválidas!",
         "email_not_confirmed": "Email não confirmado",
         "Unknown error": "Erro não identificado!",
-        "over_email_send_rate_limit": "Falha interna, contate o suporte!"
+        "over_email_send_rate_limit": "Falha interna, contate o suporte!",
+        "google_config_missing": "Configuração do Google ausente.",
+        "google_sign_in_failed": "Falha ao conectar com o Google."
       },
       "email": "e-mail",
       "password": "senha",
       "login": "ENTRAR",
       "register": "CADASTRAR",
       "loading": "CARREGANDO",
-      "appleButton": "Entrar com a Apple"
+      "appleButton": "Entrar com a Apple",
+      "googleButton": "Entrar com o Google"
     },
     "register": {
       "errors": {
         "Unknown error": "Erro não identificado!",
         "unexpected_failure": "Falha ao criar a conta!",
-        "over_email_send_rate_limit": "Falha interna, contate o suporte!"
+        "over_email_send_rate_limit": "Falha interna, contate o suporte!",
+        "username_required": "Informe seu usuário antes de continuar.",
+        "google_config_missing": "Configuração do Google ausente.",
+        "google_sign_in_failed": "Falha ao conectar com o Google."
+      },
+      "validation": {
+        "username_required": "O nome de usuário é obrigatório",
+        "username_min": "O nome de usuário deve ter pelo menos 3 caracteres",
+        "username_max": "O nome de usuário deve ter no máximo 20 caracteres"
       },
       "username": "usuário",
       "email": "e-mail",
@@ -31,7 +42,8 @@
       "save": "CADASTRAR",
       "loading": "CARREGANDO",
       "cancel": "CANCELAR",
-      "appleButton": "Criar conta com a Apple"
+      "appleButton": "Criar conta com a Apple",
+      "googleButton": "Criar conta com o Google"
     },
     "confirmation": {
       "errors": {
@@ -59,20 +71,31 @@
         "invalid_credentials": "Invalid credentials!",
         "email_not_confirmed": "Email not confirmed",
         "Unknown error": "Unknown error!",
-        "over_email_send_rate_limit": "Internal error, contact support!"
+        "over_email_send_rate_limit": "Internal error, contact support!",
+        "google_config_missing": "Google configuration is missing.",
+        "google_sign_in_failed": "Google sign-in failed. Try again."
       },
       "email": "email",
       "password": "password",
       "login": "LOGIN",
       "register": "REGISTER",
       "loading": "LOADING",
-      "appleButton": "Sign in with Apple"
+      "appleButton": "Sign in with Apple",
+      "googleButton": "Sign in with Google"
     },
     "register": {
       "errors": {
         "Unknown error": "Unknown error!",
         "unexpected_failure": "Failed to create account!",
-        "over_email_send_rate_limit": "Internal error, contact support!"
+        "over_email_send_rate_limit": "Internal error, contact support!",
+        "username_required": "Please enter a username before continuing.",
+        "google_config_missing": "Google configuration is missing.",
+        "google_sign_in_failed": "Google sign-in failed. Try again."
+      },
+      "validation": {
+        "username_required": "Username is required",
+        "username_min": "Username must be at least 3 characters",
+        "username_max": "Username must be at most 20 characters"
       },
       "username": "username",
       "email": "email",
@@ -81,7 +104,8 @@
       "save": "REGISTER",
       "loading": "LOADING",
       "cancel": "CANCEL",
-      "appleButton": "Sign up with Apple"
+      "appleButton": "Sign up with Apple",
+      "googleButton": "Sign up with Google"
     },
     "confirmation": {
       "errors": {
@@ -109,20 +133,31 @@
         "invalid_credentials": "¡Credenciales inválidas!",
         "email_not_confirmed": "Correo no confirmado",
         "Unknown error": "¡Error desconocido!",
-        "over_email_send_rate_limit": "¡Error interno, contacte al soporte!"
+        "over_email_send_rate_limit": "¡Error interno, contacte al soporte!",
+        "google_config_missing": "Falta la configuración de Google.",
+        "google_sign_in_failed": "Fallo al iniciar sesión con Google."
       },
       "email": "correo electrónico",
       "password": "contraseña",
       "login": "INGRESAR",
       "register": "REGISTRARSE",
       "loading": "CARGANDO",
-      "appleButton": "Iniciar sesión con Apple"
+      "appleButton": "Iniciar sesión con Apple",
+      "googleButton": "Iniciar sesión con Google"
     },
     "register": {
       "errors": {
         "Unknown error": "¡Error desconocido!",
         "unexpected_failure": "¡Error al crear la cuenta!",
-        "over_email_send_rate_limit": "¡Error interno, contacte al soporte!"
+        "over_email_send_rate_limit": "¡Error interno, contacte al soporte!",
+        "username_required": "Ingresa un usuario antes de continuar.",
+        "google_config_missing": "Falta la configuración de Google.",
+        "google_sign_in_failed": "Fallo al iniciar sesión con Google."
+      },
+      "validation": {
+        "username_required": "El nombre de usuario es obligatorio",
+        "username_min": "El nombre de usuario debe tener al menos 3 caracteres",
+        "username_max": "El nombre de usuario debe tener como máximo 20 caracteres"
       },
       "username": "usuario",
       "email": "correo electrónico",
@@ -131,7 +166,8 @@
       "save": "REGISTRAR",
       "loading": "CARGANDO",
       "cancel": "CANCELAR",
-      "appleButton": "Crear cuenta con Apple"
+      "appleButton": "Crear cuenta con Apple",
+      "googleButton": "Crear cuenta con Google"
     },
     "confirmation": {
       "errors": {
@@ -159,20 +195,31 @@
         "invalid_credentials": "凭证无效！",
         "email_not_confirmed": "邮箱未验证",
         "Unknown error": "未知错误！",
-        "over_email_send_rate_limit": "内部错误，请联系支持！"
+        "over_email_send_rate_limit": "内部错误，请联系支持！",
+        "google_config_missing": "缺少 Google 配置。",
+        "google_sign_in_failed": "Google 登录失败，请重试。"
       },
       "email": "邮箱",
       "password": "密码",
       "login": "登录",
       "register": "注册",
       "loading": "加载中",
-      "appleButton": "使用 Apple 登录"
+      "appleButton": "使用 Apple 登录",
+      "googleButton": "使用 Google 登录"
     },
     "register": {
       "errors": {
         "Unknown error": "未知错误！",
         "unexpected_failure": "创建账户失败！",
-        "over_email_send_rate_limit": "内部错误，请联系支持！"
+        "over_email_send_rate_limit": "内部错误，请联系支持！",
+        "username_required": "请先输入用户名。",
+        "google_config_missing": "缺少 Google 配置。",
+        "google_sign_in_failed": "Google 登录失败，请重试。"
+      },
+      "validation": {
+        "username_required": "用户名是必需的",
+        "username_min": "用户名至少需要 3 个字符",
+        "username_max": "用户名最多 20 个字符"
       },
       "username": "用户名",
       "email": "邮箱",
@@ -181,7 +228,8 @@
       "save": "注册",
       "loading": "加载中",
       "cancel": "取消",
-      "appleButton": "使用 Apple 创建账户"
+      "appleButton": "使用 Apple 创建账户",
+      "googleButton": "使用 Google 创建账户"
     },
     "confirmation": {
       "errors": {

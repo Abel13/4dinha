@@ -3,16 +3,23 @@ import { useState } from 'react';
 import { router } from 'expo-router';
 import { useDicebearBuilder } from './useDicebearBuilder';
 import { AppleCredential } from './useAppleAuth';
+import type { SocialProvider } from '@/lib/auth/signInWithProvider';
+import { signInWithProvider } from '@/lib/auth/signInWithProvider';
 
 export const useRegister = () => {
   const { applyParamsToState, imageSvg } = useDicebearBuilder();
   const [registerError, setRegisterError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const onAppleAuth = async (
-    credential: AppleCredential,
-    username?: string,
-  ) => {
+  const registerWithProvider = async ({
+    provider,
+    token,
+    username,
+  }: {
+    provider: SocialProvider;
+    token: string;
+    username?: string;
+  }) => {
     try {
       setRegisterError('');
       setLoading(true);
@@ -21,10 +28,7 @@ export const useRegister = () => {
         throw new Error('username_required');
       }
 
-      const { error: authError } = await supabase.auth.signInWithIdToken({
-        provider: 'apple',
-        token: credential.identityToken,
-      });
+      const { error: authError } = await signInWithProvider(provider, token);
 
       if (authError) {
         throw authError;
@@ -50,6 +54,29 @@ export const useRegister = () => {
     }
   };
 
+  const onAppleAuth = async (
+    credential: AppleCredential,
+    username?: string,
+  ) => {
+    if (!credential.identityToken) {
+      setRegisterError('Unknown error');
+      return;
+    }
+    await registerWithProvider({
+      provider: 'apple',
+      token: credential.identityToken,
+      username,
+    });
+  };
+
+  const onGoogleAuth = async (token: string, username?: string) => {
+    await registerWithProvider({
+      provider: 'google',
+      token,
+      username,
+    });
+  };
+
   const updateUser = async (username: string) => {
     await supabase.auth.updateUser({
       data: {
@@ -63,6 +90,7 @@ export const useRegister = () => {
 
   return {
     onAppleAuth,
+    onGoogleAuth,
     loadImage: applyParamsToState,
     updateUser,
     loading,

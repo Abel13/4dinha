@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Platform } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import { useTranslation } from './useTranslation';
 
 export interface AppleCredential {
   identityToken: string;
@@ -16,10 +17,11 @@ export interface AppleCredential {
 export const useAppleAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
+  const { t } = useTranslation('register');
 
   const getCredential = async (): Promise<AppleCredential | null> => {
     if (Platform.OS !== 'ios') {
-      setError('Apple Authentication is only available on iOS');
+      setError(t('Apple Authentication is only available on iOS'));
       return null;
     }
 

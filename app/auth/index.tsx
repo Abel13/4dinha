@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
 });
 
 export default function LoginScreen() {
-  const { handleRegister, loading, authError, onAppleAuth } = useAuth();
+  const { handleRegister, loading, authError, onAppleAuth, onGoogleAuth } =
+    useAuth();
 
   const { t, locales, changeLanguage, customLanguage } =
     useTranslation('login');
@@ -93,7 +94,11 @@ export default function LoginScreen() {
         />
         <ThemedView />
         <ThemedView style={{ alignItems: 'center' }}>
-          <Auth mode='signIn' handleCredential={onAppleAuth} />
+          <Auth
+            mode='signIn'
+            onAppleAuth={onAppleAuth}
+            onGoogleAuth={onGoogleAuth}
+          />
         </ThemedView>
 
         {authError && (

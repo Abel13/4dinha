@@ -46,17 +46,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .min(3, 'O nome de usuário deve ter pelo menos 3 caracteres')
-    .max(20, 'O nome de usuário deve ter no máximo 20 caracteres')
-    .required('O nome de usuário é obrigatório'),
-});
-
 export default function Register() {
-  const { loading, loadImage, onAppleAuth } = useRegister();
+  const { loading, loadImage, onAppleAuth, onGoogleAuth, registerError } =
+    useRegister();
   const { t } = useTranslation('register');
+
+  const schema = yup.object().shape({
+    username: yup
+      .string()
+      .min(3, t('validation.username_min'))
+      .max(20, t('validation.username_max'))
+      .required(t('validation.username_required')),
+  });
 
   const router = useRouter();
 
@@ -97,39 +98,39 @@ export default function Register() {
         />
       </ThemedView>
 
-      <ScrollView style={{ flex: 1, width: '100%' }}>
-        <ThemedView style={styles.content}>
-          <ThemedView />
-          <ThemedView>
-            <ThemedText lightColor={Colors.dark.text}>
-              {t('username')}
-            </ThemedText>
-            <ThemedInput
-              name='username'
-              maxLength={16}
-              autoCapitalize='none'
-              autoCorrect={false}
-              autoComplete='off'
-              control={control}
-              error={errors.username?.message}
-            />
-          </ThemedView>
-
-          <ThemedView style={{ alignItems: 'center' }}>
-            <Auth
-              mode='signUp'
-              username={username}
-              handleCredential={onAppleAuth}
-            />
-          </ThemedView>
-          <ThemedButton
-            type='link'
-            title={t('cancel')}
-            onPress={router.back}
-            disabled={loading}
+      <ThemedView style={styles.content}>
+        <ThemedView />
+        <ThemedView>
+          <ThemedText lightColor={Colors.dark.text}>{t('username')}</ThemedText>
+          <ThemedInput
+            name='username'
+            maxLength={16}
+            autoCapitalize='none'
+            autoCorrect={false}
+            autoComplete='off'
+            control={control}
+            error={errors.username?.message}
           />
         </ThemedView>
-      </ScrollView>
+
+        <ThemedView style={{ alignItems: 'center', gap: 12 }}>
+          <Auth
+            mode='signUp'
+            username={username}
+            onAppleAuth={(credential) => onAppleAuth(credential, username)}
+            onGoogleAuth={(token) => onGoogleAuth(token, username)}
+          />
+          {registerError && (
+            <ThemedText type='error'>{t(`errors.${registerError}`)}</ThemedText>
+          )}
+        </ThemedView>
+        <ThemedButton
+          type='link'
+          title={t('cancel')}
+          onPress={router.back}
+          disabled={loading}
+        />
+      </ThemedView>
     </ThemedView>
   );
 }

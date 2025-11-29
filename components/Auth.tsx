@@ -1,22 +1,26 @@
-import { Platform, Pressable, Text } from 'react-native';
+import { Platform, Pressable, Text, View } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useState, useEffect } from 'react';
 import { AppleCredential, useAppleAuth } from '@/hooks/useAppleAuth';
 import { ThemedText } from '@/components/ThemedText';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useGoogleAuth } from '@/hooks/useGoogleAuth';
+import { AntDesign } from '@expo/vector-icons';
 
 type AuthMode = 'signIn' | 'signUp';
 
 interface AuthProps {
   mode?: AuthMode;
   username?: string;
-  handleCredential: (credential: AppleCredential, username?: string) => void;
+  onAppleAuth: (credential: AppleCredential, username?: string) => void;
+  onGoogleAuth: (token: string, username?: string) => void;
 }
 
 export function Auth({
   mode = 'signIn',
   username,
-  handleCredential,
+  onAppleAuth,
+  onGoogleAuth,
 }: AuthProps) {
   const [isAvailable, setIsAvailable] = useState(false);
   const {
@@ -24,10 +28,15 @@ export function Auth({
     loading: appleLoading,
     error: appleError,
   } = useAppleAuth();
+  const {
+    signIn: signInWithGoogle,
+    loading: googleLoading,
+    error: googleError,
+  } = useGoogleAuth();
 
-  const loading = appleLoading;
-  const error = appleError;
-  const isDisabled = mode === 'signUp' && !username;
+  const isSignUp = mode === 'signUp';
+  const appleDisabled = isSignUp && !username;
+  const googleDisabled = isSignUp && !username;
   const { t } = useTranslation(mode === 'signUp' ? 'register' : 'login');
 
   useEffect(() => {
@@ -36,19 +45,25 @@ export function Auth({
     }
   }, []);
 
-  const handlePress = async () => {
-    if (mode === 'signUp' && !username) {
-      return;
-    }
+  const handleApplePress = async () => {
+    if (appleDisabled) return;
     const credential = await getCredential();
     if (credential) {
-      handleCredential(credential, username);
+      onAppleAuth(credential, username);
     }
   };
 
-  if (Platform.OS === 'ios' && isAvailable) {
-    return (
-      <>
+  const handleGooglePress = async () => {
+    if (googleDisabled) return;
+    const token = await signInWithGoogle();
+    if (token) {
+      onGoogleAuth(token, username);
+    }
+  };
+
+  const renderAppleButton = () => {
+    if (Platform.OS === 'ios' && isAvailable) {
+      return (
         <AppleAuthentication.AppleAuthenticationButton
           buttonType={
             mode === 'signUp'
@@ -60,29 +75,32 @@ export function Auth({
           style={{
             width: '100%',
             height: 50,
-            opacity: loading || isDisabled ? 0.5 : 1,
+            opacity: appleDisabled ? 0.5 : 1,
           }}
-          onPress={loading || isDisabled ? () => {} : handlePress}
+          onPress={appleDisabled ? () => {} : handleApplePress}
         />
-        {error && <ThemedText type='error'>{error}</ThemedText>}
-      </>
-    );
-  }
+      );
+    }
 
-  if (Platform.OS === 'ios' && !isAvailable) {
-    return (
-      <Text style={{ color: 'white' }}>
-        Apple Sign In is not available. Please use a real device (not
-        simulator).
-      </Text>
-    );
-  }
+    if (Platform.OS === 'ios' && !isAvailable) {
+      return (
+        <Text style={{ color: 'white' }}>
+          Apple Sign In is not available. Please use a real device (not
+          simulator).
+        </Text>
+      );
+    }
 
-  return (
+    return null;
+  };
+
+  const renderGoogleButton = () => (
     <Pressable
-      onPress={loading || isDisabled ? () => {} : handlePress}
+      onPress={googleDisabled ? () => {} : handleGooglePress}
       style={{
         width: '100%',
+        flexDirection: 'row',
+        gap: 5,
         height: 50,
         borderRadius: 8,
         borderWidth: 1,
@@ -90,12 +108,24 @@ export function Auth({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: loading || isDisabled ? 0.5 : 1,
+        opacity: googleDisabled ? 0.5 : 1,
       }}
     >
-      <Text style={{ color: '#000', fontWeight: '600' }}>
-        {t('appleButton')}
+      <AntDesign name='google' size={18} />
+      <Text style={{ color: '#000', fontSize: 18, fontWeight: '600' }}>
+        {t('googleButton')}
       </Text>
     </Pressable>
+  );
+
+  return (
+    <View style={{ width: '100%', gap: 12 }}>
+      {renderAppleButton()}
+      {renderGoogleButton()}
+      {appleError && <ThemedText type='error'>{appleError}</ThemedText>}
+      {googleError && (
+        <ThemedText type='error'>{t(`errors.${googleError}`)}</ThemedText>
+      )}
+    </View>
   );
 }
