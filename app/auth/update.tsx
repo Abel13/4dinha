@@ -7,12 +7,10 @@ import { Colors } from '@/constants/Colors';
 import { useRegister } from '@/hooks/useRegister';
 import { useTranslation } from '@/hooks/useTranslation';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ScrollView, StyleSheet } from 'react-native';
 import * as yup from 'yup';
-import { Auth } from '@/components/Auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,8 +45,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Register() {
-  const { loading, loadImage, onAppleAuth, onGoogleAuth, registerError } =
-    useRegister();
+  const { loading, loadImage, updateUser } = useRegister();
   const { t } = useTranslation('register');
 
   const schema = yup.object().shape({
@@ -59,8 +56,6 @@ export default function Register() {
       .required(t('validation.username_required')),
   });
 
-  const router = useRouter();
-
   const {
     control,
     watch,
@@ -69,8 +64,7 @@ export default function Register() {
     resolver: yupResolver(schema),
   });
 
-  const username = watch('username');
-  const seed = username;
+  const seed = watch('username');
 
   useEffect(() => {
     if (seed)
@@ -98,39 +92,33 @@ export default function Register() {
         />
       </ThemedView>
 
-      <ThemedView style={styles.content}>
-        <ThemedView />
-        <ThemedView>
-          <ThemedText lightColor={Colors.dark.text}>{t('username')}</ThemedText>
-          <ThemedInput
-            name='username'
-            maxLength={16}
-            autoCapitalize='none'
-            autoCorrect={false}
-            autoComplete='off'
-            control={control}
-            error={errors.username?.message}
-          />
-        </ThemedView>
+      <ScrollView style={{ flex: 1, width: '100%' }}>
+        <ThemedView style={styles.content}>
+          <ThemedView />
+          <ThemedView>
+            <ThemedText lightColor={Colors.dark.text}>
+              {t('username')}
+            </ThemedText>
+            <ThemedInput
+              name='username'
+              maxLength={16}
+              autoCapitalize='none'
+              autoCorrect={false}
+              autoComplete='off'
+              control={control}
+              error={errors.username?.message}
+              returnKeyType='done'
+            />
+          </ThemedView>
 
-        <ThemedView style={{ alignItems: 'center', gap: 12 }}>
-          <Auth
-            mode='signUp'
-            username={username}
-            onAppleAuth={(credential) => onAppleAuth(credential, username)}
-            onGoogleAuth={(token) => onGoogleAuth(token, username)}
+          <ThemedButton
+            type='link'
+            title={t('save')}
+            onPress={() => updateUser(watch('username'))}
+            disabled={loading}
           />
-          {registerError && (
-            <ThemedText type='error'>{t(`errors.${registerError}`)}</ThemedText>
-          )}
         </ThemedView>
-        <ThemedButton
-          type='link'
-          title={t('cancel')}
-          onPress={router.back}
-          disabled={loading}
-        />
-      </ThemedView>
+      </ScrollView>
     </ThemedView>
   );
 }

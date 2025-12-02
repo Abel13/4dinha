@@ -126,7 +126,7 @@ export default function DiceBearAvatarBuilder({
     applyParamsToState({
       style: initialStyle as string,
       seed: initialSeed as string,
-      backgroundColor: 'FFFFFF',
+      backgroundColor: 'a1a1a1',
     });
   }, []);
 
