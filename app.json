@@ -5,7 +5,7 @@
     "slug": "4dinha",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
-    "scheme": "x4dinha",
+    "scheme": "com.abelb13.x4dinha",
     "platforms": ["ios", "android"],
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
