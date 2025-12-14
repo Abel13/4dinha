@@ -27,6 +27,15 @@ export const enterMatchService = async ({
 }: {
   matchId: string;
 }): Promise<string | null> => {
+  const { data: matchLobby, error: lobbyError } = await supabase
+    .from('match_users')
+    .select('*')
+    .eq('match_id', matchId);
+
+  if (!matchLobby || matchLobby?.length >= 6 || lobbyError) {
+    return null;
+  }
+
   const { data: matchUser, error } = await supabase
     .from('match_users')
     .insert({

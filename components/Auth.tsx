@@ -1,11 +1,11 @@
-import { Platform, Pressable, Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useState, useEffect } from 'react';
 import { AppleCredential, useAppleAuth } from '@/hooks/useAppleAuth';
 import { ThemedText } from '@/components/ThemedText';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useGoogleAuth } from '@/hooks/useGoogleAuth';
-import { AntDesign } from '@expo/vector-icons';
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
 type AuthMode = 'signIn' | 'signUp';
 
@@ -13,7 +13,7 @@ interface AuthProps {
   mode?: AuthMode;
   username?: string;
   onAppleAuth: (credential: AppleCredential, username?: string) => void;
-  onGoogleAuth: (token: string, username?: string) => void;
+  onGoogleAuth: (idToken: string, username?: string) => void;
 }
 
 export function Auth({
@@ -55,9 +55,11 @@ export function Auth({
 
   const handleGooglePress = async () => {
     if (googleDisabled) return;
-    const token = await signInWithGoogle();
-    if (token) {
-      onGoogleAuth(token, username);
+    const idToken = await signInWithGoogle();
+    if (idToken) {
+      // Pass the ID token to the parent component
+      // The parent will use it with Supabase signInWithIdToken
+      onGoogleAuth(idToken, username);
     }
   };
 
@@ -94,29 +96,31 @@ export function Auth({
     return null;
   };
 
-  const renderGoogleButton = () => (
-    <Pressable
-      onPress={googleDisabled ? () => {} : handleGooglePress}
-      style={{
-        width: '100%',
-        flexDirection: 'row',
-        gap: 5,
-        height: 50,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#d1d1d1',
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity: googleDisabled ? 0.5 : 1,
-      }}
-    >
-      <AntDesign name='google' size={18} />
-      <Text style={{ color: '#000', fontSize: 18, fontWeight: '600' }}>
-        {t('googleButton')}
-      </Text>
-    </Pressable>
-  );
+  const renderGoogleButton = () => {
+    if (googleDisabled) {
+      return (
+        <View style={{ opacity: 0.5 }}>
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Light}
+            onPress={() => {}}
+            disabled={true}
+            style={{ width: '100%', height: 50 }}
+          />
+        </View>
+      );
+    }
+
+    return (
+      <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Light}
+        onPress={handleGooglePress}
+        disabled={googleLoading}
+        style={{ width: '100%', height: 50 }}
+      />
+    );
+  };
 
   return (
     <View style={{ width: '100%', gap: 12 }}>

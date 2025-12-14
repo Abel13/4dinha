@@ -14,6 +14,7 @@ export default function AuthLayout() {
       <Stack.Screen name='register' />
       <Stack.Screen name='update' />
       <Stack.Screen name='confirmation' />
+      <Stack.Screen name='callback' />
     </Stack>
   );
 }

@@ -11,6 +11,9 @@
         "Unknown error": "Erro não identificado!",
         "over_email_send_rate_limit": "Falha interna, contate o suporte!",
         "google_config_missing": "Configuração do Google ausente.",
+        "google_redirect_mismatch": "URL de redirecionamento não corresponde. Verifique a configuração.",
+        "google_play_services_not_available": "Google Play Services não disponível. Atualize o Google Play Services.",
+        "google_developer_error": "Erro de configuração do desenvolvedor. Verifique o Client ID e SHA-1/SHA-256 no Google Cloud Console.",
         "google_sign_in_failed": "Falha ao conectar com o Google."
       },
       "email": "e-mail",
@@ -28,6 +31,9 @@
         "over_email_send_rate_limit": "Falha interna, contate o suporte!",
         "username_required": "Informe seu usuário antes de continuar.",
         "google_config_missing": "Configuração do Google ausente.",
+        "google_redirect_mismatch": "URL de redirecionamento não corresponde. Verifique a configuração.",
+        "google_play_services_not_available": "Google Play Services não disponível. Atualize o Google Play Services.",
+        "google_developer_error": "Erro de configuração do desenvolvedor. Verifique o Client ID e SHA-1/SHA-256 no Google Cloud Console.",
         "google_sign_in_failed": "Falha ao conectar com o Google."
       },
       "validation": {
@@ -73,6 +79,7 @@
         "Unknown error": "Unknown error!",
         "over_email_send_rate_limit": "Internal error, contact support!",
         "google_config_missing": "Google configuration is missing.",
+        "google_redirect_mismatch": "Redirect URI mismatch. Please check your configuration.",
         "google_sign_in_failed": "Google sign-in failed. Try again."
       },
       "email": "email",
@@ -90,6 +97,7 @@
         "over_email_send_rate_limit": "Internal error, contact support!",
         "username_required": "Please enter a username before continuing.",
         "google_config_missing": "Google configuration is missing.",
+        "google_redirect_mismatch": "Redirect URI mismatch. Please check your configuration.",
         "google_sign_in_failed": "Google sign-in failed. Try again."
       },
       "validation": {
@@ -135,6 +143,7 @@
         "Unknown error": "¡Error desconocido!",
         "over_email_send_rate_limit": "¡Error interno, contacte al soporte!",
         "google_config_missing": "Falta la configuración de Google.",
+        "google_redirect_mismatch": "La URL de redirección no coincide. Verifique la configuración.",
         "google_sign_in_failed": "Fallo al iniciar sesión con Google."
       },
       "email": "correo electrónico",
@@ -152,6 +161,7 @@
         "over_email_send_rate_limit": "¡Error interno, contacte al soporte!",
         "username_required": "Ingresa un usuario antes de continuar.",
         "google_config_missing": "Falta la configuración de Google.",
+        "google_redirect_mismatch": "La URL de redirección no coincide. Verifique la configuración.",
         "google_sign_in_failed": "Fallo al iniciar sesión con Google."
       },
       "validation": {
@@ -197,6 +207,7 @@
         "Unknown error": "未知错误！",
         "over_email_send_rate_limit": "内部错误，请联系支持！",
         "google_config_missing": "缺少 Google 配置。",
+        "google_redirect_mismatch": "重定向 URI 不匹配。请检查您的配置。",
         "google_sign_in_failed": "Google 登录失败，请重试。"
       },
       "email": "邮箱",
@@ -214,6 +225,7 @@
         "over_email_send_rate_limit": "内部错误，请联系支持！",
         "username_required": "请先输入用户名。",
         "google_config_missing": "缺少 Google 配置。",
+        "google_redirect_mismatch": "重定向 URI 不匹配。请检查您的配置。",
         "google_sign_in_failed": "Google 登录失败，请重试。"
       },
       "validation": {

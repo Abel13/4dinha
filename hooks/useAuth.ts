@@ -21,15 +21,6 @@ export const useAuth = () => {
       setAuthError('');
       setLoading(true);
 
-      if (
-        !process.env.EXPO_PUBLIC_SUPABASE_URL!.startsWith('https://') ||
-        !process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!
-      ) {
-        throw new Error(
-          'ENV inválida: defina EXPO_PUBLIC_SUPABASE_URL e EXPO_PUBLIC_SUPABASE_ANON_KEY',
-        );
-      }
-
       const {
         error: authError,
         data: { session },
@@ -71,8 +62,14 @@ export const useAuth = () => {
     await authenticate('apple', credential.identityToken);
   };
 
-  const onGoogleAuth = async (token: string) => {
-    await authenticate('google', token);
+  const onGoogleAuth = async (idToken: string) => {
+    // With Google Sign-In native SDK, we always receive an ID token
+    // Use it to authenticate with Supabase
+    if (!idToken) {
+      setAuthError('Unknown error');
+      return;
+    }
+    await authenticate('google', idToken);
   };
 
   const signOut = async () => {
