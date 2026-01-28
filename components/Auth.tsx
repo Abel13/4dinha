@@ -97,6 +97,11 @@ export function Auth({
   };
 
   const renderGoogleButton = () => {
+    // Only show Google button on Android
+    if (Platform.OS !== 'android') {
+      return null;
+    }
+
     if (googleDisabled) {
       return (
         <View style={{ opacity: 0.5 }}>
@@ -126,8 +131,10 @@ export function Auth({
     <View style={{ width: '100%', gap: 12 }}>
       {renderAppleButton()}
       {renderGoogleButton()}
-      {appleError && <ThemedText type='error'>{appleError}</ThemedText>}
-      {googleError && (
+      {Platform.OS === 'ios' && appleError && (
+        <ThemedText type='error'>{appleError}</ThemedText>
+      )}
+      {Platform.OS === 'android' && googleError && (
         <ThemedText type='error'>{t(`errors.${googleError}`)}</ThemedText>
       )}
     </View>

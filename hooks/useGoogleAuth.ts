@@ -34,16 +34,17 @@ export const useGoogleAuth = () => {
       return;
     }
 
-    GoogleSignin.configure({
-      // Get your web client ID from Google Cloud Console
-      // This is the OAuth 2.0 Client ID (not the iOS/Android client ID)
+    const config: any = {
       webClientId: webClientId,
-      // iOS client ID (optional, only needed for iOS)
-      iosClientId: iosClientId,
-      // Android client ID is automatically configured via google-services.json
-      // For Android, you may also need offlineAccess: true
       offlineAccess: true,
-    });
+    };
+
+    // Only add iosClientId if on iOS or if it's provided
+    if (Platform.OS === 'ios' && iosClientId) {
+      config.iosClientId = iosClientId;
+    }
+
+    GoogleSignin.configure(config);
   }, []);
 
   const signIn = async (): Promise<string | null> => {
@@ -55,7 +56,6 @@ export const useGoogleAuth = () => {
         showPlayServicesUpdateDialog: true,
       });
 
-      // Sign in with Google
       const response = await GoogleSignin.signIn();
 
       if (isSuccessResponse(response)) {
@@ -67,9 +67,9 @@ export const useGoogleAuth = () => {
       console.log('Google Sign-In fail');
       return null;
     } catch (err: any) {
-      console.error('Google Sign-In Error:', err);
-      console.error('Error code:', err.code);
-      console.error('Error message:', err.message);
+      if (__DEV__) {
+        console.error('Google Sign-In Error:', err);
+      }
 
       if (err.code === statusCodes.SIGN_IN_CANCELLED) {
         // User canceled - don't show error
@@ -83,20 +83,9 @@ export const useGoogleAuth = () => {
         return null;
       } else if (
         err.code === 'DEVELOPER_ERROR' ||
-        err.message?.includes('DEVELOPER_ERROR')
+        err.message?.includes('DEVELOPER_ERROR') ||
+        err.code === 10 // Status code 10 is DEVELOPER_ERROR
       ) {
-        // Developer configuration error
-        console.error('DEVELOPER_ERROR - Check configuration:');
-        console.error(
-          '1. Verify EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID is set correctly',
-        );
-        console.error(
-          '2. For Android: Add SHA-1 and SHA-256 to Google Cloud Console',
-        );
-        console.error('3. Verify package name matches: com.abelb13.x4dinha');
-        console.error(
-          '4. For iOS: Verify iosUrlScheme in app.json matches iOS Client ID',
-        );
         setError('google_developer_error');
         return null;
       } else {
