@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function HomeScreen() {
+export default function ProfileScreen() {
   const { username, profilePicture, loadSession, session } =
     useUserSessionStore((state) => state);
   const router = useRouter();

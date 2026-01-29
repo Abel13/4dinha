@@ -69,7 +69,7 @@ const schema = yup.object().shape({
     .required('A confirmação de senha é obrigatória'),
 });
 
-export default function Register() {
+export default function RegisterScreen() {
   const { register, loading, registerError, loadImage } = useRegister();
   const { t } = useTranslation('register');
 

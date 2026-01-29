@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function End() {
+export default function EndScreen() {
   useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const { session } = useUserSessionStore();

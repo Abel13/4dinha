@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   slider: {},
 });
 
-export default function Settings() {
+export default function LeaderboardScreen() {
   const { playSound, stopSound } = useSound('ambient');
 
   useEffect(() => {

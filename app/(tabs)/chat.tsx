@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   slider: {},
 });
 
-export default function Settings() {
+export default function ChatScreen() {
   const { playSound, stopSound } = useSound('ambient');
 
   useEffect(() => {

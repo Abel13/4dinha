@@ -5,7 +5,7 @@ import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { supabase } from '@/providers/supabase';
 import { router, useLocalSearchParams } from 'expo-router';
 
-export default function AvatarCreator() {
+export default function AvatarCreatorScreen() {
   const { imageSvg, username } = useLocalSearchParams();
   const { setSession } = useUserSessionStore();
 
