@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Indiozinho() {
+export default function IndiozinhoScreen() {
   useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isModalVisible, setModalVisible] = useState(false);

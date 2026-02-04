@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   slider: {},
 });
 
-export default function Settings() {
+export default function SettingsScreen() {
   const {
     toggleSound,
     setVolume,

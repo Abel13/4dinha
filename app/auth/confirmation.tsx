@@ -55,7 +55,7 @@ const schema = yup.object().shape({
     .required('errors.required_field'),
 });
 
-export default function Register() {
+export default function ConfirmScreen() {
   const theme = useColorScheme() || 'light';
   const { validate, loading, confirmationError } = useConfirmation();
   const { email } = useLocalSearchParams<{ email: string }>();
