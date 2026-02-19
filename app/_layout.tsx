@@ -46,13 +46,12 @@ export default function RootLayout() {
       RiveRendererIOS.Rive,
       RiveRendererAndroid.Rive,
     );
-    // pega sessão atual e marca que já verificamos
+
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session ?? null);
       setAuthChecked(true);
     });
 
-    // escuta mudanças de auth
     const { data: sub } = supabase.auth.onAuthStateChange(
       (_evt, newSession) => {
         setSession(newSession);

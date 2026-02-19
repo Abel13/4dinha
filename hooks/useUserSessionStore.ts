@@ -18,11 +18,13 @@ export const useUserSessionStore = create<ISessionStore>()(
       loadSession: async () => {
         const session = get().session as Session;
 
-        const { username } = session.user.user_metadata;
+        if (session) {
+          const { username } = session?.user.user_metadata;
 
-        const profilePicture = session.user.user_metadata.image;
+          const profilePicture = session?.user.user_metadata.image;
 
-        set({ session, username, profilePicture });
+          set({ session, username, profilePicture });
+        }
       },
       setSession: (session) => {
         set({ session });
