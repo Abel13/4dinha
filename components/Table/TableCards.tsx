@@ -56,6 +56,7 @@ interface TableCardsProps {
   number: number;
   playing?: boolean;
   currentTurn: number;
+  turnStatus?: 'finished' | 'playing' | null;
   handlePlay?: (id?: string) => void;
 }
 
@@ -64,6 +65,7 @@ function CardsOnTable({
   number,
   playing,
   currentTurn,
+  turnStatus,
   handlePlay,
 }: TableCardsProps) {
   const { getTableCardPosition } = useGamePositions();
@@ -72,19 +74,20 @@ function CardsOnTable({
       style={[styles.tableCard, getTableCardPosition(number)]}
       darkColor={Colors.dark.table}
     >
-      {cards
-        .filter((c) => c.status === 'on table' && c.turn === currentTurn)
-        .map((card) => (
-          <Card
-            key={card.id}
-            id={card.id}
-            suit={card.suit}
-            symbol={card.symbol}
-            status={card.status}
-            playing={playing}
-            onPress={handlePlay}
-          />
-        ))}
+      {turnStatus === 'playing' &&
+        cards
+          .filter((c) => c.status === 'on table' && c.turn === currentTurn)
+          .map((card) => (
+            <Card
+              key={card.id}
+              id={card.id}
+              suit={card.suit}
+              symbol={card.symbol}
+              status={card.status}
+              playing={playing}
+              onPress={handlePlay}
+            />
+          ))}
     </ThemedView>
   );
 }
@@ -139,6 +142,7 @@ export function TableCards({
   number,
   playing,
   currentTurn,
+  turnStatus,
   handlePlay,
 }: TableSeatProps) {
   if (!player) return null;
@@ -158,6 +162,7 @@ export function TableCards({
         cards={player.cards}
         number={number}
         currentTurn={currentTurn}
+        turnStatus={turnStatus}
         playing={playing}
         handlePlay={handlePlay}
       />

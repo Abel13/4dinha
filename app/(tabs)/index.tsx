@@ -110,6 +110,14 @@ const styles = StyleSheet.create({
     padding: 10,
     alignContent: 'center',
   },
+  inProgressMatchItem: {
+    width: '48%',
+  },
+  inProgressMatchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
   logo: { width: 100, height: 100 },
   matchContainer: {
     backgroundColor: Colors.dark.purple,
@@ -313,27 +321,26 @@ export default function HomeScreen() {
                   data={inProgressMatches}
                   keyExtractor={(item) => item.matches.id.toString()}
                   numColumns={2}
-                  columnWrapperStyle={{ justifyContent: 'space-between' }}
-                  contentContainerStyle={{ alignItems: 'center' }}
-                  renderItem={({ item }: { item: MyMatch }) => {
-                    return (
-                      <ThemedView style={{ width: '100%' }}>
-                        <ThemedButton
-                          title={item.matches.name}
-                          type='outlined'
-                          onPress={() => {
-                            stopSound();
-                            router.push({
-                              pathname: '/(game)/4dinha',
-                              params: {
-                                gameId: item.matches.id,
-                              },
-                            });
-                          }}
-                        />
-                      </ThemedView>
-                    );
-                  }}
+                  columnWrapperStyle={styles.inProgressMatchRow}
+                  contentContainerStyle={{ alignItems: 'stretch' }}
+                  ItemSeparatorComponent={null}
+                  renderItem={({ item }: { item: MyMatch }) => (
+                    <ThemedView style={styles.inProgressMatchItem}>
+                      <ThemedButton
+                        title={item.matches.name}
+                        type='outlined'
+                        onPress={() => {
+                          stopSound();
+                          router.push({
+                            pathname: '/(game)/4dinha',
+                            params: {
+                              gameId: item.matches.id,
+                            },
+                          });
+                        }}
+                      />
+                    </ThemedView>
+                  )}
                 />
               </ThemedView>
             )}

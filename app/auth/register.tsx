@@ -124,7 +124,7 @@ export default function RegisterScreen() {
             </ThemedText>
             <ThemedInput
               name='username'
-              maxLength={15}
+              maxLength={16}
               autoCapitalize='none'
               autoCorrect={false}
               autoComplete='off'
