@@ -47,7 +47,7 @@ export default function RootLayout() {
       RiveRendererIOS.Rive,
       RiveRendererAndroid.Rive,
     );
-    // pega sessão atual e marca que já verificamos (sync com store)
+
     supabase.auth.getSession().then(({ data }) => {
       const session = data.session ?? null;
       setSession(session);
@@ -55,7 +55,6 @@ export default function RootLayout() {
       setAuthChecked(true);
     });
 
-    // escuta mudanças de auth (incl. TOKEN_REFRESHED) e mantém store em sync
     const { data: sub } = supabase.auth.onAuthStateChange(
       (_evt, newSession) => {
         setSession(newSession);

@@ -10,8 +10,8 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
-  }
+    PostgrestVersion: '12.2.3 (519615d)';
+  };
   public: {
     Tables: {
       bets: {
@@ -219,32 +219,32 @@ export type Database = {
             referencedRelation: "matches"
             referencedColumns: ["id"]
           },
-        ]
-      }
+        ];
+      };
       profiles: {
         Row: {
-          avatar_svg: string | null
-          created_at: string | null
-          id: string
-          updated_at: string | null
-          username: string | null
-        }
+          avatar_svg: string | null;
+          created_at: string | null;
+          id: string;
+          updated_at: string | null;
+          username: string | null;
+        };
         Insert: {
-          avatar_svg?: string | null
-          created_at?: string | null
-          id: string
-          updated_at?: string | null
-          username?: string | null
-        }
+          avatar_svg?: string | null;
+          created_at?: string | null;
+          id: string;
+          updated_at?: string | null;
+          username?: string | null;
+        };
         Update: {
-          avatar_svg?: string | null
-          created_at?: string | null
-          id?: string
-          updated_at?: string | null
-          username?: string | null
-        }
-        Relationships: []
-      }
+          avatar_svg?: string | null;
+          created_at?: string | null;
+          id?: string;
+          updated_at?: string | null;
+          username?: string | null;
+        };
+        Relationships: [];
+      };
       rounds: {
         Row: {
           match_id: string
@@ -279,110 +279,113 @@ export type Database = {
             referencedRelation: "deck"
             referencedColumns: ["id"]
           },
-        ]
-      }
-    }
+        ];
+      };
+    };
     Views: {
-      [_ in never]: never
-    }
+      [_ in never]: never;
+    };
     Functions: {
       get_player_cards: {
-        Args: { _match_id: string; _round_number: number; _user_id: string }
+        Args: { _match_id: string; _round_number: number; _user_id: string };
         Returns: {
-          id: string
-          status: Database["public"]["Enums"]["hand_status"]
-          suit: Database["public"]["Enums"]["card_suit"]
-          symbol: Database["public"]["Enums"]["card_symbol"]
-          turn: number
-          user_id: string
-        }[]
-      }
+          id: string;
+          status: Database['public']['Enums']['hand_status'];
+          suit: Database['public']['Enums']['card_suit'];
+          symbol: Database['public']['Enums']['card_symbol'];
+          turn: number;
+          user_id: string;
+        }[];
+      };
       get_user_email: {
-        Args: { user_id: string }
+        Args: { user_id: string };
         Returns: {
           email: string
         }[]
       }
       update_dealer: {
-        Args: { _match_id: string; _table_seat: number }
-        Returns: undefined
-      }
+        Args: { _match_id: string; _table_seat: number };
+        Returns: undefined;
+      };
       update_match_status_to_end: {
-        Args: { _match_id: string }
-        Returns: undefined
-      }
+        Args: { _match_id: string };
+        Returns: undefined;
+      };
       update_match_status_to_started: {
-        Args: { _match_id: string }
-        Returns: undefined
-      }
+        Args: { _match_id: string };
+        Returns: undefined;
+      };
       update_player_lives: {
-        Args: { _match_id: string; _new_lives: number; _user_id: string }
-        Returns: undefined
-      }
+        Args: { _match_id: string; _new_lives: number; _user_id: string };
+        Returns: undefined;
+      };
       update_ready_status: {
-        Args: { _is_ready: boolean; _match_id: string }
-        Returns: undefined
-      }
+        Args: { _is_ready: boolean; _match_id: string };
+        Returns: undefined;
+      };
       update_round_number: {
-        Args: { _match_id: string; _new_round_number: number }
-        Returns: undefined
-      }
-    }
+        Args: { _match_id: string; _new_round_number: number };
+        Returns: undefined;
+      };
+    };
     Enums: {
       actions: "deal" | "bet" | "change_status" | "play" | "round_start"
       card_suit: "♣️" | "♥️" | "♠️" | "♦️"
       card_symbol:
-        | "A"
-        | "2"
-        | "3"
-        | "4"
-        | "5"
-        | "6"
-        | "7"
-        | "8"
-        | "9"
-        | "10"
-        | "Q"
-        | "J"
-        | "K"
-      hand_status: "on hand" | "on table" | "played"
-      match_status: "created" | "started" | "end"
-      round_status: "dealing" | "betting" | "playing" | "finished"
-    }
+        | 'A'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
+        | '9'
+        | '10'
+        | 'Q'
+        | 'J'
+        | 'K';
+      hand_status: 'on hand' | 'on table' | 'played';
+      match_status: 'created' | 'started' | 'end';
+      round_status: 'dealing' | 'betting' | 'playing' | 'finished';
+    };
     CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-}
+      [_ in never]: never;
+    };
+  };
+};
 
-type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+type DefaultSchema = DatabaseWithoutInternals[Extract<
+  keyof Database,
+  'public'
+>];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])
-    ? (DefaultSchema["Tables"] &
-        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
-        Row: infer R
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
+        DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] &
+        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
       }
       ? R
       : never
@@ -390,24 +393,24 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
+    | keyof DefaultSchema['Tables']
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I;
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Insert: infer I
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
       }
       ? I
       : never
@@ -415,24 +418,24 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema["Tables"]
+    | keyof DefaultSchema['Tables']
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U;
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
-    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
-        Update: infer U
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
       }
       ? U
       : never
@@ -440,61 +443,61 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema["Enums"]
+    | keyof DefaultSchema['Enums']
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
-    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
-    : never
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema["CompositeTypes"]
+    | keyof DefaultSchema['CompositeTypes']
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof DatabaseWithoutInternals
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
-  schema: keyof DatabaseWithoutInternals
+  schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
-    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
-    : never
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;
 
 export const Constants = {
   public: {
     Enums: {
-      actions: ["deal", "bet", "change_status", "play", "round_start"],
-      card_suit: ["♣️", "♥️", "♠️", "♦️"],
+      actions: ['deal', 'bet', 'change_status', 'play', 'round_start'],
+      card_suit: ['♣️', '♥️', '♠️', '♦️'],
       card_symbol: [
-        "A",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "Q",
-        "J",
-        "K",
+        'A',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        'Q',
+        'J',
+        'K',
       ],
-      hand_status: ["on hand", "on table", "played"],
-      match_status: ["created", "started", "end"],
-      round_status: ["dealing", "betting", "playing", "finished"],
+      hand_status: ['on hand', 'on table', 'played'],
+      match_status: ['created', 'started', 'end'],
+      round_status: ['dealing', 'betting', 'playing', 'finished'],
     },
   },
-} as const
+} as const;
