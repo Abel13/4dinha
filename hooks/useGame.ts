@@ -9,7 +9,7 @@ import {
   finishRoundMutation,
   usePlayMutation,
 } from '@/services/game';
-import { Game, type Bet, type GamePlayer } from '@/types';
+import { Game, PlayerCardOnGameItem, type Bet, type GamePlayer } from '@/types';
 import { NotificationFeedbackType } from 'expo-haptics';
 import { useUserSessionStore } from './useUserSessionStore';
 import { useSound } from './useAudioConfig';
@@ -32,6 +32,12 @@ export const useGame = (matchId: string) => {
   const [playing, setPlaying] = useState<boolean>(false);
   const [betting, setBetting] = useState<boolean>(false);
   const [finishing, setFinishing] = useState<boolean>(false);
+  const [turnCards, setTurnCards] = useState<
+    {
+      turnCards: PlayerCardOnGameItem[];
+      winnerCard: PlayerCardOnGameItem;
+    }[]
+  >([]);
 
   const [turn, setTurn] = useState<number>(1);
   const [roundStatus, setRoundStatus] = useState<RoundStatus>();
@@ -77,10 +83,15 @@ export const useGame = (matchId: string) => {
     initialData: {} as Game,
   });
 
-  const turnStatus =
-    game?.players?.length -
-      game?.player_cards?.filter((c) => c.turn === turn)?.length || 0;
   const roundNumber = game?.round?.round_number || -1;
+  const turnStatus: 'finished' | 'playing' | null =
+    roundNumber === -1
+      ? null
+      : (game?.players?.length -
+            game?.player_cards?.filter((c) => c.turn === turn)?.length || 0) ===
+          0
+        ? 'finished'
+        : 'playing';
 
   useEffect(() => {
     if (error) {
@@ -192,18 +203,48 @@ export const useGame = (matchId: string) => {
   }, [game.round]);
 
   useEffect(() => {
+    const turnsWithWinner: {
+      turnCards: PlayerCardOnGameItem[];
+      winnerCard: PlayerCardOnGameItem;
+    }[] = [];
+
+    const playerCards = game.player_cards ?? [];
+    for (let turnNumber = 1; turnNumber <= turn; turnNumber++) {
+      const rawWinner = game.turns?.find(
+        (c) => c.turn_number === turnNumber,
+      )?.winner_card;
+      const newTurn = playerCards.filter(
+        (c) => c.turn === turnNumber,
+      ) as PlayerCardOnGameItem[];
+      const winnerCard: PlayerCardOnGameItem | undefined = Array.isArray(
+        rawWinner,
+      )
+        ? rawWinner[0]
+        : (rawWinner as PlayerCardOnGameItem | undefined);
+
+      if (winnerCard) {
+        turnsWithWinner.push({ turnCards: newTurn, winnerCard });
+      }
+    }
+
+    setTurnCards(turnsWithWinner.reverse());
+  }, [game.player_cards, turn]);
+
+  useEffect(() => {
     if (currentPlayer) {
       if (currentPlayer.id === me?.id) {
         playCurrentPlayer({});
         return;
       }
-      playChangePlayer({});
+
+      if (turnStatus === 'playing') playChangePlayer({});
     }
-  }, [currentPlayer]);
+  }, [currentPlayer, turnStatus]);
 
   useEffect(() => {
     if (game.players?.length >= 2) {
       const { players } = game;
+      const playerCards = game.player_cards ?? [];
       const user = players.find(
         (player) => player.user_id === session?.user?.id,
       );
@@ -211,7 +252,7 @@ export const useGame = (matchId: string) => {
 
       setMe({
         ...user,
-        cards: game.player_cards.filter((p) => p.user_id === user?.user_id),
+        cards: playerCards.filter((p) => p.user_id === user?.user_id),
         bet: game.bets.find((p) => p.user_id === user?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === user?.user_id)?.wins,
       } as GamePlayer);
@@ -242,53 +283,47 @@ export const useGame = (matchId: string) => {
 
       setPlayer2({
         ...newPlayer2,
-        cards: game.player_cards.filter(
-          (p) => p.user_id === newPlayer2?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === newPlayer2?.user_id),
         bet: game.bets.find((p) => p.user_id === newPlayer2?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === newPlayer2?.user_id)
           ?.wins,
       } as GamePlayer);
       setPlayer3({
         ...newPlayer3,
-        cards: game.player_cards.filter(
-          (p) => p.user_id === newPlayer3?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === newPlayer3?.user_id),
         bet: game.bets.find((p) => p.user_id === newPlayer3?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === newPlayer3?.user_id)
           ?.wins,
       } as GamePlayer);
       setPlayer4({
         ...newPlayer4,
-        cards: game.player_cards.filter(
-          (p) => p.user_id === newPlayer4?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === newPlayer4?.user_id),
         bet: game.bets.find((p) => p.user_id === newPlayer4?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === newPlayer4?.user_id)
           ?.wins,
       } as GamePlayer);
       setPlayer5({
         ...newPlayer5,
-        cards: game.player_cards.filter(
-          (p) => p.user_id === newPlayer5?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === newPlayer5?.user_id),
         bet: game.bets.find((p) => p.user_id === newPlayer5?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === newPlayer5?.user_id)
           ?.wins,
       } as GamePlayer);
       setPlayer6({
         ...newPlayer6,
-        cards: game.player_cards.filter(
-          (p) => p.user_id === newPlayer6?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === newPlayer6?.user_id),
         bet: game.bets.find((p) => p.user_id === newPlayer6?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === newPlayer6?.user_id)
           ?.wins,
       } as GamePlayer);
 
-      if (game.player_cards) {
-        const newTurn = Math.max(...game.player_cards.map((r) => r.turn));
-        setTurn(newTurn);
+      if (playerCards.length > 0) {
+        const cards = playerCards.map((r) => r.turn);
+        if (cards.length > 0) {
+          const newTurn = Math.max(...cards);
+
+          setTurn(newTurn);
+        }
       }
 
       setCurrentPlayer(current);
@@ -299,12 +334,13 @@ export const useGame = (matchId: string) => {
     if (game?.players?.length === 2) {
       setCurrentPage('indiozinho');
       const { players } = game;
+      const playerCards = game.player_cards ?? [];
       const user = players.find(
         (player) => player.user_id === session?.user?.id,
       );
       setMe({
         ...user,
-        cards: game.player_cards.filter((p) => p.user_id === user?.user_id),
+        cards: playerCards.filter((p) => p.user_id === user?.user_id),
         bet: game.bets.find((p) => p.user_id === user?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === user?.user_id)?.wins,
       } as GamePlayer);
@@ -316,9 +352,7 @@ export const useGame = (matchId: string) => {
 
       setIndiozinho1({
         ...firstIndiozinho,
-        cards: game.player_cards.filter(
-          (p) => p.user_id === indiozinho1?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === indiozinho1?.user_id),
         bet: game.bets.find((p) => p.user_id === indiozinho1?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === indiozinho1?.user_id)
           ?.wins,
@@ -326,9 +360,7 @@ export const useGame = (matchId: string) => {
 
       setIndiozinho2({
         ...game.players.find((p) => p.user_id !== indiozinho1?.user_id),
-        cards: game.player_cards.filter(
-          (p) => p.user_id === indiozinho2?.user_id,
-        ),
+        cards: playerCards.filter((p) => p.user_id === indiozinho2?.user_id),
         bet: game.bets.find((p) => p.user_id === indiozinho2?.user_id)?.bet,
         wins: game?.results?.find((r) => r.user_id === indiozinho2?.user_id)
           ?.wins,
@@ -401,6 +433,7 @@ export const useGame = (matchId: string) => {
     trumps,
     betCount,
     turn,
+    turnCards,
     turnStatus,
     cardQuantity,
     roundNumber,

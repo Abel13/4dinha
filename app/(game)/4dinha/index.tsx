@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ImageBackground, Modal, StyleSheet } from 'react-native';
+import { ImageBackground, Modal, ScrollView, StyleSheet } from 'react-native';
 import { useKeepAwake } from 'expo-keep-awake';
 
 import { Bet } from '@/components/Bet';
@@ -15,8 +15,9 @@ import { StatusPanel } from '@/components/StatusPanel';
 
 import { Colors } from '@/constants/Colors';
 import { useGame } from '@/hooks/useGame';
-import type { Suit, Symbol } from '@/types';
+import type { PlayerCardOnGameItem, Suit, Symbol } from '@/types';
 import { scale, verticalScale } from '@/utils/scalingUtils';
+import { HeaderButton } from '@react-navigation/elements';
 
 const styles = StyleSheet.create({
   container: {
@@ -133,6 +134,27 @@ const styles = StyleSheet.create({
     top: scale(5),
     left: verticalScale(30),
   },
+  gameRoundsContainer: {
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    backgroundColor: Colors.dark.blackTransparent07,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
+    gap: 1,
+    width: scale(60),
+    position: 'absolute',
+    top: scale(5),
+    height: 45,
+    overflow: 'hidden',
+    right: verticalScale(30),
+    zIndex: 10000,
+  },
+  open: {
+    top: scale(5),
+    bottom: scale(5),
+    height: '100%',
+  },
   topRowContainer: {
     paddingHorizontal: 70,
   },
@@ -230,8 +252,18 @@ interface GameInfoProps {
   cardQuantity: number | undefined;
   betCount: number;
   isDealer: boolean | undefined;
+}
+
+interface GameRoundsProps {
+  open: boolean;
   turn: number;
-  turnStatus: number;
+  round: number;
+  turnStatus: string | null;
+  turnCards: {
+    turnCards: PlayerCardOnGameItem[];
+    winnerCard: PlayerCardOnGameItem;
+  }[];
+  setOpen: (value: boolean) => void;
 }
 
 function TrumpsModal({ isVisible, onClose, trumps }: TrumpsModalProps) {
@@ -400,8 +432,6 @@ function GameInfo({
   cardQuantity,
   betCount,
   isDealer,
-  turn,
-  turnStatus,
 }: GameInfoProps) {
   return (
     <ThemedView style={styles.gameInfoContainer}>
@@ -427,10 +457,84 @@ function GameInfo({
   );
 }
 
+function GameRounds({
+  turn,
+  round,
+  turnStatus,
+  turnCards,
+  open = false,
+  setOpen,
+}: GameRoundsProps) {
+  if (!turn || round === -1) return null;
+
+  return (
+    <ThemedView style={[styles.gameRoundsContainer, open && styles.open]}>
+      <ThemedView
+        style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+      >
+        <HeaderButton
+          style={{ alignSelf: 'flex-end' }}
+          onPress={() => setOpen(!open)}
+        >
+          <Feather
+            name={open ? 'chevron-up' : 'chevron-down'}
+            size={24}
+            color={Colors.dark.white}
+          />
+        </HeaderButton>
+
+        <ThemedText type='default' lightColor={Colors.dark.text}>
+          {turnStatus === 'playing' && `TURNO ${turn}`}
+        </ThemedText>
+      </ThemedView>
+
+      <ThemedView>
+        {turnCards.length === 0 && (
+          <ThemedView>
+            <ThemedText>Aguarde</ThemedText>
+          </ThemedView>
+        )}
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {turnCards.map((item) => {
+            const turnNumber = item.turnCards[0]?.turn ?? item.winnerCard.turn;
+            return (
+              <ThemedView
+                key={item.winnerCard.turn}
+                style={{ gap: 2, marginBottom: 10 }}
+              >
+                <ThemedText>{`TURNO ${turnNumber}`}</ThemedText>
+
+                <ThemedView style={{ flexDirection: 'row' }}>
+                  <ScrollView horizontal>
+                    {item.turnCards.map((subItem) => (
+                      <Card
+                        status='on table'
+                        size='small'
+                        suit={subItem.suit}
+                        id={subItem.id}
+                        key={subItem.id}
+                        symbol={subItem.symbol}
+                        winner={item.winnerCard.id === subItem.id}
+                      />
+                    ))}
+                  </ScrollView>
+                </ThemedView>
+              </ThemedView>
+            );
+          })}
+          <ThemedView style={{ height: 20 }} />
+        </ScrollView>
+      </ThemedView>
+    </ThemedView>
+  );
+}
+
 export default function TableScreen() {
   useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isTrumpsModalVisible, setTrumpsModalVisible] = useState(false);
+  const [openGameRounds, setOpenGameRounds] = useState(false);
 
   const {
     dealing,
@@ -447,6 +551,7 @@ export default function TableScreen() {
     betCount,
     turn,
     turnStatus,
+    turnCards,
     cardQuantity,
     roundNumber,
     checkLimit,
@@ -516,15 +621,37 @@ export default function TableScreen() {
           cardQuantity={cardQuantity}
           betCount={betCount}
           isDealer={me?.dealer}
+        />
+
+        <GameRounds
           turn={turn}
           turnStatus={turnStatus}
+          round={roundNumber}
+          turnCards={turnCards}
+          setOpen={setOpenGameRounds}
+          open={openGameRounds}
         />
 
         <ThemedView style={[styles.container, styles.topRowContainer]}>
           <ThemedView style={[styles.track, styles.row]}>
-            <TableSeat number={3} player={player3} currentTurn={turn} />
-            <TableSeat number={4} player={player4} currentTurn={turn} />
-            <TableSeat number={5} player={player5} currentTurn={turn} />
+            <TableSeat
+              number={3}
+              player={player3}
+              currentTurn={turn}
+              turnStatus={turnStatus}
+            />
+            <TableSeat
+              number={4}
+              player={player4}
+              currentTurn={turn}
+              turnStatus={turnStatus}
+            />
+            <TableSeat
+              number={5}
+              player={player5}
+              currentTurn={turn}
+              turnStatus={turnStatus}
+            />
           </ThemedView>
         </ThemedView>
 
@@ -532,7 +659,12 @@ export default function TableScreen() {
         <ThemedView style={styles.container}>
           <ThemedView style={styles.track}>
             <ThemedView style={styles.row}>
-              <TableSeat number={2} player={player2} currentTurn={turn} />
+              <TableSeat
+                number={2}
+                player={player2}
+                currentTurn={turn}
+                turnStatus={turnStatus}
+              />
               <ThemedView>
                 <ThemedView style={styles.trump}>
                   <Card
@@ -543,7 +675,12 @@ export default function TableScreen() {
                   />
                 </ThemedView>
               </ThemedView>
-              <TableSeat number={6} player={player6} currentTurn={turn} />
+              <TableSeat
+                number={6}
+                player={player6}
+                currentTurn={turn}
+                turnStatus={turnStatus}
+              />
             </ThemedView>
           </ThemedView>
         </ThemedView>
@@ -569,6 +706,7 @@ export default function TableScreen() {
                 }}
                 playing={playing}
                 currentTurn={turn}
+                turnStatus={turnStatus}
               />
             </ThemedView>
           )}

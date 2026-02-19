@@ -7,8 +7,9 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import 'react-native-reanimated';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAudioConfig } from '@/hooks/useAudioConfig';
+import { useUserSessionStore } from '@/hooks/useUserSessionStore';
 import { StatusBar } from 'expo-status-bar';
-import { Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import { supabase } from '@/providers/supabase';
 import { Session } from '@supabase/supabase-js';
 import {
@@ -48,17 +49,35 @@ export default function RootLayout() {
     );
 
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session ?? null);
+      const session = data.session ?? null;
+      setSession(session);
+      useUserSessionStore.getState().setSession(session);
       setAuthChecked(true);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange(
       (_evt, newSession) => {
         setSession(newSession);
+        useUserSessionStore.getState().setSession(newSession);
       },
     );
 
-    return () => sub.subscription.unsubscribe();
+    // refresh ativo só quando app está em foreground (React Native)
+    const appStateSub =
+      Platform.OS !== 'web'
+        ? AppState.addEventListener('change', (state) => {
+            if (state === 'active') {
+              supabase.auth.startAutoRefresh();
+            } else {
+              supabase.auth.stopAutoRefresh();
+            }
+          })
+        : { remove: () => {} };
+
+    return () => {
+      sub.subscription.unsubscribe();
+      appStateSub.remove();
+    };
   }, []);
 
   if (!loaded || !authChecked) {

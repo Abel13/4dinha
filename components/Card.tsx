@@ -13,6 +13,7 @@ interface CardProps {
   symbol?: Symbol;
   playing?: boolean;
   size?: 'small' | 'big';
+  winner?: boolean;
   onPress?: (id?: string) => void;
 }
 
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
   '♣️': {
     color: Colors.dark.black,
   },
+  winner: { position: 'absolute', top: 0, right: 0, fontSize: 10 },
 });
 
 export function Card({
@@ -95,6 +97,7 @@ export function Card({
   playing,
   status,
   size = 'small',
+  winner = false,
   onPress,
 }: CardProps) {
   const visible = symbol && suit;
@@ -106,6 +109,7 @@ export function Card({
       >
         {visible ? (
           <ThemedView style={styles.cardContent}>
+            {winner && <ThemedText style={styles.winner}>👑</ThemedText>}
             <ThemedText
               type='paragraph'
               style={[styles[`symbol_${size}`], styles[suit]]}

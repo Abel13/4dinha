@@ -3,8 +3,8 @@ import { supabase } from '@/providers/supabase';
 import { UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { api } from './api';
 
-export const gameKey = () => {
-  return ['game'];
+export const gameKey = (gameId) => {
+  return ['game', gameId];
 };
 
 export const trumpKey = (gameId: string, roundNumber: number) => {
@@ -13,21 +13,24 @@ export const trumpKey = (gameId: string, roundNumber: number) => {
 
 export const updateGame = (gameId: string, token: string) => {
   return {
-    queryKey: gameKey(),
+    queryKey: gameKey(gameId),
     queryFn: async (): Promise<Game> => {
       if (!gameId) return {} as Game;
+      try {
+        const response = await api.get('/api/update', {
+          params: {
+            matchID: gameId,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      const response = await api.get('/api/update', {
-        params: {
-          matchID: gameId,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { data } = response;
-      return data;
+        const { data } = response;
+        return data;
+      } catch (error) {
+        return {} as Game;
+      }
     },
     initialData: {} as Game,
   };

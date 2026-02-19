@@ -4,7 +4,7 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
   // Allows to automatically instantiate createClient with right options
@@ -16,208 +16,208 @@ export type Database = {
     Tables: {
       bets: {
         Row: {
-          bet: number;
-          created_at: string | null;
-          match_id: string;
-          round_number: number;
-          user_id: string;
-        };
+          bet: number
+          created_at: string | null
+          match_id: string
+          round_number: number
+          user_id: string
+        }
         Insert: {
-          bet: number;
-          created_at?: string | null;
-          match_id: string;
-          round_number: number;
-          user_id?: string;
-        };
+          bet: number
+          created_at?: string | null
+          match_id: string
+          round_number: number
+          user_id?: string
+        }
         Update: {
-          bet?: number;
-          created_at?: string | null;
-          match_id?: string;
-          round_number?: number;
-          user_id?: string;
-        };
+          bet?: number
+          created_at?: string | null
+          match_id?: string
+          round_number?: number
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'bets_match_id_fkey';
-            columns: ['match_id'];
-            isOneToOne: false;
-            referencedRelation: 'matches';
-            referencedColumns: ['id'];
+            foreignKeyName: "bets_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       deck: {
         Row: {
-          id: string;
-          power: number;
-          suit: Database['public']['Enums']['card_suit'];
-          suit_power: number;
-          symbol: Database['public']['Enums']['card_symbol'];
-        };
+          id: string
+          power: number
+          suit: Database["public"]["Enums"]["card_suit"]
+          suit_power: number
+          symbol: Database["public"]["Enums"]["card_symbol"]
+        }
         Insert: {
-          id?: string;
-          power: number;
-          suit: Database['public']['Enums']['card_suit'];
-          suit_power: number;
-          symbol: Database['public']['Enums']['card_symbol'];
-        };
+          id?: string
+          power: number
+          suit: Database["public"]["Enums"]["card_suit"]
+          suit_power: number
+          symbol: Database["public"]["Enums"]["card_symbol"]
+        }
         Update: {
-          id?: string;
-          power?: number;
-          suit?: Database['public']['Enums']['card_suit'];
-          suit_power?: number;
-          symbol?: Database['public']['Enums']['card_symbol'];
-        };
-        Relationships: [];
-      };
+          id?: string
+          power?: number
+          suit?: Database["public"]["Enums"]["card_suit"]
+          suit_power?: number
+          symbol?: Database["public"]["Enums"]["card_symbol"]
+        }
+        Relationships: []
+      }
       match_actions: {
         Row: {
-          action: Database['public']['Enums']['actions'];
-          created_at: string;
-          id: string;
-          match_id: string;
-          round_number: number;
-          user_id: string;
-        };
+          action: Database["public"]["Enums"]["actions"]
+          created_at: string
+          id: string
+          match_id: string
+          round_number: number
+          user_id: string
+        }
         Insert: {
-          action: Database['public']['Enums']['actions'];
-          created_at?: string;
-          id?: string;
-          match_id: string;
-          round_number: number;
-          user_id?: string;
-        };
+          action: Database["public"]["Enums"]["actions"]
+          created_at?: string
+          id?: string
+          match_id: string
+          round_number: number
+          user_id?: string
+        }
         Update: {
-          action?: Database['public']['Enums']['actions'];
-          created_at?: string;
-          id?: string;
-          match_id?: string;
-          round_number?: number;
-          user_id?: string;
-        };
+          action?: Database["public"]["Enums"]["actions"]
+          created_at?: string
+          id?: string
+          match_id?: string
+          round_number?: number
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'match_actions_match_id_fkey';
-            columns: ['match_id'];
-            isOneToOne: false;
-            referencedRelation: 'matches';
-            referencedColumns: ['id'];
+            foreignKeyName: "match_actions_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       match_users: {
         Row: {
-          created_at: string | null;
-          dealer: boolean;
-          id: string;
-          lives: number;
-          match_id: string;
-          ready: boolean;
-          table_seat: number | null;
-          user_id: string;
-        };
+          created_at: string | null
+          dealer: boolean
+          id: string
+          lives: number
+          match_id: string
+          ready: boolean
+          table_seat: number | null
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          dealer?: boolean;
-          id?: string;
-          lives?: number;
-          match_id: string;
-          ready?: boolean;
-          table_seat?: number | null;
-          user_id?: string;
-        };
+          created_at?: string | null
+          dealer?: boolean
+          id?: string
+          lives?: number
+          match_id: string
+          ready?: boolean
+          table_seat?: number | null
+          user_id?: string
+        }
         Update: {
-          created_at?: string | null;
-          dealer?: boolean;
-          id?: string;
-          lives?: number;
-          match_id?: string;
-          ready?: boolean;
-          table_seat?: number | null;
-          user_id?: string;
-        };
+          created_at?: string | null
+          dealer?: boolean
+          id?: string
+          lives?: number
+          match_id?: string
+          ready?: boolean
+          table_seat?: number | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'match_users_match_id_fkey';
-            columns: ['match_id'];
-            isOneToOne: false;
-            referencedRelation: 'matches';
-            referencedColumns: ['id'];
+            foreignKeyName: "match_users_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
           },
-        ];
-      };
+        ]
+      }
       matches: {
         Row: {
-          created_at: string | null;
-          id: string;
-          name: string;
-          round_number: number;
-          status: Database['public']['Enums']['match_status'] | null;
-          user_id: string;
-        };
+          created_at: string | null
+          id: string
+          name: string
+          round_number: number
+          status: Database["public"]["Enums"]["match_status"] | null
+          user_id: string
+        }
         Insert: {
-          created_at?: string | null;
-          id?: string;
-          name: string;
-          round_number?: number;
-          status?: Database['public']['Enums']['match_status'] | null;
-          user_id?: string;
-        };
+          created_at?: string | null
+          id?: string
+          name: string
+          round_number?: number
+          status?: Database["public"]["Enums"]["match_status"] | null
+          user_id?: string
+        }
         Update: {
-          created_at?: string | null;
-          id?: string;
-          name?: string;
-          round_number?: number;
-          status?: Database['public']['Enums']['match_status'] | null;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
+          created_at?: string | null
+          id?: string
+          name?: string
+          round_number?: number
+          status?: Database["public"]["Enums"]["match_status"] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       player_cards: {
         Row: {
-          card_id: string;
-          created_at: string;
-          id: string;
-          match_id: string;
-          round_number: number;
-          status: Database['public']['Enums']['hand_status'];
-          turn: number | null;
-          user_id: string;
-        };
+          card_id: string
+          created_at: string
+          id: string
+          match_id: string
+          round_number: number
+          status: Database["public"]["Enums"]["hand_status"]
+          turn: number | null
+          user_id: string
+        }
         Insert: {
-          card_id: string;
-          created_at?: string;
-          id?: string;
-          match_id: string;
-          round_number: number;
-          status?: Database['public']['Enums']['hand_status'];
-          turn?: number | null;
-          user_id: string;
-        };
+          card_id: string
+          created_at?: string
+          id?: string
+          match_id: string
+          round_number: number
+          status?: Database["public"]["Enums"]["hand_status"]
+          turn?: number | null
+          user_id: string
+        }
         Update: {
-          card_id?: string;
-          created_at?: string;
-          id?: string;
-          match_id?: string;
-          round_number?: number;
-          status?: Database['public']['Enums']['hand_status'];
-          turn?: number | null;
-          user_id?: string;
-        };
+          card_id?: string
+          created_at?: string
+          id?: string
+          match_id?: string
+          round_number?: number
+          status?: Database["public"]["Enums"]["hand_status"]
+          turn?: number | null
+          user_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'player_cards_card_id_fkey';
-            columns: ['card_id'];
-            isOneToOne: false;
-            referencedRelation: 'deck';
-            referencedColumns: ['id'];
+            foreignKeyName: "player_cards_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "deck"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'player_cards_match_id_fkey';
-            columns: ['match_id'];
-            isOneToOne: false;
-            referencedRelation: 'matches';
-            referencedColumns: ['id'];
+            foreignKeyName: "player_cards_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
           },
         ];
       };
@@ -247,37 +247,37 @@ export type Database = {
       };
       rounds: {
         Row: {
-          match_id: string;
-          round_number: number;
-          status: Database['public']['Enums']['round_status'];
-          trump: string;
-        };
+          match_id: string
+          round_number: number
+          status: Database["public"]["Enums"]["round_status"]
+          trump: string
+        }
         Insert: {
-          match_id: string;
-          round_number: number;
-          status?: Database['public']['Enums']['round_status'];
-          trump: string;
-        };
+          match_id: string
+          round_number: number
+          status?: Database["public"]["Enums"]["round_status"]
+          trump: string
+        }
         Update: {
-          match_id?: string;
-          round_number?: number;
-          status?: Database['public']['Enums']['round_status'];
-          trump?: string;
-        };
+          match_id?: string
+          round_number?: number
+          status?: Database["public"]["Enums"]["round_status"]
+          trump?: string
+        }
         Relationships: [
           {
-            foreignKeyName: 'round_match_id_fkey';
-            columns: ['match_id'];
-            isOneToOne: false;
-            referencedRelation: 'matches';
-            referencedColumns: ['id'];
+            foreignKeyName: "round_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'rounds_trump_fkey';
-            columns: ['trump'];
-            isOneToOne: false;
-            referencedRelation: 'deck';
-            referencedColumns: ['id'];
+            foreignKeyName: "rounds_trump_fkey"
+            columns: ["trump"]
+            isOneToOne: false
+            referencedRelation: "deck"
+            referencedColumns: ["id"]
           },
         ];
       };
@@ -300,9 +300,9 @@ export type Database = {
       get_user_email: {
         Args: { user_id: string };
         Returns: {
-          email: string;
-        }[];
-      };
+          email: string
+        }[]
+      }
       update_dealer: {
         Args: { _match_id: string; _table_seat: number };
         Returns: undefined;
@@ -329,8 +329,8 @@ export type Database = {
       };
     };
     Enums: {
-      actions: 'deal' | 'bet' | 'change_status' | 'play' | 'round_start';
-      card_suit: '♣️' | '♥️' | '♠️' | '♦️';
+      actions: "deal" | "bet" | "change_status" | "play" | "round_start"
+      card_suit: "♣️" | "♥️" | "♠️" | "♦️"
       card_symbol:
         | 'A'
         | '2'
@@ -389,7 +389,7 @@ export type Tables<
       }
       ? R
       : never
-    : never;
+    : never
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
@@ -414,7 +414,7 @@ export type TablesInsert<
       }
       ? I
       : never
-    : never;
+    : never
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
@@ -439,7 +439,7 @@ export type TablesUpdate<
       }
       ? U
       : never
-    : never;
+    : never
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends

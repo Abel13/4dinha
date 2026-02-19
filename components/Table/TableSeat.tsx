@@ -37,6 +37,7 @@ export interface TableSeatProps {
   number: number;
   playing?: boolean;
   currentTurn: number;
+  turnStatus: 'playing' | 'finished' | null;
   handlePlay?: (id?: string) => void;
 }
 
@@ -45,6 +46,7 @@ export function TableSeat({
   number,
   playing,
   currentTurn,
+  turnStatus,
   handlePlay,
 }: TableSeatProps) {
   const { formatBet, getPlayerPosition } = useGamePositions();
@@ -82,6 +84,7 @@ export function TableSeat({
         number={number}
         playing={playing}
         currentTurn={currentTurn}
+        turnStatus={turnStatus}
         handlePlay={handlePlay}
       />
     </ThemedView>
