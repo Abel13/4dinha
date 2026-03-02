@@ -24,6 +24,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ThemedButton } from '@/components/ThemedButton';
 import { SvgImage } from '@/components/SvgImage';
 import { MyMatch } from '@/types/MyMatch';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: Colors.dark.background },
@@ -160,6 +161,7 @@ export default function HomeScreen() {
   const { matches, enterMatch, inProgressMatches } = useMatchList();
   const { username, profilePicture } = useUserSessionStore((state) => state);
   const { signOut } = useAuth();
+  const { t } = useTranslation('home');
 
   const { footerMenu, headerMenu } = useHome();
 
@@ -216,7 +218,7 @@ export default function HomeScreen() {
               style={[styles.profilePic]}
             />
           </ThemedView>
-          <ThemedText type='defaultSemiBold'>{`Olá, ${username}!`}</ThemedText>
+          <ThemedText type='defaultSemiBold'>{t('greeting', { username })}</ThemedText>
           <HelloWave size={14} />
         </SoundButton>
 
@@ -290,7 +292,7 @@ export default function HomeScreen() {
         <ScrollView horizontal style={styles.scrollContainer}>
           <ThemedView style={styles.menuContainer}>
             <ThemedButton
-              title='CRIAR PARTIDA'
+              title={t('createMatch')}
               type='outlined'
               onPress={() => {
                 stopSound();
@@ -306,7 +308,7 @@ export default function HomeScreen() {
                   lightColor={Colors.dark.text}
                   style={styles.subtitle}
                 >
-                  Volte para a partida
+                  {t('returnToMatch')}
                 </ThemedText>
 
                 <ThemedFlatList
@@ -345,12 +347,12 @@ export default function HomeScreen() {
             lightColor={Colors.dark.text}
             style={styles.subtitle}
           >
-            Salas Abertas
+            {t('openRooms')}
           </ThemedText>
           <ThemedFlatList
             data={matches}
             keyExtractor={(item) => item.id}
-            emptyMessage='Nenhuma sala criada...'
+            emptyMessage={t('noRooms')}
             renderItem={({ item }) => (
               <ThemedView style={{ height: 50, marginBottom: 5 }}>
                 <ThemedButton

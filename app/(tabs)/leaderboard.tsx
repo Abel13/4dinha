@@ -3,6 +3,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useSound } from '@/hooks/useAudioConfig';
+import { useTranslation } from '@/hooks/useTranslation';
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
 
 export default function LeaderboardScreen() {
   const { playSound, stopSound } = useSound('ambient');
+  const { t } = useTranslation('leaderboard');
 
   useEffect(() => {
     playSound({
@@ -53,7 +55,7 @@ export default function LeaderboardScreen() {
     <ThemedView style={styles.container}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type='h4'>Classificação</ThemedText>
+          <ThemedText type='h4'>{t('title')}</ThemedText>
           <SoundButton sound='menu' onPress={router.back}>
             <Feather name='x-circle' color={Colors.dark.text} size={24} />
           </SoundButton>

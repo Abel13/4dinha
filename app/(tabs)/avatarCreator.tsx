@@ -2,12 +2,14 @@ import DiceBearAvatarBuilder from '@/components/DiceBearAvatarBuilder';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useUserSessionStore } from '@/hooks/useUserSessionStore';
+import { useTranslation } from '@/hooks/useTranslation';
 import { supabase } from '@/providers/supabase';
 import { router, useLocalSearchParams } from 'expo-router';
 
 export default function AvatarCreatorScreen() {
   const { imageSvg, username } = useLocalSearchParams();
   const { setSession } = useUserSessionStore();
+  const { t } = useTranslation('avatarCreator');
 
   const handleSave = async (imageSvg: string) => {
     const { error } = await supabase.auth.updateUser({
@@ -30,7 +32,7 @@ export default function AvatarCreatorScreen() {
 
   if (!imageSvg) {
     <ThemedView>
-      <ThemedText>No URL found!</ThemedText>
+      <ThemedText>{t('noUrl')}</ThemedText>
     </ThemedView>;
   }
 
