@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function LobbyScreen() {
+export default function HomeScreen() {
   const router = useRouter();
   const theme = useColorScheme() || 'light';
   const { playSound, stopSound } = useSound('ambient');

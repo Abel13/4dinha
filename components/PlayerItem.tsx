@@ -21,6 +21,10 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.dark.border,
+    backgroundColor: Colors.dark.blackTransparent03,
+    overflow: 'hidden',
   },
 });
 
@@ -31,7 +35,7 @@ interface Props {
 export function PlayerItem({ matchUser }: Props) {
   const { playerName, playerPicture } = usePlayer(matchUser.user_id);
 
-  if (playerName === null || playerPicture === null)
+  if (playerName === null)
     return (
       <ThemedView style={styles.container}>
         <ThemedText lightColor={Colors.dark.text}>Carregando...</ThemedText>
@@ -41,7 +45,11 @@ export function PlayerItem({ matchUser }: Props) {
   return (
     <ThemedView style={[styles.container, styles.row]}>
       <ThemedView style={styles.row}>
-        <SvgImage xml={playerPicture as string} style={styles.profileImage} />
+        {playerPicture ? (
+          <SvgImage xml={playerPicture as string} style={styles.profileImage} />
+        ) : (
+          <ThemedView style={styles.profileImage} />
+        )}
         <ThemedText type='default' lightColor={Colors.dark.text}>
           {playerName}
         </ThemedText>

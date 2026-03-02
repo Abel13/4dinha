@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 64,
     textAlign: 'center',
-    fontFamily: 'BarlowCondensed-SemiBold',
+    fontFamily: 'BarlowCondensedSemiBold',
     shadowColor: Colors.dark.shadowText,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.9,
@@ -55,7 +55,7 @@ const schema = yup.object().shape({
     .required('errors.required_field'),
 });
 
-export default function Register() {
+export default function ConfirmScreen() {
   const theme = useColorScheme() || 'light';
   const { validate, loading, confirmationError } = useConfirmation();
   const { email } = useLocalSearchParams<{ email: string }>();

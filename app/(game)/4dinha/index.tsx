@@ -427,7 +427,7 @@ function GameInfo({
   );
 }
 
-export default function Table() {
+export default function TableScreen() {
   useKeepAwake();
   const { gameId } = useLocalSearchParams();
   const [isTrumpsModalVisible, setTrumpsModalVisible] = useState(false);
