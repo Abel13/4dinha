@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { useSound } from '@/hooks/useAudioConfig';
 import { useSettingsStore } from '@/hooks/useSettingsStore';
+import { useTranslation } from '@/hooks/useTranslation';
 import { Feather } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { router } from 'expo-router';
@@ -50,6 +51,7 @@ export default function SettingsScreen() {
     musicVolume,
   } = useSettingsStore((store) => store);
   const { playSound, stopSound } = useSound('ambient');
+  const { t } = useTranslation('settings');
 
   useEffect(() => {
     playSound({
@@ -65,15 +67,15 @@ export default function SettingsScreen() {
     <ThemedView style={styles.container}>
       <ThemedView style={styles.content}>
         <ThemedView style={styles.titleContainer}>
-          <ThemedText type='h4'>Configurações</ThemedText>
+          <ThemedText type='h4'>{t('title')}</ThemedText>
           <SoundButton sound='menu' onPress={router.back}>
             <Feather name='x-circle' color={Colors.dark.text} size={24} />
           </SoundButton>
         </ThemedView>
         <ScrollView style={styles.settings}>
-          <Collapsible title='Audio' key='audio' startOpen>
+          <Collapsible title={t('audio')} key='audio' startOpen>
             <ThemedView style={styles.setting}>
-              <ThemedText style={styles.label}>Sons</ThemedText>
+              <ThemedText style={styles.label}>{t('sounds')}</ThemedText>
               <Switch
                 style={styles.slider}
                 value={soundEnabled}
@@ -84,7 +86,7 @@ export default function SettingsScreen() {
               <ThemedView>
                 <ThemedView style={styles.setting}>
                   <ThemedText style={styles.label}>
-                    Volume principal: {(generalVolume * 100).toFixed(0)}
+                    {t('mainVolume', { value: (generalVolume * 100).toFixed(0) })}
                   </ThemedText>
                   <Slider
                     style={styles.slider}
@@ -97,7 +99,7 @@ export default function SettingsScreen() {
                 </ThemedView>
                 <ThemedView style={styles.setting}>
                   <ThemedText style={styles.label}>
-                    Volume da interface: {(uiVolume * 100).toFixed(0)}
+                    {t('uiVolume', { value: (uiVolume * 100).toFixed(0) })}
                   </ThemedText>
                   <Slider
                     style={styles.slider}
@@ -110,7 +112,7 @@ export default function SettingsScreen() {
                 </ThemedView>
                 <ThemedView style={styles.setting}>
                   <ThemedText style={styles.label}>
-                    Volume da música: {(musicVolume * 100).toFixed(0)}
+                    {t('musicVolume', { value: (musicVolume * 100).toFixed(0) })}
                   </ThemedText>
                   <Slider
                     style={styles.slider}
@@ -123,7 +125,7 @@ export default function SettingsScreen() {
                 </ThemedView>
                 <ThemedView style={styles.setting}>
                   <ThemedText style={styles.label}>
-                    Volume dos efeitos: {(effectsVolume * 100).toFixed(0)}
+                    {t('effectsVolume', { value: (effectsVolume * 100).toFixed(0) })}
                   </ThemedText>
                   <Slider
                     style={styles.slider}

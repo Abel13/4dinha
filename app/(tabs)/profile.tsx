@@ -10,6 +10,7 @@ import { Colors } from '@/constants/Colors';
 import { useEffect } from 'react';
 import { SvgImage } from '@/components/SvgImage';
 import { SoundButton } from '@/components/SoundButton';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,6 +71,7 @@ export default function ProfileScreen() {
   const { username, profilePicture, loadSession, session } =
     useUserSessionStore((state) => state);
   const router = useRouter();
+  const { t } = useTranslation('profile');
 
   const theme = useColorScheme() || 'dark';
 
@@ -93,7 +95,7 @@ export default function ProfileScreen() {
         <SoundButton sound='menu' onPress={router.back}>
           <Feather name='chevron-left' color={Colors[theme].icon} size={28} />
         </SoundButton>
-        <ThemedText type='title'>{`Olá, ${username}!`}</ThemedText>
+        <ThemedText type='title'>{t('greeting', { username })}</ThemedText>
         <HelloWave />
       </ThemedView>
 

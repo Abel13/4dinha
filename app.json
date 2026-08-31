@@ -6,9 +6,11 @@
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "com.abelb13.x4dinha",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
     "ios": {
       "icon": "./assets/images/icon.png",
       "supportsTablet": true,
@@ -19,9 +21,6 @@
         "UISupportsGameController": true,
         "UIViewControllerBasedStatusBarAppearance": true
       }
-    },
-    "androidNavigationBar": {
-      "backgroundColor": "#021223"
     },
     "android": {
       "package": "com.abelb13.x4dinha",
@@ -62,7 +61,9 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.1071484969694-ti33dm7u3p2dd288b8msrikrvlsfm9fm"
         }
-      ]
+      ],
+      "expo-image",
+      "expo-status-bar"
     ],
     "experiments": {
       "typedRoutes": true
