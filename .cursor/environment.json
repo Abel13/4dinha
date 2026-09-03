@@ -1,0 +1,17 @@
+{
+  "name": "4dinha",
+  "install": "npm ci",
+  "terminals": [
+    {
+      "name": "expo",
+      "command": "npx expo start --port 8081",
+      "description": "Expo/Metro dev server for the 4dinha React Native app. Serves the JS bundle and Expo dev tools on port 8081. Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY as secrets for full runtime (auth) functionality."
+    }
+  ],
+  "ports": [
+    {
+      "name": "expo",
+      "port": 8081
+    }
+  ]
+}
