@@ -6,7 +6,12 @@
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "x4dinha",
-    "platforms": ["ios", "android"],
+    "platforms": ["ios", "android", "web"],
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "favicon": "./assets/images/icon.png"
+    },
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {

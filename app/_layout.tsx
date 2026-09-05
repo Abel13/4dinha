@@ -11,11 +11,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Platform } from 'react-native';
 import { supabase } from '@/providers/supabase';
 import { Session } from '@supabase/supabase-js';
-import {
-  RiveRenderer,
-  RiveRendererAndroid,
-  RiveRendererIOS,
-} from 'rive-react-native';
+import { setupRiveRenderer } from '@/utils/setupRive';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,11 +37,12 @@ export default function RootLayout() {
   }, [loaded]);
 
   useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    RiveRenderer.defaultRenderer(
-      RiveRendererIOS.Rive,
-      RiveRendererAndroid.Rive,
-    );
+    if (Platform.OS !== 'web') {
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.LANDSCAPE,
+      ).catch(() => {});
+    }
+    setupRiveRenderer();
     // pega sessão atual e marca que já verificamos
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session ?? null);
