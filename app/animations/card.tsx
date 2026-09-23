@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
-import PagerView from 'react-native-pager-view';
+import Pager from '@/components/Pager';
 import { Card } from '../../components/animated/CardBack';
 
 export default function WinningCardScreen() {
@@ -13,7 +13,7 @@ export default function WinningCardScreen() {
         backgroundColor: '#add',
       }}
     >
-      <PagerView
+      <Pager
         initialPage={0}
         style={{
           flex: 1,
@@ -668,7 +668,7 @@ export default function WinningCardScreen() {
             }
           />
         </View>
-      </PagerView>
+      </Pager>
     </View>
   );
 }
